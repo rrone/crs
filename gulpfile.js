@@ -12,7 +12,7 @@ const appTask = function() {
     // Control the order
     gulp.src([
             appResourceDir + '/css/style.css',
-            appResourceDir + '/css/refsched.css'
+            appResourceDir + '/css/crs.css'
         ])
         .pipe(concat("app.css"))
         .pipe(gulp.dest('public/css'));

@@ -9,7 +9,6 @@ $settings = [
             'template_path' => [
                 PROJECT_ROOT . '/templates',
                 PROJECT_ROOT . '/src/Action/Logon',
-                PROJECT_ROOT . '/src/Action/End',
                 PROJECT_ROOT . '/src/Action/Reports',
                 PROJECT_ROOT . '/src/Action/Admin',
             ],

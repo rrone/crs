@@ -3,8 +3,8 @@ namespace Tests;
 
 use App\Action\AbstractController;
 use App\Action\AbstractView;
-use App\Action\Greet\ReportsController;
-use App\Action\Greet\ReportsView;
+use App\Action\Reports\ReportsController;
+use App\Action\Reports\ReportsView;
 
 class ReportsTest extends AppTestCase
 {

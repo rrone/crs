@@ -21,7 +21,6 @@ class LogExport extends AbstractExporter
 
     private $outFileName;
     private $user;
-    private $event;
 
     public function __construct(Container $container, DataWarehouse $dataWarehouse)
     {

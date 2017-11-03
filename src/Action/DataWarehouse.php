@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Action;
 
 use Illuminate\Database\Capsule\Manager;
@@ -35,6 +36,7 @@ class DataWarehouse
     }
 
     //User table functions
+
     /**
      * @return \Illuminate\Support\Collection
      */
@@ -56,6 +58,25 @@ class DataWarehouse
 
         $user = $this->db->table('users')
             ->where('name', 'like', $name)
+            ->get();
+
+        return $this->getZero($user);
+
+    }
+
+
+    /**
+     * @param $hash
+     * @return null|object
+     */
+    public function getUserByPW($hash)
+    {
+        if (empty($hash)) {
+            return null;
+        }
+
+        $user = $this->db->table('users')
+            ->where('hash', 'like', $hash)
             ->get();
 
         return $this->getZero($user);
@@ -92,9 +113,11 @@ class DataWarehouse
 
             $this->db->table('users')
                 ->where('id', $u->id)
-                ->update([
-                    'hash' => $hash,
-                ]);
+                ->update(
+                    [
+                        'hash' => $hash,
+                    ]
+                );
 
             return $u->id;
         }
@@ -102,12 +125,90 @@ class DataWarehouse
     }
 
     /**
+     * @param $limit
      * @return mixed
      */
-    public function getHighestRefCerts()
+    public function getHighestRefCerts($limit = null)
     {
-        $result = $this->db->get('GetHighestCertification()');
-        
-        return $result;
+        $results = $this->db::select('call GetHighestCertification()');
+
+        if (!is_null($limit)) {
+            $results = array_slice($results, 0, $limit, true);
+        }
+
+        return $results;
     }
+
+//Log writer
+
+    /**
+     * @param $key
+     * @param $msg
+     * @return null
+     */
+    public function logInfo($key, $msg)
+    {
+        $data = [
+            'timestamp' => date('Y-m-d H:i:s'),
+            'projectKey' => $key,
+            'note' => $msg,
+        ];
+
+        $this->db->table('log')
+            ->insert($data);
+
+        return null;
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function getAccessLog()
+    {
+        return $this->db->table('log')
+            ->get();
+    }
+
+    /**
+     *
+     */
+    public function showVariables()
+    {
+        return $this->db->getConnection();
+    }
+
+//Log reader
+
+
+    /**
+     * @param $key
+     * @param $userName
+     * @return null|string
+     */
+    public function getLastLogon($key, $userName)
+    {
+        $timestamp = null;
+
+        $ts = $this->db->table('log')
+            ->where(
+                [
+                    ['projectKey', 'like', $key],
+                    ['note', 'like', "$userName: Scheduler greet%"],
+                ]
+            )
+            ->orderBy('timestamp', 'desc')
+            ->limit(1)
+            ->get();
+
+        $ts = $this->getZero($ts);
+
+        if (!empty($ts)) {
+            $utc = new DateTime($ts->timestamp, new DateTimeZone('UTC'));
+            $time = $utc->setTimezone(new DateTimeZone('America/Los_Angeles'));
+            $timestamp = $time->format('Y-M-j H:i');
+        }
+
+        return $timestamp;
+    }
+
 }

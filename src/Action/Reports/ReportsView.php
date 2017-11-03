@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Action\Reports;
 
 use Slim\Container;
@@ -20,10 +21,12 @@ class ReportsView extends AbstractView
         $this->games = null;
         $this->description = 'No matches scheduled';
     }
+
     public function handler(Request $request, Response $response)
     {
         $this->user = $request->getAttribute('user');
     }
+
     public function render(Response &$response)
     {
         $html = $this->renderView();
@@ -32,28 +35,29 @@ class ReportsView extends AbstractView
             'view' => array(
                 'admin' => $this->user->admin,
                 'content' => $html,
-                'message' => "<h3 class=\"center\">Message</h3>\n"
-            )
+                'message' => null,
+            ),
         );
-var_dump($this->user);
-var_dump($content);
         $this->view->render($response, 'reports.html.twig', $content);
     }
+
     protected function renderView()
     {
         $html = null;
 
-        if (!empty($this->user)) {
+        $uname = $this->user->name;
 
-//                $uname = $this->user->name;
+        $html .= "<h3 class=\"center\">Welcome, $uname</h3>\n";
+        $html .= "<h3 class=\"center\">The following reports are available.</h3>\n";
 
-                $html .= "<h3 class=\"center\">CURRENT STATUS</h3>\n";
-                $html .= "<h3 class=\"center\">The following reports are available.</h3>\n";
+        $href = $this->getBaseURL('exportPath');
+        $html .= "<a  href=$href class=\"export\" style=\"margin-right: 0\">Highest Referee Certification<i
+ class=\"icon-white icon-circle-arrow-down\"></i></a>";
+        $html .= "<div class='clear-fix'></div>";
+        $html .= "</h3>\n";
 
-
-            $html .= "<h3 class=\"center\"><a href=" . $this->getBaseURL('endPath') . ">Log Off</a></h3>";
-
-        }
+        $href = $this->getBaseURL('endPath');
+        $html .= "<h3 class=\"center\"><a href=$href>Log Off</a></h3>";
 
         return $html;
 

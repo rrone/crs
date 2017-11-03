@@ -1,7 +1,6 @@
 <?php
 namespace Tests;
 
-use App\Action\AbstractImporter;
 use App\Action\Admin\AdminController;
 use App\Action\Admin\AdminView;
 use App\Action\AbstractController;
@@ -9,12 +8,6 @@ use App\Action\AbstractView;
 use App\Action\AbstractExporter;
 use App\Action\Admin\LogExportController;
 use App\Action\Admin\LogExport;
-use App\Action\Admin\SchedTemplateExport;
-use App\Action\Admin\SchedTemplateExportController;
-use App\Action\Admin\SchedImport;
-use App\Action\Admin\SchedImportController;
-use Slim\Http\UploadedFile;
-
 
 class AdminTest extends AppTestCase
 {
@@ -72,7 +65,6 @@ class AdminTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['user_test']['user'];
-        $projectKey = $this->config['user_test']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,
@@ -158,7 +150,6 @@ class AdminTest extends AppTestCase
         // invoke the controller action and test it
 
         $user = $this->config['admin_test']['user'];
-        $projectKey = $this->config['admin_test']['projectKey'];
 
         $this->client->app->getContainer()['session'] = [
             'authed' => true,

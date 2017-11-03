@@ -22,3 +22,7 @@ $container['reportsPath'] = $container->get('router')->pathFor('reports');
 $app->map(['GET', 'POST'], '/adm', App\Action\Admin\AdminController::class)
     ->setName('admin');
 $container['adminPath'] = $container->get('router')->pathFor('admin');
+
+$app->map(['GET', 'POST'], '/export', App\Action\Export\ExportController::class)
+    ->setName('export');
+$container['exportPath'] = $container->get('router')->pathFor('export');

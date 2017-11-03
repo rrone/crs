@@ -25,10 +25,12 @@ if (isset($_SERVER['HTTPS'])) {
     $settings['settings']['env_uri'] = 'https://';
 }
 
-$settings['settings']['env_uri'] .= $_SERVER['SERVER_NAME'] . '/refsched/public';
+$settings['settings']['env_uri'] .= $_SERVER['SERVER_NAME'] . '/crs/public';
 
 ini_set("display_errors", 0);
 ini_set("log_errors", 1);
+ini_set('max_execution_time', 300);
+ini_set('memory_limit','1G');
 
 //Define where the log goes: syslog
 ini_set("error_log", "syslog");

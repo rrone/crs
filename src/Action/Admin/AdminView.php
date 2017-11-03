@@ -69,9 +69,8 @@ class AdminView extends AbstractView
             } elseif (in_array('btnLogItem', array_keys($_POST))) {
 
                 if (!empty($_POST['logNote'])) {
-                    $projectKey = !is_null($event) ? $event->projectKey : '';
                     $msg = $this->user->name . ': ' . $_POST['logNote'];
-                    $this->dw->logInfo($projectKey, $msg);
+                    $this->dw->logInfo('reports', $msg);
                 }
             } else {
                 $this->msg = null;
@@ -114,18 +113,6 @@ class AdminView extends AbstractView
         }
 
         return $selectOptions;
-    }
-
-    protected function renderEnabledEvents()
-    {
-        $events = $this->dw->getEnabledEvents();
-        $eventLabels = [];
-
-        foreach ($events as $event) {
-            $eventLabels[] = $event->label;
-        }
-
-        return $eventLabels;
     }
 
 }

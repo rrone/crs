@@ -15,7 +15,7 @@ class AppWebTestClient extends WebTestClient
 {
     private $cookies = array();
 
-    private $followRedirect;
+//    private $followRedirect;
 
     private $returnAsObject;
 

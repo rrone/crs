@@ -62,7 +62,7 @@ $container['logger'] = function (\Slim\Container $c) {
     return $logger;
 };
 
-$container['db'] = function ($c) {
+$container['db'] = function (\Slim\Container $c) {
     $capsule = new Illuminate\Database\Capsule\Manager;
 
     $capsule->addConnection($c['settings']['db']);
@@ -84,7 +84,7 @@ $container['dw'] = function (\Slim\Container $c) {
 // Action dependency Injection
 // -----------------------------------------------------------------------------
 $db = $container->get('db');
-$dw = $container['dw'];
+$dw = $container->get('dw');
 $view = $container->get('view');
 $uploadPath = $container->get('settings')['upload_path'];
 
@@ -122,14 +122,6 @@ $container[App\Action\Logon\LogonController::class] = function ($c) use ($dw) {
 };
 
 // -----------------------------------------------------------------------------
-// Greet class
-// -----------------------------------------------------------------------------
-$container[App\Action\Greet\ReportsView::class] = function ($c) use ($dw) {
-
-    return new \App\Action\Greet\ReportsView($c, $dw);
-};
-
-// -----------------------------------------------------------------------------
 // Reports class
 // -----------------------------------------------------------------------------
 $container[App\Action\Reports\ReportsView::class] = function ($c) use ($dw) {
@@ -141,5 +133,20 @@ $container[App\Action\Reports\ReportsController::class] = function ($c) use ($dw
     $v = new \App\Action\Reports\ReportsView($c, $dw);
 
     return new \App\Action\Reports\ReportsController($c, $v);
+};
+
+// -----------------------------------------------------------------------------
+// Export class
+// -----------------------------------------------------------------------------
+$container[App\Action\Export\ExportXl::class] = function () use ($dw) {
+
+    return new \App\Action\Export\ExportXl($dw);
+};
+
+
+$container[App\Action\Export\ExportController::class] = function ($c) use ($dw) {
+    $v = new \App\Action\Export\ExportXl($dw);
+
+    return new \App\Action\Export\ExportController($c, $v);
 };
 

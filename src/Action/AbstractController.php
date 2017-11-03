@@ -102,7 +102,7 @@ abstract class AbstractController
         }
 
         if (!is_null($logMsg)) {
-            $dw->logInfo($projectKey, $logMsg);
+            $dw->logInfo('reports', $logMsg);
         }
 
         return null;

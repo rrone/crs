@@ -59,37 +59,20 @@ table {
     border: 0;
 }
 th, td {
-    text-align: center;
     line-height: 1.6rem;
 }
 
 th {
+    text-align: center;
     padding: 0.5rem 2px;
 }
 
 td {
+    text-align: left;
     padding: 0 2px;
-}
-
-.sched-table th, .sched-table td {
-    border: 1px solid #9c9c9c;
-}
-.sched-table tr {
-    line-height: 2em;
-}
-
-.edit-table input {
-    width: 94%;
-    margin: 1px 3%;
-    line-height: 2rem;
-}
-.edit-table th {
-    line-height: 3rem;
 }
 .maincontent {
     margin: 10px auto;
-}
-.contentarea {
     padding-right: 15px;
     padding-left: 15px;
     line-height: 1.4;

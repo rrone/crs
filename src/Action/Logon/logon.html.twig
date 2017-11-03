@@ -1,0 +1,14 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+    <table width="98%" class="maincontent">
+        <tr>
+            <td>
+                <p class="center"><span style="color: #FF0000">{{ message | raw }}</span></p>
+                {{ content | raw }}
+
+            </td>
+        </tr>
+
+    </table>
+{% endblock %}

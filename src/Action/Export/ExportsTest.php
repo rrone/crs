@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests;
 
 class ExportsTest extends AppTestCase
@@ -15,7 +16,7 @@ class ExportsTest extends AppTestCase
         $this->client = new AppWebTestClient($this->app);
 
     }
-    
+
     public function testExportAsAnonymous()
     {
         // invoke the controller action and test it
@@ -76,6 +77,18 @@ class ExportsTest extends AppTestCase
         $contentDisposition = $response->getHeader('Content-Disposition')[0];
         $this->assertContains('attachment; filename=Report_', $contentDisposition);
         $this->assertContains('.xlsx', $contentDisposition);
+
+        //Referee Instructor Evaluators
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->get('/export/rie');
+
+        $contentType = $response->getHeader('Content-Type')[0];
+        $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        $this->assertEquals($cType, $contentType);
+
+        $contentDisposition = $response->getHeader('Content-Disposition')[0];
+        $this->assertContains('attachment; filename=Report_', $contentDisposition);
+        $this->assertContains('.xlsx', $contentDisposition);
     }
 
     public function testExportAsAdmin()
@@ -123,7 +136,18 @@ class ExportsTest extends AppTestCase
 
         $contentDisposition = $response->getHeader('Content-Disposition')[0];
         $this->assertContains('attachment; filename=Report_', $contentDisposition);
-        $this->assertContains('.xlsx', $contentDisposition);    }
+        $this->assertContains('.xlsx', $contentDisposition);
 
+        //Referee Instructor Evaluators
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->get('/export/rie');
 
+        $contentType = $response->getHeader('Content-Type')[0];
+        $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        $this->assertEquals($cType, $contentType);
+
+        $contentDisposition = $response->getHeader('Content-Disposition')[0];
+        $this->assertContains('attachment; filename=Report_', $contentDisposition);
+        $this->assertContains('.xlsx', $contentDisposition);
+    }
 }

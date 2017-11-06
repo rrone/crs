@@ -54,16 +54,16 @@ class ReportsView extends AbstractView
         <ul>
             <li>All reports are delivered as Excel workbooks.</li>
             <li>All report data is extracted from the 83 Blue Sombrero Portals within Section 1 on Friday.</li>
-            <li>Suggestions for other reports should be sent to <a href="mailto:{{}} sra_email }}?{{ 
+            <li>Suggestions for other reports should be sent to <a href="mailto:{{ sra_email }}?{{ 
             subject }}">Section 1 Referee Administrator</a>.</li>
             <li>Blue Sombrero/AYSOU information/status of known issues are published on 
        <a href="http://www.aysonational.org/Default.aspx?tabid=917680" target="_blank">AYSO's Blue Sombrero Support 
        Page</a>.</li>
+            <li>Any errors/ommissions should be address by a problem report to <a 
+            href="mailto:aysosupport@bluesombrero.com">aysosupport@bluesombrero.com</a>.</li>
             <li>Having an Instructor certification in Blue Sombrero does not ensure Instructor status in 
             AYSOU.ORG.  You also need to be included on the Instructor list in AYSOU.  You can request inclusion 
-            by a request to <a href="support@ayso.org">support@ayso.org</a>.</li>
-            <li>Any errors/ommissions should be address by a problem report to <a 
-            href="aysosupport@bluesombrero.com">aysosupport@bluesombrero.com</a>.</li>
+            by a request to <a href="mailto:support@ayso.org?subject=Mad as hell and not going to take it anymore...">support@ayso.org</a>.</li>
             <li>Don't be surprised if it takes months to get it corrected.  Be the squeaky wheel.</li>
         </ul>
 
@@ -88,6 +88,10 @@ EOD;
         $html .= "<div class='clear-fix'></div>\n";
         $html .= "</h3>\n";
 
+        $href = $this->getBaseURL('rie');
+        $html .= "<h3 class=\"center\"><a  href=$href >Referee Instructor Evaluators</a></h3>\n";
+        $html .= "<div class='clear-fix'></div>\n";
+        $html .= "</h3>\n";
         $html .= "<hr>\n";
 
         $href = $this->getBaseURL('end');

@@ -23,11 +23,13 @@ $container['view'] = function (\Slim\Container $c) {
     $view->addExtension(new Slim\Views\TwigExtension($c->get('router'), $c->get('request')->getUri()));
     $view->addExtension(new Twig_Extension_Debug());
 
-    $Version = new Twig_SimpleFunction('version', function () use ($settings) {
-        $ver = 'Version ' . $settings['version']['version'];
+    $Version = new Twig_SimpleFunction(
+        'version', function () use ($settings) {
+        $ver = 'Version '.$settings['version']['version'];
 
         return $ver;
-    });
+    }
+    );
 
     $view->getEnvironment()->addFunction($Version);
 
@@ -40,6 +42,13 @@ $container['flash'] = function () {
 };
 
 unset($container['errorHandler']);
+
+//Override the default Not Found Handler
+$container['notFoundHandler'] = function (\Slim\Container $c) {
+    return function ($request, $response) use ($c) {
+        return $response->withRedirect('/', 301);
+    };
+};
 
 // -----------------------------------------------------------------------------
 // Service factories
@@ -60,13 +69,14 @@ $container['logger'] = function (\Slim\Container $c) {
     //End of added
 
     $logger->pushHandler($handler);
+
     return $logger;
 };
 
 $container['db'] = function (\Slim\Container $c) {
     $capsule = new Illuminate\Database\Capsule\Manager;
 
-    $capsule->addConnection($c['settings']['db']);
+    $capsule->addConnection($c['settings']['dbConfig']);
 
     $capsule->setAsGlobal();
     $capsule->bootEloquent();

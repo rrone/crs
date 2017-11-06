@@ -42,11 +42,6 @@ class ExportXl extends AbstractExporter
         } else {
             $limit = null;
         }
-        // generate the response
-        $response = $response->withHeader('Content-Type', $this->contentType);
-        $response = $response->withHeader('Content-Disposition', 'attachment; filename='.$this->outFileName);
-
-        $content = null;
 
         switch ($dataRequest) {
             case 'hrc':
@@ -58,11 +53,22 @@ class ExportXl extends AbstractExporter
             case 'ri':
                 $results = $this->dw->getRefInstructors($limit);
                 break;
+            case 'rie':
+                $results = $this->dw->getRefInstructorEvaluators($limit);
+                break;
             default:
                 $results = null;
         }
 
+        $content = null;
         $this->generateExport($content, $results);
+
+        if(is_null($results)) {
+            return $response->withRedirect($this->getBaseURL('logon'));
+        }
+        // generate the response
+        $response = $response->withHeader('Content-Type', $this->contentType);
+        $response = $response->withHeader('Content-Disposition', 'attachment; filename='.$this->outFileName);
 
         /** @noinspection PhpUndefinedMethodInspection */
         $body = $response->getBody();

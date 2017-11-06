@@ -38,9 +38,9 @@ $settings = require PROJECT_ROOT . '/app/settings.php';
 $settings['debug'] = true;
 $settings['displayErrorDetails'] = $settings['debug'];
 
-$server = $config['db'];
+$server = ucwords($config['dev']);
 $settings['settings']['banner'] = "<h1 class=\"banner\">Development Server : $server</h1>";
-$settings['settings']['db'] = $config[$server];
+$settings['settings']['dbConfig'] = $config[$config['dev']];
 
 $settings['settings']['env_uri'] = 'http://';
 if (isset($_SERVER['HTTPS'])) {

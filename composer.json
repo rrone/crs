@@ -1,5 +1,5 @@
 {
-    "name": "ayso1ref/reports",
+    "name": "ayso1ref/certification reporting system",
     "description": "Slim Framework for ",
     "license": "BSD-3-Clause",
     "type": "project",
@@ -40,7 +40,6 @@
         "phpoffice/phpexcel": "^1.8",
         "flexsounds/slim-symfony-di-container": "^1.0",
         "illuminate/database": "~5.1",
-        "phpoffice/phpExcel": "~1.8.1",
         "ircmaxell/password-compat": "^1.0"
     }
 }

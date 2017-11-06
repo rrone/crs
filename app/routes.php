@@ -35,8 +35,11 @@ $app->group('/export', function() {
         ->setName('ra');
     $this->get('/ri', App\Action\Export\ExportController::class)
         ->setName('ri');
+    $this->get('/rie', App\Action\Export\ExportController::class)
+        ->setName('rie');
     });
 
 $container['hrc'] = $container->get('router')->pathFor('hrc');
 $container['ra'] = $container->get('router')->pathFor('ra');
 $container['ri'] = $container->get('router')->pathFor('ri');
+$container['rie'] = $container->get('router')->pathFor('rie');

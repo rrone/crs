@@ -54,7 +54,8 @@ class AppTestCase extends WebTestCase
         $settings = require PROJECT_ROOT.'/app/settings.php';
         $settings['debug'] = true;
 
-        $settings['settings']['db'] = $this->config['db_test'];
+        $server = $this->config['test'];
+        $settings['settings']['dbConfig'] = $this->config[$server];
         $settings['test']['user'] = $this->config['user_test'];
         $settings['test']['admin'] = $this->config['admin_test'];
         $settings['test']['empty'] = $this->config['empty_test'];

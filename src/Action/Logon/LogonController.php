@@ -26,7 +26,7 @@ class LogonController extends AbstractController
         if ($this->isAuthorized()) {
             $this->logStamp($request);
 
-            return $response->withRedirect($this->getBaseURL('reportsPath'));
+            return $response->withRedirect($this->getBaseURL('reports'));
         } else {
             $this->logonView->render($response);
 

@@ -22,7 +22,7 @@ class ExportController extends AbstractController
     {
 
         if(!$this->isAuthorized()) {
-            return $response->withRedirect($this->getBaseURL('reports'));
+            return $response->withRedirect($this->getBaseURL('logon'));
         };
 
         $this->logStamp($request);

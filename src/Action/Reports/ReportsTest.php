@@ -63,8 +63,8 @@ class ReportsTest extends AppTestCase
             'user' => $this->dw->getUserByName($user),
         ];
 
-        $view = $this->client->post('/reports');
-        $this->assertContains("<h3 class=\"center\">Welcome $user Assignor</h3>",$view);
+        $view = $this->client->get('/reports');
+        $this->assertContains("<h3>Notes on these reports</h3>",$view);
     }
 
     public function testReportsAsAdmin()
@@ -87,9 +87,8 @@ class ReportsTest extends AppTestCase
             'user' => $this->dw->getUserByName($user),
         ];
 
-//        $view = $this->client->get('/reports');
-//        $this->assertContains("<h3 class=\"center\">Welcome $user</h3>",$view);
-//        $this->assertContains("<h3 class=\"center\"><a href=/editgame>Edit matches</a>",$view);
+        $view = $this->client->get('/reports');
+        $this->assertContains("<h3>Notes on these reports</h3>",$view);
     }
 
 }

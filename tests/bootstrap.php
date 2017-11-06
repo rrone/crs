@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests;
 
 // Settings to make all errors more obvious during testing
@@ -18,11 +19,14 @@ use Slim\Http\Headers;
 use Slim\Http\RequestBody;
 use Slim\Http\Request;
 
-define('PROJECT_ROOT', realpath(__DIR__ . '/..'));
+define('PROJECT_ROOT', realpath(__DIR__.'/..'));
 
-require_once PROJECT_ROOT . '/vendor/autoload.php';
+ini_set('max_execution_time', 600);
+ini_set('memory_limit','1G');
 
-// Initialize our own copy of the slim application
+require_once PROJECT_ROOT.'/vendor/autoload.php';
+
+// Initialize copy of the slim application for test
 class AppTestCase extends WebTestCase
 {
     protected $config;
@@ -42,12 +46,12 @@ class AppTestCase extends WebTestCase
 
     private $cookies = array();
 
-    public function getSlimInstance() {
-
-        $this->config = include(PROJECT_ROOT . '/config/config.php');
+    public function getSlimInstance()
+    {
+        $this->config = include(PROJECT_ROOT.'/config/config.php');
 
 // Instantiate the app
-        $settings = require PROJECT_ROOT . '/app/settings.php';
+        $settings = require PROJECT_ROOT.'/app/settings.php';
         $settings['debug'] = true;
 
         $settings['settings']['db'] = $this->config['db_test'];
@@ -61,17 +65,17 @@ class AppTestCase extends WebTestCase
         $app = new App($settings);
 
 // Set up dependencies
-        require PROJECT_ROOT . '/app/dependencies.php';
+        require PROJECT_ROOT.'/app/dependencies.php';
 
 // Register middleware
-        require PROJECT_ROOT . '/app/middleware.php';
+        require PROJECT_ROOT.'/app/middleware.php';
 
 // Register routes
-        require PROJECT_ROOT . '/app/routes.php';
+        require PROJECT_ROOT.'/app/routes.php';
 
         $this->c = $app->getContainer();
 
-        $this->sr = new DataWarehouse($this->c->get('db'));
+        $this->dw = new DataWarehouse($this->c->get('db'));
         $app->getContainer()['settings.test'] = true;
 
         return $app;
@@ -83,7 +87,7 @@ class AppTestCase extends WebTestCase
         $method = strtoupper($method);
         $options = array(
             'REQUEST_METHOD' => $method,
-            'REQUEST_URI' => $path
+            'REQUEST_URI' => $path,
         );
 
         if ($method === 'GET') {
@@ -113,6 +117,8 @@ class AppTestCase extends WebTestCase
     {
         $this->cookies[$name] = $value;
     }
-};
+}
+
+;
 
 /* End of file bootstrap.php */

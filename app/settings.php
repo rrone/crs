@@ -28,12 +28,13 @@ $settings = [
         ],
 
         'version' => [
-            'version' => 'dev.2017.11.03.01'
+            'version' => '2017.11.05.00'
         ],
 
         'sra' => [
             'name' => 'Rick Roberts',
-            'email' => 'ayso1sra@gmail.com'
+            'email' => 'ayso1sra@gmail.com',
+            'subject' => 'subject=Suggestion%20for%20a%20volunteer%20report'
         ],
 
         'issueTracker' => 'https://github.com/rrone/crs/issues'

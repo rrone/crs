@@ -21,12 +21,13 @@ class ExportsTest extends AppTestCase
         // invoke the controller action and test it
 
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get('/export');
+        $response = (object)$this->client->get('/export/ra');
+
         $view = (string)$response->getBody();
         $this->assertEquals('', $view);
 
         $url = implode($response->getHeader('Location'));
-        $this->assertEquals('/export', $url);
+        $this->assertEquals('/', $url);
     }
 
     public function testExportAsUser()
@@ -40,15 +41,40 @@ class ExportsTest extends AppTestCase
             'user' => $this->dw->getUserByName($user),
         ];
 
+        //Highest Referee Certification
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get('/export');
+        $response = (object)$this->client->get('/export/hrc?100');
 
         $contentType = $response->getHeader('Content-Type')[0];
         $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
         $this->assertEquals($cType, $contentType);
 
         $contentDisposition = $response->getHeader('Content-Disposition')[0];
-        $this->assertContains('attachment; filename=GameSchedule', $contentDisposition);
+        $this->assertContains('attachment; filename=Report_', $contentDisposition);
+        $this->assertContains('.xlsx', $contentDisposition);
+
+        //Referee Assessors
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->get('/export/ra');
+
+        $contentType = $response->getHeader('Content-Type')[0];
+        $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        $this->assertEquals($cType, $contentType);
+
+        $contentDisposition = $response->getHeader('Content-Disposition')[0];
+        $this->assertContains('attachment; filename=Report_', $contentDisposition);
+        $this->assertContains('.xlsx', $contentDisposition);
+
+        //Referee Instructors
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->get('/export/ri');
+
+        $contentType = $response->getHeader('Content-Type')[0];
+        $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        $this->assertEquals($cType, $contentType);
+
+        $contentDisposition = $response->getHeader('Content-Disposition')[0];
+        $this->assertContains('attachment; filename=Report_', $contentDisposition);
         $this->assertContains('.xlsx', $contentDisposition);
     }
 
@@ -63,17 +89,41 @@ class ExportsTest extends AppTestCase
             'user' => $this->dw->getUserByName($user),
         ];
 
+        //Highest Referee Certification
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get('/export');
+        $response = (object)$this->client->get('/export/hrc?100');
 
         $contentType = $response->getHeader('Content-Type')[0];
         $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
         $this->assertEquals($cType, $contentType);
 
         $contentDisposition = $response->getHeader('Content-Disposition')[0];
-        $this->assertContains('attachment; filename=GameSchedule', $contentDisposition);
+        $this->assertContains('attachment; filename=Report_', $contentDisposition);
         $this->assertContains('.xlsx', $contentDisposition);
-    }
+
+        //Referee Assessors
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->get('/export/ra');
+
+        $contentType = $response->getHeader('Content-Type')[0];
+        $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        $this->assertEquals($cType, $contentType);
+
+        $contentDisposition = $response->getHeader('Content-Disposition')[0];
+        $this->assertContains('attachment; filename=Report_', $contentDisposition);
+        $this->assertContains('.xlsx', $contentDisposition);
+
+        //Referee Instructors
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->get('/export/ri');
+
+        $contentType = $response->getHeader('Content-Type')[0];
+        $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        $this->assertEquals($cType, $contentType);
+
+        $contentDisposition = $response->getHeader('Content-Disposition')[0];
+        $this->assertContains('attachment; filename=Report_', $contentDisposition);
+        $this->assertContains('.xlsx', $contentDisposition);    }
 
 
 }

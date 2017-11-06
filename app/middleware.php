@@ -3,8 +3,10 @@
 
 // e.g: $app->add(new \Slim\Csrf\Guard);
 
-use Psr\Http\Message\RequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
+//use Psr\Http\Message\RequestInterface as Request;
+//use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Http\Request;
+use Slim\Http\Response;
 
 $app->add(function (Request $request, Response $response, callable $next) {
     $uri = $request->getUri();

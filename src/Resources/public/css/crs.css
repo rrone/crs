@@ -40,6 +40,9 @@ h3 {
     font-size: 12px;
     padding: 0 20px;
 }
+hr {
+    margin: 10px 0;
+}
 .h3-btn {
     margin-top: 20px;
     line-height: 3em;
@@ -72,7 +75,6 @@ td {
     padding: 0 2px;
 }
 .maincontent {
-    margin: 10px auto;
     padding-right: 15px;
     padding-left: 15px;
     line-height: 1.4;
@@ -140,6 +142,17 @@ legend {
     }
 }
 .panel { margin-bottom: inherit }
-.no-border { border: 0 }
 .border { border: 1px solid #ddd }
 
+.legend {
+    font-size: 12px;
+    width: 80%;
+    margin: 0 auto;
+    line-height: 2rem;
+}
+.no-border {
+    border: none;
+}
+.border {
+    border: 1px solid transparent;
+}

@@ -30,7 +30,7 @@ class LogExport extends AbstractExporter
         $this->dw = $dataWarehouse;
         $this->view = $container->get('view');
 
-        $this->outFileName = 'Access_Log_' . date('Ymd_His') . '.' . $this->getFileExtension();
+        $this->outFileName = 'Log_' . date('Ymd_His') . '.' . $this->getFileExtension();
     }
 
     public function handler(Request $request, Response $response)
@@ -56,7 +56,7 @@ class LogExport extends AbstractExporter
         $log = $this->dw->getAccessLog();
 
         //set the header labels
-        $labels = array('Timestamp', 'Project Key', 'User', 'Memo');
+        $labels = array('Timestamp', 'Project Key', 'User', 'Note');
         $data = array($labels);
 
         //set the data : match in each row

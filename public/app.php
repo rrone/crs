@@ -23,10 +23,10 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
 
 define('PROJECT_ROOT', realpath(__DIR__ . '/..'));
 
-require PROJECT_ROOT . '/vendor/autoload.php';
-
 ini_set('max_execution_time', 300);
 ini_set('memory_limit','1G');
+
+require PROJECT_ROOT . '/vendor/autoload.php';
 
 Debug::enable();
 
@@ -38,9 +38,9 @@ $settings = require PROJECT_ROOT . '/app/settings.php';
 $settings['debug'] = true;
 $settings['displayErrorDetails'] = $settings['debug'];
 
-$server = ucwords($config['db']);
+$server = $config['db'];
 $settings['settings']['banner'] = "<h1 class=\"banner\">Development Server : $server</h1>";
-$settings['settings']['db'] = $config[$config['db']];
+$settings['settings']['db'] = $config[$server];
 
 $settings['settings']['env_uri'] = 'http://';
 if (isset($_SERVER['HTTPS'])) {

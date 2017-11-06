@@ -6,7 +6,7 @@
   "scripts": {
     "gulp-build": "./node_modules/.bin/gulp build",
     "gulp-watch": "./node_modules/.bin/gulp watch",
-    "test": "/usr/local/bin/php ~/Dev/refsched/vendor/phpunit/phpunit/phpunit --bootstrap ~/Dev/refsched/tests/bootstrap.php --configuration ~/Dev/refsched/phpunit.xml",
+    "test": "/usr/local/bin/php ~/Sites/AYSO/crs/vendor/phpunit/phpunit/phpunit --bootstrap ~/Sites/AYSO/crs/tests/bootstrap.php --configuration ~/Sites/AYSO/crs/phpunit.xml",
     "deploy": "dist.sh",
     "coverage": "open var/coverage/index.html"
   },
@@ -14,12 +14,12 @@
   "license": "ISC",
   "devDependencies": {
     "gulp": "^3.9.1",
-    "gulp-concat": "^2.6.0"
+    "gulp-concat": "^2.6.1"
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
     "jquery": "^3.2.1",
     "normalize.css": "^4.2.0",
-    "purecss": "^0.6.0"
+    "purecss": "^0.6.2"
   }
 }

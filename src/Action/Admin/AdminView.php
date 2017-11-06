@@ -56,9 +56,9 @@ class AdminView extends AbstractView
 
                 return 'Update';
 
-            } elseif (in_array('btnCancel', array_keys($_POST))) {
+            } elseif (in_array('btnDone', array_keys($_POST))) {
 
-                return 'Cancel';
+                return 'Done';
 
             } elseif (in_array('btnExportLog', array_keys($_POST))) {
 
@@ -70,7 +70,7 @@ class AdminView extends AbstractView
 
                 if (!empty($_POST['logNote'])) {
                     $msg = $this->user->name . ': ' . $_POST['logNote'];
-                    $this->dw->logInfo('reports', $msg);
+                    $this->dw->logInfo('CRS', $msg);
                 }
             } else {
                 $this->msg = null;
@@ -83,13 +83,12 @@ class AdminView extends AbstractView
 
     public function render(Response &$response)
     {
-        $adminPath = $response->getHeader('adminPath')[0];
+        $adminPath = $response->getHeader('admin')[0];
 
         $content = array(
             'view' => array(
                 'admin' => $this->user->admin,
                 'users' => $this->renderUsers(),
-                'events' => $this->renderEnabledEvents(),
                 'action' => $adminPath,
                 'message' => $this->msg,
                 'messageStyle' => $this->msgStyle,

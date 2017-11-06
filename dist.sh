@@ -3,6 +3,7 @@
 set -e
 #set distribution folder alias
 dist="$HOME"/GoogleDrive-rick.roberts.9/ayso/s1/web/ayso1ref/crs
+config="$HOME"/Sites/AYSO/crs/config
 PHP=/usr/local/etc/php/7.1
 
 ## clear the screen
@@ -37,7 +38,7 @@ cp -f -r app $dist/app
 cp -f -r vendor $dist/vendor
 cp -f -r public $dist/public
 cp -f -r templates $dist/templates
-cp -f -r config $dist/config
+##cp -f -r $config $dist/config
 cp -f -r src/Action $dist/src
 
 echo "  Updating index to production..."
@@ -49,8 +50,8 @@ find $dist -type f -name '.DS_Store' -delete
 echo "  Removing development jetsam..."
 find $dist -type f -name 'app_*' -delete
 find $dist/src -type f -name '*Test.php' -delete
-rm -f -r $dist/config/.git
-find $dist/config -type f -name '.env' -delete
+##rm -f -r $dist/config/.git
+##find $dist/config -type f -name '.env' -delete
 
 echo "  Restore composer development items..."
 ## Restore xdebug
@@ -61,3 +62,5 @@ fi
 composer update
 
 echo "...distribution complete"
+echo
+echo "As required, upload the config folder $config"

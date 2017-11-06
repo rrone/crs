@@ -21,7 +21,7 @@ class AdminController extends AbstractController
     public function __invoke(Request $request, Response $response, $args)
     {
         if(!$this->isAuthorized() || !$this->user->admin) {
-            return $response->withRedirect($this->getBaseURL('greetPath'));
+            return $response->withRedirect($this->getBaseURL('reports'));
         };
 
         $this->logStamp($request);
@@ -30,25 +30,17 @@ class AdminController extends AbstractController
             'user' => $this->user,
         ]);
 
-        $response = $response->withHeader('adminPath', $this->getBaseURL('adminPath'));
+        $response = $response->withHeader('admin', $this->getBaseURL('admin'));
         $result = $this->adminView->handler($request, $response);
 
         switch ($result) {
-             case 'Cancel':
+             case 'Done':
 
-                 return $response->withRedirect($this->getBaseURL('greetPath'));
-
-            case 'SchedTemplateExport':
-
-                return $response->withRedirect($this->getBaseURL('schedTemplatePath'));
-
-            case 'SchedImport':
-
-                return $response->withRedirect($this->getBaseURL('schedImportPath'));
+                 return $response->withRedirect($this->getBaseURL('reports'));
 
             case 'ExportLog':
 
-                return $response->withRedirect($this->getBaseURL('logExportPath'));
+                return $response->withRedirect($this->getBaseURL('logExport'));
         }
 
         $this->adminView->render($response);

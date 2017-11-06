@@ -38,7 +38,7 @@ abstract class AbstractView
         $this->view = $container->get('view');
         $this->dw = $dataWarehouse;
 
-        $this->page_title = "Section 1 Referee Scheduler";
+        $this->page_title = "Section 1: Certification Reporting System";
     }
 
     abstract protected function handler(Request $request, Response $response);

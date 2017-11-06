@@ -78,17 +78,17 @@ abstract class AbstractController
         $post = $request->isPost() ? 'with updated ref assignments' : '';
 
         switch ($uri) {
-            case $this->getBaseURL('logonPath'):
+            case $this->getBaseURL('logon'):
             case '/':
             case '/logon':
                 //TODO: Why is $uri == '/adm' passing this case?
-                $logMsg = $uri != $this->getBaseURL('adminPath') ? "$user: Scheduler logon" : null;
+                $logMsg = $uri != $this->getBaseURL('admin') ? "$user: CRS logon" : null;
                 break;
-            case $this->getBaseURL('endPath'):
+            case $this->getBaseURL('end'):
             case '/end':
                 $logMsg = "$user: CRS log off";
                 break;
-            case $this->getBaseURL('reportsPath'):
+            case $this->getBaseURL('reports'):
             case '/reports':
                 if (!empty($post)) {
                     $logMsg = "$user: CRS $uriPath dispatched $post";
@@ -102,7 +102,7 @@ abstract class AbstractController
         }
 
         if (!is_null($logMsg)) {
-            $dw->logInfo('reports', $logMsg);
+            $dw->logInfo('CRS', $logMsg);
         }
 
         return null;

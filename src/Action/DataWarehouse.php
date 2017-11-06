@@ -8,7 +8,7 @@ use DateTime;
 use DateTimeZone;
 
 /**
- * Class SchedulerRepository
+ * Class DataWarehouse
  * @package App\Action
  */
 class DataWarehouse
@@ -16,14 +16,15 @@ class DataWarehouse
     /* @var Manager */
     private $db;
 
+    const BIGINT = 9223372036854775807;
+
     /**
-     * SchedulerRepository constructor.
+     * DataWarehouse constructor.
      * @param Manager $db
      */
     public function __construct(Manager $db)
     {
         $this->db = $db;
-
     }
 
     /**
@@ -42,7 +43,7 @@ class DataWarehouse
      */
     public function getAllUsers()
     {
-        return $this->db->table('users')
+        return $this->db->table('crs_users')
             ->get();
     }
 
@@ -56,7 +57,7 @@ class DataWarehouse
             return null;
         }
 
-        $user = $this->db->table('users')
+        $user = $this->db->table('crs_users')
             ->where('name', 'like', $name)
             ->get();
 
@@ -75,7 +76,7 @@ class DataWarehouse
             return null;
         }
 
-        $user = $this->db->table('users')
+        $user = $this->db->table('crs_users')
             ->where('hash', 'like', $hash)
             ->get();
 
@@ -130,11 +131,44 @@ class DataWarehouse
      */
     public function getHighestRefCerts($limit = null)
     {
-        $results = $this->db::select('call GetHighestCertification()');
+        $limit = is_null($limit) ? self::BIGINT : $limit;
 
-        if (!is_null($limit)) {
-            $results = array_slice($results, 0, $limit, true);
-        }
+        /** @noinspection PhpUndefinedMethodInspection */
+        $results = $this->db::select('call GetHighestCertification(?)', [$limit]);
+
+        $results = array_slice($results, 0, $limit, true);
+
+        return $results;
+    }
+
+    /**
+     * @param $limit
+     * @return mixed
+     */
+    public function getRefAssessors($limit = null)
+    {
+        $limit = is_null($limit) ? self::BIGINT : $limit;
+
+        /** @noinspection PhpUndefinedMethodInspection */
+        $results = $this->db::select('call GetRefereeAssessors(?)', [$limit]);
+
+        $results = array_slice($results, 0, $limit, true);
+
+        return $results;
+    }
+
+    /**
+     * @param $limit
+     * @return mixed
+     */
+    public function getRefInstructors($limit = null)
+    {
+        $limit = is_null($limit) ? self::BIGINT : $limit;
+
+        /** @noinspection PhpUndefinedMethodInspection */
+        $results = $this->db::select('call GetRefereeInstructors(?)', [$limit]);
+
+        $results = array_slice($results, 0, $limit, true);
 
         return $results;
     }
@@ -166,6 +200,7 @@ class DataWarehouse
     public function getAccessLog()
     {
         return $this->db->table('log')
+            ->where('projectKey', '=', 'CRS')
             ->get();
     }
 
@@ -193,7 +228,7 @@ class DataWarehouse
             ->where(
                 [
                     ['projectKey', 'like', $key],
-                    ['note', 'like', "$userName: Scheduler greet%"],
+                    ['note', 'like', "$userName: CRS logon%"],
                 ]
             )
             ->orderBy('timestamp', 'desc')

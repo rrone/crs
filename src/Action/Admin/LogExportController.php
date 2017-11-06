@@ -19,11 +19,11 @@ class LogExportController extends AbstractController
     public function __invoke(Request $request, Response $response, $args)
     {
         if(!$this->isAuthorized()) {
-            return $response->withRedirect($this->getBaseURL('logonPath'));
+            return $response->withRedirect($this->getBaseURL('logon'));
         };
 
         if (!$this->user->admin) {
-            return $response->withRedirect($this->getBaseURL('greetPath'));
+            return $response->withRedirect($this->getBaseURL('reports'));
         }
 
         $this->logStamp($request);

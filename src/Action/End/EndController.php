@@ -18,7 +18,7 @@ class EndController extends AbstractController
 
         $this->logStamp($request);
 
-        $resp = $response->withRedirect($this->getBaseURL('logonPath'));
+        $resp = $response->withRedirect($this->getBaseURL('logon'));
 
         session_unset();
 

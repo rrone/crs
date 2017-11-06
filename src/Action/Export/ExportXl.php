@@ -20,6 +20,7 @@ class ExportXl extends AbstractExporter
         parent::__construct('xls');
 
         $this->dw = $dataWarehouse;
+
         $this->outFileName = 'Report_'.date('Ymd_His').'.'.$this->getFileExtension();
     }
 
@@ -27,13 +28,41 @@ class ExportXl extends AbstractExporter
     {
         $this->user = $request->getAttribute('user');
 
+        $uri = $request->getUri()->getPath();
+
+        $type = array_values(explode('/', $uri));
+
+        $dataRequest = isset($type[2]) ? $type[2] : null;
+
+        $params = $request->getParams();
+        if (!is_null($params)) {
+            $params = array_keys($params);
+            $limit = isset($params[0]) ? (integer)$params[0] : null;
+            $limit = $limit == 0 ? null : $limit;
+        } else {
+            $limit = null;
+        }
         // generate the response
         $response = $response->withHeader('Content-Type', $this->contentType);
         $response = $response->withHeader('Content-Disposition', 'attachment; filename='.$this->outFileName);
 
         $content = null;
 
-        $this->generateHighestCertification($content);
+        switch ($dataRequest) {
+            case 'hrc':
+                $results = $this->dw->getHighestRefCerts($limit);
+                break;
+            case 'ra':
+                $results = $this->dw->getRefAssessors($limit);
+                break;
+            case 'ri':
+                $results = $this->dw->getRefInstructors($limit);
+                break;
+            default:
+                $results = null;
+        }
+
+        $this->generateExport($content, $results);
 
         /** @noinspection PhpUndefinedMethodInspection */
         $body = $response->getBody();
@@ -43,11 +72,13 @@ class ExportXl extends AbstractExporter
         return $response;
     }
 
-    private function generateHighestCertification(&$content)
+    private function generateExport(&$content, $certs)
     {
-        $data = [];
+        if (is_null($certs)) {
+            return null;
+        }
 
-        $certs = $this->dw->getHighestRefCerts();
+        $data = [];
 
         //set the header labels
         if (!empty($certs)) {

@@ -65,7 +65,7 @@ class LogonView extends AbstractView
     {
         $content = array(
             'content' => $this->renderView(),
-            'users' => $this->getBaseURL('logonPath'),
+            'users' => $this->getBaseURL('logon'),
             'message' => $this->msg,
         );
 
@@ -80,7 +80,7 @@ class LogonView extends AbstractView
 
         $users = $this->dw->getAllUsers();
 
-        $logonPath = $this->getBaseURL('logonPath');
+        $logonPath = $this->getBaseURL('logon');
 
         if (count($users) > 0) {
             $html .= <<<EOD

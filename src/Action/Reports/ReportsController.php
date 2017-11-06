@@ -20,8 +20,9 @@ class ReportsController extends AbstractController
     }
     public function __invoke(Request $request, Response $response, $args)
     {
+
         if(!$this->isAuthorized()) {
-            return $response->withRedirect($this->getBaseURL('logonPath'));
+            return $response->withRedirect($this->getBaseURL('logon'));
         };
 
         $this->logStamp($request);

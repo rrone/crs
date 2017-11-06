@@ -14,7 +14,8 @@ $container['view'] = function (\Slim\Container $c) {
 
     //Manage Twig base_url() returns port 80 when used over HTTPS connection
     $view['env_uri'] = $c->get('settings')['env_uri'];
-    $view['sra'] = $c->get('settings')['sra']['email'];
+    $view['sra_email'] = $c->get('settings')['sra']['email'];
+    $view['subject'] = $c->get('settings')['sra']['subject'];
     $view['issueTracker'] = $c->get('settings')['issueTracker'];
     $view['banner'] = $c->get('settings')['banner'];
 
@@ -105,6 +106,20 @@ $container[App\Action\Admin\AdminController::class] = function ($c) use ($dw) {
     $v = new \App\Action\Admin\AdminView($c, $dw);
 
     return new \App\Action\Admin\AdminController($c, $v);
+};
+
+// -----------------------------------------------------------------------------
+// LogExport class
+// -----------------------------------------------------------------------------
+$container[App\Action\Admin\LogExport::class] = function ($c) use ($dw) {
+
+    return new \App\Action\Admin\LogExport($c, $dw);
+};
+
+$container[App\Action\Admin\LogExportController::class] = function ($c) use ($dw) {
+    $v = new \App\Action\Admin\LogExport($c, $dw);
+
+    return new \App\Action\Admin\LogExportController($c, $v);
 };
 
 // -----------------------------------------------------------------------------

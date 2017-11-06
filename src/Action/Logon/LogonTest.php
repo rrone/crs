@@ -31,9 +31,6 @@ class LogonTest extends AppTestCase
         $controller = new LogonController($this->c, $view);
         $this->assertTrue($controller instanceof AbstractController);
 
-        $view = $this->client->get('/');
-
-        $this->assertContains('<h1>Section 1: Certification Reporting System</h1>', $view);
     }
 
     public function testLogonAsUser()
@@ -58,9 +55,9 @@ class LogonTest extends AppTestCase
         $url = implode($response->getHeader('Location'));
         $this->assertEquals('/reports', $url);
 
-//        $response = (object)$this->client->get($url);
-//        $view = (string)$response->getBody();
-//        $this->assertContains("<h3 class=\"center\">Welcome $this->userName Assignor</h3>", $view);
+        $response = (object)$this->client->get($url);
+        $view = (string)$response->getBody();
+        $this->assertContains("<h3>Notes on these reports</h3>", $view);
     }
 
     public function testLogonAsUserWithBadPW()
@@ -110,7 +107,7 @@ class LogonTest extends AppTestCase
 
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
-        $this->assertContains("<h3 class=\"center\">Welcome $this->userName</h3>", $view);
+        $this->assertContains("<h3>Notes on these reports</h3>", $view);
 
     }
 
@@ -138,7 +135,7 @@ class LogonTest extends AppTestCase
 
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
-        $this->assertContains("<h3 class=\"center\">Welcome $this->userName</h3>", $view);
+        $this->assertContains("<h3>Notes on these reports</h3>", $view);
 
     }
 

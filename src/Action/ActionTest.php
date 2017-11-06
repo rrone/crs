@@ -11,7 +11,11 @@ class ActionTest extends AppTestCase
      */
     protected $c;
 
+    /**
+     * @var DataWarehouse
+     */
     private $mockSR;
+
     private $userName;
     private $user;
 

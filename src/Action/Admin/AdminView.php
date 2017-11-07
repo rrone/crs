@@ -23,7 +23,46 @@ class AdminView extends AbstractView
         if ($request->isPost()) {
             $_POST = $request->getParsedBody();
 
-            if (in_array('btnUpdate', array_keys($_POST))) {
+            if (in_array('btnAddUser', array_keys($_POST))) {
+                $userName = $_POST['userName'];
+                $pw = $_POST['newPassword'];
+
+                if (!empty($userName) && !empty($pw)) {
+                    $userData = array(
+                        'name' => $userName,
+                        'enabled' => true,
+                    );
+
+                    $user = $this->dw->getUserByName($userName);
+
+                    if(is_null($user)) {
+                        $userData['hash'] = password_hash($pw, PASSWORD_BCRYPT);
+
+                        $this->dw->setUser($userData);
+
+                        $this->msg['add'] = "$userName has been enabled.";
+                        $this->msgStyle['add'] = "color:#000000";
+                    } elseif (!$this->isRepost($request)) {
+                        $this->msg['add'] = "User already exists. Update the password below.";
+                        $this->msgStyle['add'] = "color:#FF0000";
+                    } else {
+                        $this->msg['add'] = null;
+                        $this->msgStyle['add'] = null;
+                    }
+                } else {
+                    if (empty($userName)) {
+                        $this->msg['add'] = "User name may not be blank.";
+                        $this->msgStyle['add'] = "color:#FF0000";
+                    }
+                    if (empty($pw)) {
+                        $this->msg['add'] .= "<br>Password may not be blank.";
+                        $this->msgStyle['add'] = "color:#FF0000";
+                    }
+                }
+
+                return 'AddUser';
+
+            } elseif (in_array('btnUpdate', array_keys($_POST))) {
                 $userName = $_POST['selectUser'];
                 $pw = $_POST['passwordInput'];
 
@@ -47,11 +86,11 @@ class AdminView extends AbstractView
 
                     $this->dw->setUser($userData);
 
-                    $this->msg = "$userName password has been updated.";
-                    $this->msgStyle = "color:#000000";
+                    $this->msg['update'] = "$userName password has been updated.";
+                    $this->msgStyle['update'] = "color:#000000";
                 } else {
-                    $this->msg = "Password may not be blank.";
-                    $this->msgStyle = "color:#FF0000";
+                    $this->msg['update'] = "Password may not be blank.";
+                    $this->msgStyle['update'] = "color:#FF0000";
                 }
 
                 return 'Update';
@@ -72,9 +111,11 @@ class AdminView extends AbstractView
                     $msg = $this->user->name . ': ' . $_POST['logNote'];
                     $this->dw->logInfo('CRS', $msg);
                 }
+
             } else {
                 $this->msg = null;
             }
+
         }
 
         return null;
@@ -90,8 +131,10 @@ class AdminView extends AbstractView
                 'admin' => $this->user->admin,
                 'users' => $this->renderUsers(),
                 'action' => $adminPath,
-                'message' => $this->msg,
-                'messageStyle' => $this->msgStyle,
+                'messageAdd' => $this->msg['add'] ?? '',
+                'messageStyleAdd' => $this->msgStyle['add'] ?? '',
+                'messageUpdate' => $this->msg['update'] ?? '',
+                'messageStyleUpdate' => $this->msgStyle['update'] ?? '',
             )
         );
 

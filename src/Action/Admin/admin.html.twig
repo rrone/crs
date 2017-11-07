@@ -12,6 +12,55 @@
     <div class="panel panel-default no-border">
         <div class="panel-heading panel-masthead center border"><h1>Administrative Functions</h1></div>
 
+        {#Add User Panel#}
+        <div class="panel panel-default">
+            <!-- Form Name -->
+            <div class="panel-heading"><h2>Add User</h2></div>
+            <form class="form-horizontal user-update" method="post" action="{{ view.action | raw }}">
+                <fieldset>
+
+                    <!-- Select Basic -->
+                    <p></p>
+                    <div class="form-group">
+                        <label class="col-xs-4 control-label col-xs-offset-1" for="userName">Add User
+                            </label>
+                        <div class="col-xs-6">
+                            <input id="userName" type="text" name="userName" placeholder="User Name"
+                                   class="form-control input-md">
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+
+                    <!-- Password input-->
+                    <div class="form-group">
+                        <label class="col-xs-4 control-label col-xs-offset-1" for="newPassword">Enter New
+                            Password</label>
+                        <div class="col-xs-6">
+                            <input id="newPassword" name="newPassword" type="text" placeholder="Password"
+                                   class="form-control input-md">
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+
+                    <!-- Button -->
+                    <div class="form-group">
+                        <div class="col-xs-12 text-right">
+                            <button id="btnAddUser" name="btnAddUser" class="btn btn-primary btn-sm center">Add User
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        {% if (view.messageStyleAdd != null) %}
+                            <p class="center" style={{ view.messageStyleAdd }}> {{ view.messageAdd | raw }}</p>
+                        {% endif %}
+                    </div>
+
+                </fieldset>
+            </form>
+        </div>
+
+        {#Update User Password#}
         <div class="panel panel-default">
             <!-- Form Name -->
             <div class="panel-heading"><h2>Update User Password</h2></div>
@@ -37,7 +86,7 @@
                         <label class="col-xs-4 control-label col-xs-offset-1" for="passwordInput">Enter New
                             Password</label>
                         <div class="col-xs-6">
-                            <input id="passwordInput" name="passwordInput" type="text" placeholder=""
+                            <input id="passwordInput" name="passwordInput" type="text" placeholder="New password"
                                    class="form-control input-md">
                             <span class="help-block"></span>
                         </div>
@@ -52,8 +101,8 @@
                     </div>
 
                     <div class="form-group">
-                        {% if (view.messageStyle != null) %}
-                            <p class="center" style={{ view.messageStyle }}> {{ view.message | raw }}</p>
+                        {% if (view.messageStyleUpdate != null) %}
+                            <p class="center" style={{ view.messageStyleUpdate }}> {{ view.messageUpdate | raw }}</p>
                         {% endif %}
                     </div>
 
@@ -61,6 +110,7 @@
             </form>
         </div>
 
+        {#Update User Password#}
         <div class="panel panel-default">
             <!-- Form Name -->
             <div class="panel-heading"><h2>Log Functions</h2></div>
@@ -72,7 +122,7 @@
                         <div class="col-xs-12 center">
                             <label class="col-xs-2 control-label" for="logNote">Log Note</label>
                             <div class="col-xs-7">
-                                <input style="width: 100%" id="logNote" name="logNote" type="text" placeholder=""
+                                <input style="width: 100%" id="logNote" name="logNote" type="text" placeholder="Log note"
                                        class="form-control input-md">
                             </div>
                             <div class="text-right" style="margin-top: -4px;">

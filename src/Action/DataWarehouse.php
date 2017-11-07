@@ -180,6 +180,17 @@ class DataWarehouse
         return $results;
     }
 
+    /**
+     * @param integer $limit
+     * @return Collection
+     */
+    public function getRefsWithNoBSCerts($limit = self::BIGINT)
+    {
+        $results = $this->db::select('call RefereesWithNoCerts()');
+
+        return $results;
+    }
+
 //Log writer
 
     /**

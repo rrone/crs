@@ -59,7 +59,7 @@ EOD;
         $html .= <<<EOD
 <div class="legend">
     <h3>Notes on these reports</h3>
-        <ul>
+        <ol>
             <li>All reports are delivered as Excel workbooks.</li>
             <li>All report data is extracted from the 83 Blue Sombrero Portals within Section 1 on Friday.</li>
             <li>Suggestions for other reports should be sent to <a href="mailto:{{ sra_email }}?{{ 
@@ -73,7 +73,7 @@ EOD;
             AYSOU.ORG.  You also need to be included on the Instructor list in AYSOU.  You can request inclusion 
             by a request to <a href="mailto:support@ayso.org?subject=Mad as hell and not going to take it anymore...">support@ayso.org</a>.</li>
             <li>Don't be surprised if it takes months to get it corrected.  Be the squeaky wheel.</li>
-        </ul>
+        </ol>
 
 </div>
 <hr>
@@ -82,26 +82,31 @@ EOD;
         $html .= "<h3 class=\"center\">Available reports for volunteers in Section 1:</h3>\n";
 
         $href = $this->getBaseURL('hrc');
-        $html .= "<h3 class=\"center\"><a  href=$href >Highest Referee Certification</a></h3>\n";
+        $html .= "<h3 class=\"center\"><a  href=$href download>Highest Referee Certification</a></h3>\n";
         $html .= "<div class='clear-fix'></div>\n";
         $html .= "</h3>\n";
 
         $href = $this->getBaseURL('ra');
-        $html .= "<h3 class=\"center\"><a  href=$href >Referee Assessors</a></h3>\n";
+        $html .= "<h3 class=\"center\"><a  href=$href download>Referee Assessors</a></h3>\n";
         $html .= "<div class='clear-fix'></div>\n";
         $html .= "</h3>\n";
 
         $href = $this->getBaseURL('ri');
-        $html .= "<h3 class=\"center\"><a  href=$href >Referee Instructors</a></h3>\n";
+        $html .= "<h3 class=\"center\"><a  href=$href download>Referee Instructors</a></h3>\n";
         $html .= "<div class='clear-fix'></div>\n";
         $html .= "</h3>\n";
 
         $href = $this->getBaseURL('rie');
-        $html .= "<h3 class=\"center\"><a  href=$href >Referee Instructor Evaluators</a></h3>\n";
+        $html .= "<h3 class=\"center\"><a  href=$href download>Referee Instructor Evaluators</a></h3>\n";
         $html .= "<div class='clear-fix'></div>\n";
         $html .= "</h3>\n";
-        $html .= "<hr>\n";
 
+        $href = $this->getBaseURL('nocerts');
+        $html .= "<h3 class=\"center\"><a  href=$href download>Referee Registered in BS without Certifications</a> (see Note #5 above)</h3>\n";
+        $html .= "<div class='clear-fix'></div>\n";
+        $html .= "</h3>\n";
+
+        $html .= "<hr>\n";
         $href = $this->getBaseURL('end');
         $html .= "<h3 class=\"center\"><a href=$href>Log Off</a></h3>\n";
 

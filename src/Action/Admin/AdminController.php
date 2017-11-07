@@ -43,9 +43,7 @@ class AdminController extends AbstractController
                 return $response->withRedirect($this->getBaseURL('logExport'));
         }
 
-        $this->adminView->render($response);
-
-        return $response;
+        return $this->adminView->render($response);
 
     }
 }

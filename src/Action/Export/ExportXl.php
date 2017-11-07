@@ -52,6 +52,9 @@ class ExportXl extends AbstractExporter
             case 'rie':
                 $results = $this->dw->getRefInstructorEvaluators($limit);
                 break;
+            case 'nocerts':
+                $results = $this->dw->getRefsWithNoBSCerts($limit);
+                break;
             default:
                 $results = null;
         }

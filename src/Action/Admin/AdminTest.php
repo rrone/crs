@@ -128,7 +128,7 @@ class AdminTest extends AppTestCase
         ];
 
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get('/adm/log');
+        $response = (object)$this->client->get('/adm');
 
         $url = implode($response->getHeader('Location'));
 
@@ -157,7 +157,7 @@ class AdminTest extends AppTestCase
         ];
 
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get('/adm/log');
+        $response = (object)$this->client->get('/log');
 
         $contentType = $response->getHeader('Content-Type')[0];
         $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';

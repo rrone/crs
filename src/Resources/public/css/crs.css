@@ -75,6 +75,7 @@ td {
     padding: 0 2px;
 }
 .maincontent {
+    margin-top: 40px;
     padding-right: 15px;
     padding-left: 15px;
     line-height: 1.4;

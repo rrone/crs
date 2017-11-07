@@ -78,7 +78,7 @@ class LogonTest extends AppTestCase
         $this->client->returnAsResponseObject(true);
         $response = (object)$this->client->post($url, $body, $headers);
         $view = (string)$response->getBody();
-        $this->assertContains('<h1>Section 1: Certification Reporting System</h1>', $view);
+        $this->assertContains('<td width="50%"><div class="right">Report Admin: </div></td>', $view);
         $this->assertContains("Unrecognized password for $this->userName", $view);
     }
 

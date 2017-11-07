@@ -44,7 +44,7 @@ class ExportsTest extends AppTestCase
 
         //Highest Referee Certification
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get('/export/hrc?100');
+        $response = (object)$this->client->get('/hrc?100');
 
         $contentType = $response->getHeader('Content-Type')[0];
         $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
@@ -56,7 +56,7 @@ class ExportsTest extends AppTestCase
 
         //Referee Assessors
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get('/export/ra');
+        $response = (object)$this->client->get('/ra');
 
         $contentType = $response->getHeader('Content-Type')[0];
         $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
@@ -68,7 +68,7 @@ class ExportsTest extends AppTestCase
 
         //Referee Instructors
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get('/export/ri');
+        $response = (object)$this->client->get('/ri');
 
         $contentType = $response->getHeader('Content-Type')[0];
         $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
@@ -80,7 +80,7 @@ class ExportsTest extends AppTestCase
 
         //Referee Instructor Evaluators
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get('/export/rie');
+        $response = (object)$this->client->get('/rie');
 
         $contentType = $response->getHeader('Content-Type')[0];
         $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
@@ -104,7 +104,7 @@ class ExportsTest extends AppTestCase
 
         //Highest Referee Certification
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get('/export/hrc?100');
+        $response = (object)$this->client->get('/hrc?100');
 
         $contentType = $response->getHeader('Content-Type')[0];
         $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
@@ -116,7 +116,7 @@ class ExportsTest extends AppTestCase
 
         //Referee Assessors
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get('/export/ra');
+        $response = (object)$this->client->get('/ra');
 
         $contentType = $response->getHeader('Content-Type')[0];
         $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
@@ -128,7 +128,7 @@ class ExportsTest extends AppTestCase
 
         //Referee Instructors
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get('/export/ri');
+        $response = (object)$this->client->get('/ri');
 
         $contentType = $response->getHeader('Content-Type')[0];
         $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
@@ -140,7 +140,7 @@ class ExportsTest extends AppTestCase
 
         //Referee Instructor Evaluators
         $this->client->returnAsResponseObject(true);
-        $response = (object)$this->client->get('/export/rie');
+        $response = (object)$this->client->get('/rie');
 
         $contentType = $response->getHeader('Content-Type')[0];
         $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';

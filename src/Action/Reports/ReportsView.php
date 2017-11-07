@@ -48,6 +48,14 @@ class ReportsView extends AbstractView
 
 //        $html .= "<h3 class=\"center\">Welcome, $uname</h3>\n";
 
+        if ($this->container['settings']['debug']) {
+            $html .= <<<EOD
+<div class="center">
+    <h1>Section 1: Certification Reporting System</h1>
+</div>
+EOD;
+        }
+
         $html .= <<<EOD
 <div class="legend">
     <h3>Notes on these reports</h3>

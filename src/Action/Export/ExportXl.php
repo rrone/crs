@@ -30,10 +30,6 @@ class ExportXl extends AbstractExporter
 
         $uri = $request->getUri()->getPath();
 
-        $type = array_values(explode('/', $uri));
-
-        $dataRequest = isset($type[2]) ? $type[2] : null;
-
         $params = $request->getParams();
         if (!is_null($params)) {
             $params = array_keys($params);
@@ -43,7 +39,7 @@ class ExportXl extends AbstractExporter
             $limit = null;
         }
 
-        switch ($dataRequest) {
+        switch (str_replace ('/','',$uri)) {
             case 'hrc':
                 $results = $this->dw->getHighestRefCerts($limit);
                 break;

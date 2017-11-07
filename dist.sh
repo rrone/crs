@@ -50,6 +50,8 @@ find $dist -type f -name '.DS_Store' -delete
 echo "  Removing development jetsam..."
 find $dist -type f -name 'app_*' -delete
 find $dist/src -type f -name '*Test.php' -delete
+rm -f -r $dist/public/app_prod.php
+rm -f -r $dist/public/app_dev.php
 ##rm -f -r $dist/config/.git
 ##find $dist/config -type f -name '.env' -delete
 

@@ -8,7 +8,7 @@ if (PHP_SAPI === 'cli-server' && $_SERVER['SCRIPT_FILENAME'] !== __FILE__) {
 
 define('PROJECT_ROOT', realpath(__DIR__ . '/..'));
 
-ini_set("display_errors", 1);
+ini_set("display_errors", 0);
 //Define where the log goes: syslog
 ini_set("error_log", "syslog");
 ini_set("log_errors", 1);

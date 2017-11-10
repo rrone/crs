@@ -38,7 +38,7 @@ class ExportXl extends AbstractExporter
         } else {
             $limit = null;
         }
-
+        var_dump($uri); die();
         switch (str_replace ('/','',$uri)) {
             case 'hrc':
                 $results = $this->dw->getHighestRefCerts($limit);

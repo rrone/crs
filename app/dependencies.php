@@ -28,10 +28,22 @@ $container['view'] = function (\Slim\Container $c) {
         $ver = 'Version '.$settings['version']['version'];
 
         return $ver;
-    }
+        }
     );
 
     $view->getEnvironment()->addFunction($Version);
+
+    $filter_cast_to_array = new Twig_SimpleFilter('cast_to_array', function ($stdClassObject) {
+        $response = array();
+
+        foreach ($stdClassObject as $key => $value) {
+            $response[] = array($key, $value->text);
+        }
+//        var_dump($response); die();
+        return $response;
+    });
+
+    $view->getEnvironment()->addFilter($filter_cast_to_array);
 
     return $view;
 };

@@ -187,9 +187,30 @@ class DataWarehouse
     public function getRefsWithNoBSCerts($limit = self::BIGINT)
     {
         $results = $this->db::select('call RefereesWithNoCerts()');
-
+var_dump($results); die();
         return $results;
     }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function getReports()
+    {
+        return $this->db->table('reports')
+            ->orderBy('seq')
+            ->get();
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function getReportNotes()
+    {
+        return $this->db->table('report_notes')
+            ->orderBy('seq')
+            ->get();
+    }
+
 
 //Log writer
 

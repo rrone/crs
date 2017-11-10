@@ -16,7 +16,7 @@ class ExportController extends AbstractController
 		parent::__construct($container);
 
         $this->exportXl = $exportXl;
-        
+
     }
     public function __invoke(Request $request, Response $response, $args)
     {

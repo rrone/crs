@@ -187,7 +187,7 @@ class DataWarehouse
     public function getRefsWithNoBSCerts($limit = self::BIGINT)
     {
         $results = $this->db::select('call RefereesWithNoCerts()');
-var_dump($results); die();
+
         return $results;
     }
 

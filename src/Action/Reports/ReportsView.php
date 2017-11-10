@@ -70,12 +70,12 @@ EOD;
 
         foreach($reports as $report) {
             $href = $this->getBaseURL($report->key);
-            var_dump($href);
+
             $html .= "<h3 class=\"center\"><a  href=$href download>$report->text</a> $report->notes</h3>\n";
             $html .= "<div class='clear-fix'></div>\n";
             $html .= "</h3>\n";
         }
-die();
+
         $html .= "<hr>\n";
         $href = $this->getBaseURL('end');
         $html .= "<h3 class=\"center\"><a href=$href>Log Off</a></h3>\n";

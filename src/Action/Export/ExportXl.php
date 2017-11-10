@@ -38,7 +38,7 @@ class ExportXl extends AbstractExporter
         } else {
             $limit = null;
         }
-        var_dump($uri); die();
+
         switch (str_replace ('/','',$uri)) {
             case 'hrc':
                 $results = $this->dw->getHighestRefCerts($limit);
@@ -113,6 +113,8 @@ class ExportXl extends AbstractExporter
             $content['report']['data'] = $data;
             $content['report']['options']['freezePane'] = 'A2';
             $content['report']['options']['horizontalAlignment'] = ['B1:Z' => 'left'];
+        } else {
+            return null;
         }
 
         return $content;

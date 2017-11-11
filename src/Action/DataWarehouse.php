@@ -212,6 +212,21 @@ class DataWarehouse
     }
 
 
+    /**
+     * @return mixed
+     */
+    public function getUpdateTimestamp()
+    {
+        $ts = $this->db->table('certs')
+            ->orderBy('timestamp', 'desc')
+            ->limit(1)
+            ->get();
+
+        $updated = $this->getZero($ts)->timestamp;
+
+        return $updated;
+    }
+
 //Log writer
 
     /**

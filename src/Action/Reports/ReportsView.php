@@ -35,6 +35,7 @@ class ReportsView extends AbstractView
                 'notes' =>  $this->dw->getReportNotes(),
                 'content' => $this->renderView(),
                 'message' => null,
+                'updated' => $this->getUpdateTimestamp(),
             ),
         );
 
@@ -82,5 +83,12 @@ EOD;
 
         return $html;
 
+    }
+
+    protected function getUpdateTimestamp()
+    {
+        $ts = $this->dw->getUpdateTimestamp();
+
+        return $ts;
     }
 }

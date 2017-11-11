@@ -17,8 +17,6 @@ class ReportsView extends AbstractView
     {
         parent::__construct($container, $dataWarehouse);
 
-        $this->games = null;
-        $this->description = 'No matches scheduled';
     }
 
     public function handler(Request $request, Response $response)

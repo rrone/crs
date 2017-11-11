@@ -2,9 +2,9 @@
 
 {% block content %}
     <div class="maincontent">
+        <p class="right">Last Data Refresh: {{ view.updated | raw }}</p>
         <p class="center"><span style="color: #FF0000">{{ view.message | raw }}</span></p>
         {{ view.header | raw }}
-        <p class="right">Last Data Refresh: {{ view.updated | raw }}</p>
         <br>
 
         <div class="legend">

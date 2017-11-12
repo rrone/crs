@@ -73,7 +73,6 @@ abstract class AbstractController
 
         $_GET = $request->getParams();
         $uri = $request->getUri()->getPath();
-        $uriPath = $uri == '/' ? 'logon' : str_replace('/', '', $uri);
         $user = isset($this->user) ? $this->user->name : 'Anonymous';
         $post = $request->isPost() ? 'with updated ref assignments' : '';
 
@@ -91,13 +90,13 @@ abstract class AbstractController
             case $this->getBaseURL('reports'):
             case '/reports':
                 if (!empty($post)) {
-                    $logMsg = "$user: CRS $uriPath dispatched $post";
+                    $logMsg = "$user: CRS $uri dispatched $post";
                 } else {
                     return null;
                 }
                 break;
             default:
-                $logMsg = "$user: CRS $uriPath dispatched";
+                $logMsg = "$user: CRS $uri dispatched";
                 break;
         }
 

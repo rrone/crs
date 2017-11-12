@@ -27,6 +27,13 @@ class ExportXl extends AbstractExporter
     public function handler(Request $request, Response $response)
     {
         $this->user = $request->getAttribute('user');
+        if($this->user->admin) {
+            $userKey = '%%';
+        }else{
+            $key = explode(' ', $this->user->name);
+            $userKey = end($key);
+            $userKey = $userKey == '10' ? '1' : $userKey;
+        }
 
         $uri = $request->getUri()->getPath();
 
@@ -39,21 +46,21 @@ class ExportXl extends AbstractExporter
             $limit = null;
         }
 
-        switch (str_replace ('/','',$uri)) {
+        switch (str_replace('/', '', $uri)) {
             case 'hrc':
-                $results = $this->dw->getHighestRefCerts($limit);
+                $results = $this->dw->getHighestRefCerts($userKey, $limit);
                 break;
             case 'ra':
-                $results = $this->dw->getRefAssessors($limit);
+                $results = $this->dw->getRefAssessors($userKey, $limit);
                 break;
             case 'ri':
-                $results = $this->dw->getRefInstructors($limit);
+                $results = $this->dw->getRefInstructors($userKey, $limit);
                 break;
             case 'rie':
-                $results = $this->dw->getRefInstructorEvaluators($limit);
+                $results = $this->dw->getRefInstructorEvaluators($userKey, $limit);
                 break;
             case 'nocerts':
-                $results = $this->dw->getRefsWithNoBSCerts($limit);
+                $results = $this->dw->getRefsWithNoBSCerts($userKey, $limit);
                 break;
             default:
                 $results = null;
@@ -62,7 +69,7 @@ class ExportXl extends AbstractExporter
         $content = null;
         $this->generateExport($content, $results);
 
-        if(is_null($results)) {
+        if (is_null($results)) {
             return $response->withRedirect($this->getBaseURL('logon'));
         }
         // generate the response
@@ -100,14 +107,24 @@ class ExportXl extends AbstractExporter
             foreach ($certs as $cert) {
                 $row = [];
                 if (!empty($cert)) {
-                    foreach ($cert as $ref) {
-                        $row[] = $ref;
+                    foreach ($cert as $key => $value) {
+                        switch ($key) {
+                            case 'Name':
+                            case 'First Name':
+                            case 'Last Name':
+                            case 'Address':
+                            case 'City':
+                            case 'Email':
+                                $value = ucwords(strtolower($value));
+                                break;
+                        }
+
+                        $row[] = $value;
                     }
                 }
 
                 $data[] = $row;
             }
-
         }
         if (!empty($data)) {
             $content['report']['data'] = $data;

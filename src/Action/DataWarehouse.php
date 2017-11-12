@@ -129,12 +129,14 @@ class DataWarehouse
     }
 
     /**
+     * @param mixed $userKey
      * @param integer $limit
      * @return mixed
      */
-    public function getHighestRefCerts($limit = self::BIGINT)
+    public function getHighestRefCerts($userKey, $limit = self::BIGINT)
     {
         $results = $this->db->table('hrc_tmp')
+            ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
 
@@ -142,12 +144,20 @@ class DataWarehouse
     }
 
     /**
+     * @param mixed $userKey
      * @param integer $limit
      * @return mixed
      */
-    public function getRefAssessors($limit = self::BIGINT)
+    public function getRefAssessors($userKey = null, $limit = self::BIGINT)
     {
+        if (is_null($userKey)) {
+            $userKey = '%%';
+        } else {
+            $userKey = "%$userKey%";
+        }
+
         $results = $this->db->table('ra_tmp')
+            ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
 
@@ -155,12 +165,20 @@ class DataWarehouse
     }
 
     /**
+     * @param mixed $userKey
      * @param integer $limit
      * @return mixed
      */
-    public function getRefInstructors($limit = self::BIGINT)
+    public function getRefInstructors($userKey = null, $limit = self::BIGINT)
     {
+        if (is_null($userKey)) {
+            $userKey = '%%';
+        } else {
+            $userKey = "%$userKey%";
+        }
+
         $results = $this->db->table('ri_tmp')
+            ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
 
@@ -168,12 +186,20 @@ class DataWarehouse
     }
 
     /**
+     * @param mixed $userKey
      * @param integer $limit
      * @return Collection
      */
-    public function getRefInstructorEvaluators($limit = self::BIGINT)
+    public function getRefInstructorEvaluators($userKey = null, $limit = self::BIGINT)
     {
+        if (is_null($userKey)) {
+            $userKey = '%%';
+        } else {
+            $userKey = "%$userKey%";
+        }
+
         $results = $this->db->table('rie_tmp')
+            ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
 
@@ -181,12 +207,19 @@ class DataWarehouse
     }
 
     /**
+     * @param mixed $userKey
      * @param integer $limit
      * @return Collection
      */
-    public function getRefsWithNoBSCerts($limit = self::BIGINT)
+    public function getRefsWithNoBSCerts($userKey = null, $limit = self::BIGINT)
     {
-        $results = $this->db::select('call RefereesWithNoCerts()');
+        if (is_null($userKey)) {
+            $userKey = '%%';
+        } else {
+            $userKey = "%$userKey%";
+        }
+
+        $results = $this->db::select("call RefereesWithNoCerts(?)", [$userKey]);
 
         return $results;
     }

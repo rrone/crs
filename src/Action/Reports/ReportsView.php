@@ -7,6 +7,8 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Action\AbstractView;
 use App\Action\DataWarehouse;
+use DateTime;
+use DateTimeZone;
 
 class ReportsView extends AbstractView
 {
@@ -85,8 +87,11 @@ EOD;
 
     protected function getUpdateTimestamp()
     {
-        $ts = $this->dw->getUpdateTimestamp();
+        $utc = $this->dw->getUpdateTimestamp();
 
-        return $ts;
+        $ts = new DateTime($utc, new DateTimeZone('UTC'));
+        $ts->setTimezone(new DateTimeZone('PST'));
+
+        return $ts->format('Y-m-d H:i:s');;
     }
 }

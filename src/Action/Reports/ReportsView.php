@@ -28,6 +28,7 @@ class ReportsView extends AbstractView
         $content = array(
             'view' => array(
                 'admin' => $this->user->admin,
+                'user' => $this->user->name,
                 'header' => $this->renderHeader(),
                 'notes' =>  $this->dw->getReportNotes(),
                 'content' => $this->renderView(),

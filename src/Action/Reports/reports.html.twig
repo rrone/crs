@@ -2,21 +2,26 @@
 
 {% block content %}
     <div class="maincontent">
-        <p class="right">Last Data Refresh: {{ view.updated | raw }} PST</p>
-        <p class="center"><span style="color: #FF0000">{{ view.message | raw }}</span></p>
-        {{ view.header | raw }}
-        <br>
-
-        <div class="legend">
-            <h3>Notes on these reports</h3>
-            <ol>
-                {% for key, value in view.notes|cast_to_array %}
-                    <li>{{ value.1 | raw }}</li>
-                {% endfor %}
-            </ol>
-            <hr>
-            {{ view.content | raw }}
+        <div class="right">
+            <p style="text-align: right">{{ view.user | raw }}</p>
+            <p>Last Data Refresh: {{ view.updated | raw }} PST</p>
         </div>
+
+        <p class="center"><span style="color: #FF0000">{{ view.message | raw }}</span></p>
+    </div>
+    {{ view.header | raw }}
+    <br>
+
+    <div class="legend">
+        <h3>Notes on these reports</h3>
+        <ol>
+            {% for key, value in view.notes|cast_to_array %}
+                <li>{{ value.1 | raw }}</li>
+            {% endfor %}
+        </ol>
+        <hr>
+        {{ view.content | raw }}
+    </div>
 
     </div>
 {% endblock %}

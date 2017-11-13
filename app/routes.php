@@ -33,10 +33,13 @@ $app->get('/ri', App\Action\Export\ExportController::class)
     ->setName('ri');
 $app->get('/rie', App\Action\Export\ExportController::class)
     ->setName('rie');
+$app->get('/nra', App\Action\Export\ExportController::class)
+    ->setName('nra');
 $app->get('/nocerts', App\Action\Export\ExportController::class)
     ->setName('nocerts');
 $container['hrc'] = $container->get('router')->pathFor('hrc');
 $container['ra'] = $container->get('router')->pathFor('ra');
 $container['ri'] = $container->get('router')->pathFor('ri');
 $container['rie'] = $container->get('router')->pathFor('rie');
+$container['nra'] = $container->get('router')->pathFor('nra');
 $container['nocerts'] = $container->get('router')->pathFor('nocerts');

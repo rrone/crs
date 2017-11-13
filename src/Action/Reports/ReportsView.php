@@ -12,9 +12,6 @@ use DateTimeZone;
 
 class ReportsView extends AbstractView
 {
-    private $games;
-    private $description;
-
     public function __construct(Container $container, DataWarehouse $dataWarehouse)
     {
         parent::__construct($container, $dataWarehouse);
@@ -70,12 +67,13 @@ EOD;
         $reports = $this->dw->getReports();
 
         foreach($reports as $report) {
-            $href = $this->getBaseURL($report->key);
+            if(!$report->admin || ($report->admin && $this->user->admin)) {
+                $href = $this->getBaseURL($report->key);
 
-            $html .= "<h3 class=\"center\"><a  href=$href download>$report->text</a><span style='font-weight:normal'>
-$report->notes</span></h3>\n";
-            $html .= "<div class='clear-fix'></div>\n";
-            $html .= "</h3>\n";
+                $html .= "<h3 class=\"center\"><a  href=$href download>$report->text</a><span style='font-weight:normal'>$report->notes</span></h3>\n";
+                $html .= "<div class='clear-fix'></div>\n";
+                $html .= "</h3>\n";
+            }
         }
 
         $html .= "<hr>\n";

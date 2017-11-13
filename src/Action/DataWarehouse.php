@@ -169,6 +169,25 @@ class DataWarehouse
      * @param integer $limit
      * @return mixed
      */
+    public function getRefNationalAssessors($userKey = null, $limit = self::BIGINT)
+    {
+        if (is_null($userKey)) {
+            $userKey = '';
+        }
+
+        $results = $this->db->table('tmp_nra')
+            ->where('sar', 'like', "%$userKey%")
+            ->limit($limit)
+            ->get();
+
+        return $results;
+    }
+
+    /**
+     * @param mixed $userKey
+     * @param integer $limit
+     * @return mixed
+     */
     public function getRefInstructors($userKey = null, $limit = self::BIGINT)
     {
         if (is_null($userKey)) {

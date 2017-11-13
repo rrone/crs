@@ -62,6 +62,9 @@ class ExportXl extends AbstractExporter
             case 'nocerts':
                 $results = $this->dw->getRefsWithNoBSCerts($userKey, $limit);
                 break;
+            case 'nra':
+                $results = $this->dw->getRefNationalAssessors($userKey, $limit);
+                break;
             default:
                 $results = null;
         }
@@ -114,9 +117,10 @@ class ExportXl extends AbstractExporter
                             case 'Last Name':
                             case 'Address':
                             case 'City':
-                            case 'Email':
-                                $value = ucwords(strtolower($value));
+                            $value = ucwords(strtolower($value));
                                 break;
+                            case 'Email':
+                                $value = strtolower($value);
                         }
 
                         $row[] = $value;

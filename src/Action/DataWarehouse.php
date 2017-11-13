@@ -135,7 +135,7 @@ class DataWarehouse
      */
     public function getHighestRefCerts($userKey, $limit = self::BIGINT)
     {
-        $results = $this->db->table('hrc_tmp')
+        $results = $this->db->table('tmp_hrc')
             ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
@@ -156,7 +156,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->table('ra_tmp')
+        $results = $this->db->table('tmp_ra')
             ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
@@ -177,7 +177,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->table('ri_tmp')
+        $results = $this->db->table('tmp_ri')
             ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
@@ -198,7 +198,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->table('rie_tmp')
+        $results = $this->db->table('tmp_rie')
             ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
@@ -219,7 +219,10 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db::select("call RefereesWithNoCerts(?)", [$userKey]);
+        $results = $this->db->table('tmp_nocerts')
+            ->where('sar', 'like', "%$userKey%")
+            ->limit($limit)
+            ->get();
 
         return $results;
     }
@@ -250,7 +253,7 @@ class DataWarehouse
      */
     public function getUpdateTimestamp()
     {
-        $ts = $this->db->table('certs')
+        $ts = $this->db->table('lastUpdate')
             ->orderBy('timestamp', 'desc')
             ->limit(1)
             ->get();

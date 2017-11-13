@@ -111,6 +111,9 @@ td {
 .btn  {
     margin: 10px 20px;
 }
+#btnDone {
+    background-color: lightgrey;
+}
 .left-margin {
     margin-left: 20px;
 }

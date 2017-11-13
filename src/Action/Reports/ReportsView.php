@@ -72,7 +72,8 @@ EOD;
         foreach($reports as $report) {
             $href = $this->getBaseURL($report->key);
 
-            $html .= "<h3 class=\"center\"><a  href=$href download>$report->text</a> $report->notes</h3>\n";
+            $html .= "<h3 class=\"center\"><a  href=$href download>$report->text</a><span style='font-weight:normal'>
+$report->notes</span></h3>\n";
             $html .= "<div class='clear-fix'></div>\n";
             $html .= "</h3>\n";
         }

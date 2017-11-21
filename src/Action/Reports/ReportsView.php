@@ -63,7 +63,9 @@ EOD;
     {
         $html = null;
 
-        $html .= "<h3 class=\"center\">Available reports for volunteers in Section 1:</h3>\n";
+        $u = $this->user->name;
+        $html .= "<h3>Available reports for $u:</h3>\n";
+        $html .= "<ul class=\"indent\">";
 
         $reports = $this->dw->getReports();
 
@@ -72,9 +74,7 @@ EOD;
                 $href = $this->getBaseURL($report->key);
                 $notes = empty($report->notes) ? null : "<span style='font-weight:normal'> ($report->notes)</span>";
 
-                $html .= "<h3 class=\"center\"><a  href=$href download>$report->text</a>$notes</h3>\n";
-                $html .= "<div class='clear-fix'></div>\n";
-                $html .= "</h3>\n";
+                $html .= "<li><h3><a  href=$href download>$report->text</a>$notes</h3></li>";
             }
         }
 
@@ -93,6 +93,6 @@ EOD;
         $ts = new DateTime($utc, new DateTimeZone('UTC'));
         $ts->setTimezone(new DateTimeZone('PST'));
 
-        return $ts->format('Y-m-d H:i:s');;
+        return $ts->format('Y-m-d H:i');
     }
 }

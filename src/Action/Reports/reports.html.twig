@@ -3,8 +3,8 @@
 {% block content %}
     <div class="maincontent">
         <div class="right">
-            <p style="text-align: right">User: {{ view.user | raw }}</p>
-            <p>Last Refresh: {{ view.updated | raw }} PST</p>
+            <p style="text-align: right"><b>User:</b> {{ view.user | raw }}</p>
+            <p><b>Last Refresh:</b> {{ view.updated | raw }} PST</p>
         </div>
 
         <p class="center"><span style="color: #FF0000">{{ view.message | raw }}</span></p>
@@ -13,7 +13,7 @@
     <br>
 
     <div class="legend">
-        <h3>Notes on these reports</h3>
+        <h3>Notes on these reports:</h3>
         <ol>
             {% for key, value in view.notes|cast_to_array %}
                 <li>{{ value.1 | raw }}</li>

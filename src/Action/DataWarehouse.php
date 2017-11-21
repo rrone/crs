@@ -247,6 +247,27 @@ class DataWarehouse
     }
 
     /**
+     * @param mixed $userKey
+     * @param integer $limit
+     * @return Collection
+     */
+    public function getRefUpgrades($userKey = null, $limit = self::BIGINT)
+    {
+        if (is_null($userKey)) {
+            $userKey = '%%';
+        } else {
+            $userKey = "%$userKey%";
+        }
+
+        $results = $this->db->table('tmp_ref_upgrades')
+            ->where('sar', 'like', "%$userKey%")
+            ->limit($limit)
+            ->get();
+
+        return $results;
+    }
+
+    /**
      * @return \Illuminate\Support\Collection
      */
     public function getReports()

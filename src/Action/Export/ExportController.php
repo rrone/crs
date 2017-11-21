@@ -29,6 +29,7 @@ class ExportController extends AbstractController
 
         $request = $request->withAttributes([
             'user' => $this->user,
+            'baseURL' => $this->getBaseURL('logon')
         ]);
 
         $response = $this->exportXl->handler($request, $response);

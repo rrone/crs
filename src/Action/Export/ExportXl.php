@@ -14,6 +14,7 @@ class ExportXl extends AbstractExporter
 
     private $outFileName;
     private $user;
+    private $baseURL;
 
     public function __construct(DataWarehouse $dataWarehouse)
     {
@@ -27,6 +28,8 @@ class ExportXl extends AbstractExporter
     public function handler(Request $request, Response $response)
     {
         $this->user = $request->getAttribute('user');
+        $this->baseURL = $request->getAttribute('baseURL');
+
         if($this->user->admin) {
             $userKey = '%%';
         }else{
@@ -46,7 +49,14 @@ class ExportXl extends AbstractExporter
             $limit = null;
         }
 
-        switch (str_replace('/', '', $uri)) {
+        $uri = str_replace('/', '', $uri);
+        
+        $user = explode(' ', $this->user->name);
+        $u = strtolower(str_replace('/', '', end($user)));
+
+        $this->outFileName = "$uri.$u." . $this->outFileName;
+
+        switch ($uri) {
             case 'hrc':
                 $results = $this->dw->getHighestRefCerts($userKey, $limit);
                 break;
@@ -62,6 +72,9 @@ class ExportXl extends AbstractExporter
             case 'nocerts':
                 $results = $this->dw->getRefsWithNoBSCerts($userKey, $limit);
                 break;
+            case 'ruc':
+                $results = $this->dw->getRefUpgrades($userKey, $limit);
+                break;
             case 'nra':
                 $results = $this->dw->getRefNationalAssessors($userKey, $limit);
                 break;
@@ -73,7 +86,7 @@ class ExportXl extends AbstractExporter
         $this->generateExport($content, $results);
 
         if (is_null($results)) {
-            return $response->withRedirect($this->getBaseURL('logon'));
+            return $response->withRedirect($this->baseURL);
         }
         // generate the response
         $response = $response->withHeader('Content-Type', $this->contentType);
@@ -121,6 +134,9 @@ class ExportXl extends AbstractExporter
                                 break;
                             case 'Email':
                                 $value = strtolower($value);
+                                break;
+                            case 'CertDate':
+                                $value = date_format(date_create($value), 'm/d/Y');
                         }
 
                         $row[] = $value;
@@ -131,6 +147,7 @@ class ExportXl extends AbstractExporter
             }
         }
         if (!empty($data)) {
+
             $content['report']['data'] = $data;
             $content['report']['options']['freezePane'] = 'A2';
             $content['report']['options']['horizontalAlignment'] = ['B1:Z' => 'left'];

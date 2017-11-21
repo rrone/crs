@@ -51,7 +51,7 @@ class ExportsTest extends AppTestCase
         $this->assertEquals($cType, $contentType);
 
         $contentDisposition = $response->getHeader('Content-Disposition')[0];
-        $this->assertContains('attachment; filename=Report_', $contentDisposition);
+        $this->assertContains('attachment; filename=', $contentDisposition);
         $this->assertContains('.xlsx', $contentDisposition);
 
         //Referee Assessors
@@ -63,7 +63,7 @@ class ExportsTest extends AppTestCase
         $this->assertEquals($cType, $contentType);
 
         $contentDisposition = $response->getHeader('Content-Disposition')[0];
-        $this->assertContains('attachment; filename=Report_', $contentDisposition);
+        $this->assertContains('attachment; filename=', $contentDisposition);
         $this->assertContains('.xlsx', $contentDisposition);
 
         //Referee Instructors
@@ -75,7 +75,7 @@ class ExportsTest extends AppTestCase
         $this->assertEquals($cType, $contentType);
 
         $contentDisposition = $response->getHeader('Content-Disposition')[0];
-        $this->assertContains('attachment; filename=Report_', $contentDisposition);
+        $this->assertContains('attachment; filename=', $contentDisposition);
         $this->assertContains('.xlsx', $contentDisposition);
 
         //Referee Instructor Evaluators
@@ -87,7 +87,7 @@ class ExportsTest extends AppTestCase
         $this->assertEquals($cType, $contentType);
 
         $contentDisposition = $response->getHeader('Content-Disposition')[0];
-        $this->assertContains('attachment; filename=Report_', $contentDisposition);
+        $this->assertContains('attachment; filename=', $contentDisposition);
         $this->assertContains('.xlsx', $contentDisposition);
     }
 
@@ -111,7 +111,7 @@ class ExportsTest extends AppTestCase
         $this->assertEquals($cType, $contentType);
 
         $contentDisposition = $response->getHeader('Content-Disposition')[0];
-        $this->assertContains('attachment; filename=Report_', $contentDisposition);
+        $this->assertContains('attachment; filename=', $contentDisposition);
         $this->assertContains('.xlsx', $contentDisposition);
 
         //Referee Assessors
@@ -123,7 +123,7 @@ class ExportsTest extends AppTestCase
         $this->assertEquals($cType, $contentType);
 
         $contentDisposition = $response->getHeader('Content-Disposition')[0];
-        $this->assertContains('attachment; filename=Report_', $contentDisposition);
+        $this->assertContains('attachment; filename=', $contentDisposition);
         $this->assertContains('.xlsx', $contentDisposition);
 
         //Referee Instructors
@@ -135,7 +135,7 @@ class ExportsTest extends AppTestCase
         $this->assertEquals($cType, $contentType);
 
         $contentDisposition = $response->getHeader('Content-Disposition')[0];
-        $this->assertContains('attachment; filename=Report_', $contentDisposition);
+        $this->assertContains('attachment; filename=', $contentDisposition);
         $this->assertContains('.xlsx', $contentDisposition);
 
         //Referee Instructor Evaluators
@@ -147,7 +147,19 @@ class ExportsTest extends AppTestCase
         $this->assertEquals($cType, $contentType);
 
         $contentDisposition = $response->getHeader('Content-Disposition')[0];
-        $this->assertContains('attachment; filename=Report_', $contentDisposition);
+        $this->assertContains('attachment; filename=', $contentDisposition);
+        $this->assertContains('.xlsx', $contentDisposition);
+
+        //Referee Upgrade Candidates
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->get('/ruc');
+
+        $contentType = $response->getHeader('Content-Type')[0];
+        $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        $this->assertEquals($cType, $contentType);
+
+        $contentDisposition = $response->getHeader('Content-Disposition')[0];
+        $this->assertContains('attachment; filename=', $contentDisposition);
         $this->assertContains('.xlsx', $contentDisposition);
     }
 }

@@ -106,18 +106,6 @@ class AppWebTestClient extends WebTestClient
         $app = $this->app;
         $this->response = $app($this->request, $response);
 
-//        if($this->followRedirect){
-//            while(empty((string)$this->response->getBody()))
-//            {
-//                $this->returnAsResponseObject(true);
-//                $url = implode($this->response->getHeader('Location'));
-//
-//                $this->response = $this->request('get', $url);
-//                var_dump((string)$this->response->getBody());
-//
-//            }
-//        }
-//
         // Return the application output
         if($this->returnAsObject){
             $return = $this->response;

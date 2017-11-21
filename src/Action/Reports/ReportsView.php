@@ -70,8 +70,9 @@ EOD;
         foreach($reports as $report) {
             if(!$report->admin || ($report->admin && $this->user->admin)) {
                 $href = $this->getBaseURL($report->key);
+                $notes = empty($report->notes) ? null : "<span style='font-weight:normal'> ($report->notes)</span>";
 
-                $html .= "<h3 class=\"center\"><a  href=$href download>$report->text</a><span style='font-weight:normal'>$report->notes</span></h3>\n";
+                $html .= "<h3 class=\"center\"><a  href=$href download>$report->text</a>$notes</h3>\n";
                 $html .= "<div class='clear-fix'></div>\n";
                 $html .= "</h3>\n";
             }

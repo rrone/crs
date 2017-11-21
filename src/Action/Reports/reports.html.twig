@@ -3,8 +3,8 @@
 {% block content %}
     <div class="maincontent">
         <div class="right">
-            <p style="text-align: right">{{ view.user | raw }}</p>
-            <p>Last Data Refresh: {{ view.updated | raw }} PST</p>
+            <p style="text-align: right">User: {{ view.user | raw }}</p>
+            <p>Last Refresh: {{ view.updated | raw }} PST</p>
         </div>
 
         <p class="center"><span style="color: #FF0000">{{ view.message | raw }}</span></p>

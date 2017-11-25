@@ -98,6 +98,7 @@ class ExportXl extends AbstractExporter
         // generate the response
         $response = $response->withHeader('Content-Type', $this->contentType);
         $response = $response->withHeader('Content-Disposition', 'attachment; filename='.$this->outFileName);
+        $response = $response->withHeader('Set-Cookie', 'fileDownload=true; path=/');
 
         /** @noinspection PhpUndefinedMethodInspection */
         $body = $response->getBody();

@@ -64,8 +64,9 @@ EOD;
         $html = null;
 
         $u = $this->user->name;
+        $html .= "<div id=\"reports\">";
         $html .= "<h3>Available reports for $u:</h3>\n";
-        $html .= "<ul class=\"indent\">";
+        $html .= "<ul class=\"indent\">\n";
 
         $reports = $this->dw->getReports();
 
@@ -74,13 +75,13 @@ EOD;
                 $href = $this->getBaseURL($report->key);
                 $notes = empty($report->notes) ? null : "<span style='font-weight:normal'> ($report->notes)</span>";
 
-                $html .= "<li><h3><a  href=$href download>$report->text</a>$notes</h3></li>";
+                $html .= "<li><h3><a  href=\"$href\" class=\"reportDownload\" >$report->text</a>$notes</h3></li>\n";
             }
         }
 
         $html .= "<hr>\n";
         $href = $this->getBaseURL('end');
-        $html .= "<h3 class=\"center\"><a href=$href>Log Off</a></h3>\n";
+        $html .= "<h3 class=\"center\"><a href=$href >Log Off</a></h3>\n";
 
         return $html;
 

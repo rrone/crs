@@ -1,5 +1,7 @@
 {% extends "layout.html.twig" %}
 
+{% block style %} {% endblock %}
+
 {% block content %}
     <div class="maincontent">
         <div class="right">
@@ -23,5 +25,42 @@
         {{ view.content | raw }}
     </div>
 
+    <div id="preparing-file-modal" title="Preparing report..." style="display: none;">
+        We are preparing your report, please wait...
+
+        <div class="ui-progressbar-value ui-corner-left ui-corner-right" style="width: 100%; height:22px; margin-top: 20px;"></div>
     </div>
+
+
+    <div id="error-modal" title="Error" style="display: none;">
+        There was a problem generating your report, please try again.
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src='{{ env_uri }}/js/filedownload.js'></script>
+    <script type="text/javascript">
+        $(function () {
+            // Simple rich user experience - jquery.fileDownload.js & jQuery UI Dialog
+            // uses the optional "options" argument
+            //
+            //      the below uses jQuery "on" http://api.jquery.com/on/ (jQuery 1.7 + required, otherwise use "delegate" or "live") so that any
+            //      <a class="fileDownload..."/> that is ever loaded into an Ajax site will automatically use jquery.fileDownload.js
+            //      if you are using "on":
+            //          you should generally be able to reduce the scope of the selector below "document" but it is used in this example so it
+            //          works for possible dynamic manipulation in the entire DOM
+            //
+            $(document).on("click", "a.reportDownload", function () {
+                $.fileDownload($(this).prop('href'), {
+                    preparingMessageHtml: "Your report is being generated, please wait...",
+                    failMessageHtml: "There was a problem generating your report, please try again."
+                });
+                return false; //this is critical to stop the click event which will trigger a normal file download!
+            });
+        });
+
+    </script>
+
+
 {% endblock %}

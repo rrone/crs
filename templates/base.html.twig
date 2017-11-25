@@ -9,6 +9,12 @@
     <link rel="icon" href="/images/favicon.ico" sizes="16x16">
     <link href='{{ env_uri }}/css/bootstrap.min.css' rel='stylesheet' type='text/css'/>
     <link href='{{ env_uri }}/css/app.css' rel='stylesheet' type='text/css'/>
+
+    <style>
+
+        {% block style %}{% endblock %}
+
+    </style>
 </head>
 
 <body>
@@ -24,11 +30,13 @@
             <p>Questions? Contact the <a href="mailto:{{ sra_email }}">Section 1 Referee Administrator.</a></p>
             {% if ( view.admin ) %}
                 <p>Find an issue with the Certification Reporting System? Log it in the <a href="{{ issueTracker }}"
-                                                                      target="_blank">issue tracker</a><a
+                                                                                           target="_blank">issue
+                        tracker</a><a
                             href='{{ env_uri }}/adm'>.</a></p>
             {% else %}
                 <p>Find an issue with the Certification Reporting System? Log it in the <a href="{{ issueTracker }}"
-                                                                      target="_blank">issue tracker.</a></p>
+                                                                                           target="_blank">issue
+                        tracker.</a></p>
             {% endif %}
             <p>{{ version() }}</p>
         </div>
@@ -53,7 +61,10 @@
 <script
         src="https://code.jquery.com/jquery-3.1.1.min.js"
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" rel="stylesheet" type="text/css" />
 
 {% block script %}{% endblock %}
 </html>

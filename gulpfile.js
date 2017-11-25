@@ -15,20 +15,21 @@ const appTask = function() {
             appResourceDir + '/css/crs.css'
         ])
         .pipe(concat("app.css"))
-        .pipe(gulp.dest('public/css'));
+        .pipe(gulp.dest(appWebDir + '/css'));
 
      //Java scripts
     gulp.src([
-            appResourceDir + '/js/app.js'
+            appResourceDir + '/js/jquery.filedownload.js'
         ])
-        .pipe(concat("ext.js"))
-        .pipe(gulp.dest(appWebDir +'/js'));
+        .pipe(concat("filedownload.js"))
+        .pipe(gulp.dest(appWebDir + '/js'));
         
     // images
     gulp.src([
             appResourceDir + '/images/*.png',
-            appResourceDir + '/images/*.ico'
-            
+            appResourceDir + '/images/*.ico',
+            appResourceDir + '/images/*.gif'
+
         ])
         .pipe(gulp.dest(appWebDir +'/images'));
 };

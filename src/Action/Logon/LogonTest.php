@@ -57,7 +57,7 @@ class LogonTest extends AppTestCase
 
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
-        $this->assertContains("<h3>Notes on these reports</h3>", $view);
+        $this->assertContains("<h3>Notes on these reports:</h3>", $view);
     }
 
     public function testLogonAsUserWithBadPW()
@@ -107,7 +107,7 @@ class LogonTest extends AppTestCase
 
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
-        $this->assertContains("<h3>Notes on these reports</h3>", $view);
+        $this->assertContains("<h3>Notes on these reports:</h3>", $view);
 
     }
 
@@ -135,7 +135,7 @@ class LogonTest extends AppTestCase
 
         $response = (object)$this->client->get($url);
         $view = (string)$response->getBody();
-        $this->assertContains("<h3>Notes on these reports</h3>", $view);
+        $this->assertContains("<h3>Notes on these reports:</h3>", $view);
 
     }
 

@@ -64,7 +64,7 @@ class ReportsTest extends AppTestCase
         ];
 
         $view = $this->client->get('/reports');
-        $this->assertContains("<h3>Notes on these reports</h3>",$view);
+        $this->assertContains("<h3>Notes on these reports:</h3>",$view);
     }
 
     public function testReportsAsAdmin()
@@ -88,7 +88,7 @@ class ReportsTest extends AppTestCase
         ];
 
         $view = $this->client->get('/reports');
-        $this->assertContains("<h3>Notes on these reports</h3>",$view);
+        $this->assertContains("<h3>Notes on these reports:</h3>",$view);
     }
 
 }

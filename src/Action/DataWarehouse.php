@@ -268,6 +268,27 @@ class DataWarehouse
     }
 
     /**
+     * @param mixed $userKey
+     * @param integer $limit
+     * @return Collection
+     */
+    public function getUnregisteredRefs($userKey = null, $limit = self::BIGINT)
+    {
+        if (is_null($userKey)) {
+            $userKey = '%%';
+        } else {
+            $userKey = "%$userKey%";
+        }
+
+        $results = $this->db->table('tmp_unregistered_refs')
+            ->where('sar', 'like', "%$userKey%")
+            ->limit($limit)
+            ->get();
+
+        return $results;
+    }
+
+    /**
      * @return \Illuminate\Support\Collection
      */
     public function getReports()

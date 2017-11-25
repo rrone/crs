@@ -75,8 +75,15 @@ class ExportXl extends AbstractExporter
             case 'ruc':
                 $results = $this->dw->getRefUpgrades($userKey, $limit);
                 break;
+            case 'urr':
+                $results = $this->dw->getUnregisteredRefs($userKey, $limit);
+                break;
             case 'nra':
-                $results = $this->dw->getRefNationalAssessors($userKey, $limit);
+                if($this->user->admin) {
+                    $results = $this->dw->getRefNationalAssessors($userKey, $limit);
+                } else {
+                    $results = null;
+                }
                 break;
             default:
                 $results = null;

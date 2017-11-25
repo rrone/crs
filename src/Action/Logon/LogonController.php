@@ -27,11 +27,10 @@ class LogonController extends AbstractController
             $this->logStamp($request);
 
             return $response->withRedirect($this->getBaseURL('reports'));
-        } else {
-            $this->logonView->render($response);
-
-            return $response;
         }
 
+        $response = $this->logonView->render($response);
+
+        return $response;
     }
 }

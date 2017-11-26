@@ -72,10 +72,14 @@ EOD;
 
         foreach($reports as $report) {
             if(!$report->admin || ($report->admin && $this->user->admin)) {
-                $href = $this->getBaseURL($report->key);
-                $notes = empty($report->notes) ? null : "<span style='font-weight:normal'> ($report->notes)</span>";
+                try { // handle possible exception if database table report differs from defined routes
+                    $href = $this->getBaseURL($report->key);
+                    $notes = empty($report->notes) ? null : "<span style='font-weight:normal'> ($report->notes)</span>";
 
-                $html .= "<li><h3><a  href=\"$href\" class=\"reportDownload\" >$report->text</a>$notes</h3></li>\n";
+                    $html .= "<li><h3><a  href=\"$href\" class=\"reportDownload\" >$report->text</a>$notes</h3></li>\n";
+                } catch (\Exception $e) {
+
+                }
             }
         }
 

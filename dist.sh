@@ -9,7 +9,7 @@ PHP=/usr/local/etc/php/7.1
 ## clear the screen
 #printf "\033c"
 
-echo "  Checkout master branch from Git repository..."
+#echo "  Checkout master branch from Git repository..."
 #git checkout master
 
 echo "  Build public resources..."
@@ -19,7 +19,7 @@ echo "  Purge composer development items..."
 ## Disable xdebug for composer performance
 if [ -e $PHP"/conf.d/ext-xdebug.ini" ]
 then
-    mv "$PHP"/conf.d/ext-xdebug.ini "$PHP"/conf.d/ext-xdebug.~ini
+    mv $PHP"/conf.d/ext-xdebug.ini" $PHP"/conf.d/ext-xdebug.~ini"
 fi
 
 composer install --no-dev
@@ -59,9 +59,9 @@ echo "  Restore composer development items..."
 ## Restore xdebug
 if [ -e $PHP"/conf.d/ext-xdebug.~ini" ]
 then
-    mv "$PHP"/conf.d/ext-xdebug.~ini "$PHP"/conf.d/ext-xdebug.ini
+    mv $PHP"/conf.d/ext-xdebug.~ini" $PHP"/conf.d/ext-xdebug.ini"
 fi
-composer update
+composer install
 
 echo "...distribution complete"
 echo

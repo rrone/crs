@@ -18,6 +18,8 @@ class AdminView extends AbstractView
 
     public function handler(Request $request, Response $response)
     {
+        parent::handler($request, $response);
+
         $this->user = $request->getAttribute('user');
 
         if ($request->isPost()) {

@@ -364,7 +364,6 @@ class DataWarehouse
 
 //Log reader
 
-
     /**
      * @param $key
      * @param $userName
@@ -396,4 +395,89 @@ class DataWarehouse
         return $timestamp;
     }
 
+    //Session data procedures
+
+    /**
+     * @param $sess_id
+     * @return string
+     */
+    public function readSessionData($sess_id)
+    {
+        var_dump($sess_id);
+        $record = $this->db->table('sessions')
+            ->where('id', '=', $sess_id)
+            ->get();
+var_dump($record[0]);die();
+        if (!is_null($record->get('items'))) {
+            $data = unserialize($record->get('items')->data);
+            var_dump($data);die();
+            return $data;
+        }
+
+        return '';
+    }
+
+    /**
+     * @param $sess_id
+     * @param $sess_data
+     * @return bool
+     */
+    public function writeSessionData($sess_id, $sess_data)
+    {
+        $access = time();
+
+        $result = $this->db->table('sessions')
+            ->where(['id' => $sess_id])
+            ->get();
+
+        if (empty($result[0])) {
+            $this->db->table('sessions')
+                ->insert(
+                    [
+                        'id' => $sess_id,
+                        'access' => $access,
+                        'data' => serialize($sess_data),
+                    ]
+                );
+        } else {
+            $this->db->table('sessions')
+                ->where(['id' => $sess_id])
+                ->update(
+                    [
+                        'access' => $access,
+                        'data' => serialize($sess_data),
+                    ]
+                );
+        }
+
+        return true;
+    }
+
+    /**
+     * @param $sess_id
+     * @return bool
+     */
+    public function destroySessionData($sess_id)
+    {
+        $this->db->table('sessions')
+            ->where('id', '=', $sess_id)
+            ->delete();
+
+        return true;
+    }
+
+    /**
+     * @param $max
+     * @return bool
+     */
+    public function cleanSessionData($max)
+    {
+        $old = time() - $max;
+
+        $this->db->table('sessions')
+            ->where('access', '<', $old)
+            ->delete();
+
+        return true;
+    }
 }

@@ -5,6 +5,7 @@ use Slim\Container;
 use Slim\Views\Twig;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Dflydev\FigCookies\FigRequestCookies;
 
 abstract class AbstractView
 {
@@ -16,6 +17,9 @@ abstract class AbstractView
 
     /* @var DataWarehouse */
     protected $dw;
+
+    protected $crsID;
+    public $SESSION;
 
     //view variables
     protected $user;
@@ -41,13 +45,23 @@ abstract class AbstractView
         $this->page_title = "Section 1: Certification Reporting System";
     }
 
-    abstract protected function handler(Request $request, Response $response);
+    public function handler(Request $request, Response $response)
+    {
+        $maxlifetime = ini_get("session.gc_maxlifetime");
+
+        $this->dw->cleanSessionData($maxlifetime);
+
+        $this->crsID = FigRequestCookies::get($request, 'CRSID');
+        $data = $this->dw->readSessionData($this->crsID->getValue());
+var_dump($data);
+        $this->SESSION = $data == '' ? [] : $data;
+
+    }
 
     abstract protected function render(Response &$response);
 
     protected function isRepost(Request $request)
     {
-
         if ($request->isPost()) {
             $_POST = $request->getParsedBody();
 

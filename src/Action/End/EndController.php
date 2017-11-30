@@ -20,9 +20,10 @@ class EndController extends AbstractController
 
         $resp = $response->withRedirect($this->getBaseURL('logon'));
 
-        session_unset();
-
-        session_destroy();
+        if(session_status() == PHP_SESSION_ACTIVE){
+            session_unset();
+            session_destroy();
+        }
 
         return $resp;
     }

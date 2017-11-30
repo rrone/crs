@@ -20,9 +20,6 @@ class ReportsController extends AbstractController
     }
     public function __invoke(Request $request, Response $response, $args)
     {
-        parent::__invoke($request,  $response, $args);
-
-        $this->reportsView->handler($request, $response);
 
         if(!$this->isAuthorized()) {
             return $response->withRedirect($this->getBaseURL('logon'));
@@ -30,6 +27,11 @@ class ReportsController extends AbstractController
 
         $this->logStamp($request);
 
+        $request = $request->withAttributes([
+            'user' => $this->user,
+        ]);
+
+        $this->reportsView->handler($request, $response);
         $this->reportsView->render($response);
 
         return $response;

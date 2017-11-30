@@ -27,16 +27,12 @@ class LogonView extends AbstractView
     {
         parent::handler($request, $response);
 
-        var_dump($request->isPost());
         if ($request->isPost()) {
-
-            unset($this->SESSION);
-
             $_POST = $request->getParsedBody();
 
             $userName = isset($_POST['user']) ? $_POST['user'] : null;
             $user = $this->dw->getUserByName($userName);
-            $this->SESSION['user'] = $user;
+            $_SESSION['user'] = $user;
 
             // try user pass
             $pass = isset($_POST['passwd']) ? $_POST['passwd'] : null;
@@ -44,7 +40,7 @@ class LogonView extends AbstractView
             $authed = password_verify($pass, $hash);
 
             if ($authed) {
-                $this->SESSION['authed'] = true;
+                $_SESSION['authed'] = true;
                 $this->msg = null;
             } else {
                 //try master password
@@ -53,18 +49,15 @@ class LogonView extends AbstractView
                 $authed = password_verify($pass, $hash);
 
                 if ($authed) {
-                    $this->SESSION['authed'] = true;
-                    $this->SESSION['admin'] = true;
+                    $_SESSION['authed'] = true;
+                    $_SESSION['admin'] = true;
                     $this->msg = null;
                 } else {
-                    $this->SESSION['authed'] = false;
-                    $this->SESSION['admin'] = false;
+                    $_SESSION['authed'] = false;
+                    $_SESSION['admin'] = false;
                     $this->msg = 'Unrecognized password for ' . $_POST['user'];
                 }
             }
-
-            $this->dw->writeSessionData($userName, $this->SESSION);
-            var_dump($this->SESSION);
         }
 
         return null;

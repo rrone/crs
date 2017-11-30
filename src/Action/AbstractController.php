@@ -4,8 +4,6 @@ namespace App\Action;
 
 use Slim\Container;
 use Slim\Http\Request;
-use Slim\Http\Response;
-use Dflydev\FigCookies\FigRequestCookies;
 
 abstract class AbstractController
 {
@@ -14,9 +12,6 @@ abstract class AbstractController
 
     /* @var Container */
     protected $container;
-
-    protected $crsID;
-    protected $SESSION;
 
     //shared variables
     protected $root;
@@ -33,12 +28,6 @@ abstract class AbstractController
         $this->root = __DIR__ . '/../../var';
     }
 
-    public function __invoke(Request $request, Response $response, $args)
-    {
-        $this->crsID = FigRequestCookies::get($request, 'CRSID');
-
-    }
-
     private function isTest()
     {
         return $this->container->get('settings.test');
@@ -47,22 +36,21 @@ abstract class AbstractController
     protected function isAuthorized()
     {
         if ($this->isTest() && isset($this->container['session'])) {
-            unset ($this->SESSION);
+            unset ($_SESSION);
             $session = $this->container['session'];
-            $this->SESSION['authed'] = $session['authed'];
-            $this->SESSION['user'] = $session['user'];
+            $_SESSION['authed'] = $session['authed'];
+            $_SESSION['user'] = $session['user'];
             if (isset($session['game_id'])) {
-                $this->SESSION['game_id'] = $session['game_id'];
+                $_SESSION['game_id'] = $session['game_id'];
             }
         }
 
-var_dump($this->SESSION);
-        $this->authed = isset($this->SESSION['authed']) ? $this->SESSION['authed'] : null;
+        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
         if (!$this->authed) {
             return null;
         }
 
-        $this->user = isset($this->SESSION['user']) ? $this->SESSION['user'] : null;
+        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
         if (is_null($this->user)) {
             return null;
@@ -73,7 +61,7 @@ var_dump($this->SESSION);
 
     protected function logStamp(Request $request)
     {
-        if (isset($this->SESSION['admin'])) {
+        if (isset($_SESSION['admin'])) {
             return null;
         }
 

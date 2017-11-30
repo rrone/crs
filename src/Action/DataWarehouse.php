@@ -403,15 +403,12 @@ class DataWarehouse
      */
     public function readSessionData($sess_id)
     {
-        var_dump($sess_id);
         $record = $this->db->table('sessions')
             ->where('id', '=', $sess_id)
             ->get();
-var_dump($record[0]);die();
-        if (!is_null($record->get('items'))) {
-            $data = unserialize($record->get('items')->data);
-            var_dump($data);die();
-            return $data;
+
+        if (isset($record[0])) {
+            return $record[0]->data;
         }
 
         return '';
@@ -436,7 +433,7 @@ var_dump($record[0]);die();
                     [
                         'id' => $sess_id,
                         'access' => $access,
-                        'data' => serialize($sess_data),
+                        'data' => $sess_data,
                     ]
                 );
         } else {
@@ -445,7 +442,7 @@ var_dump($record[0]);die();
                 ->update(
                     [
                         'access' => $access,
-                        'data' => serialize($sess_data),
+                        'data' => $sess_data,
                     ]
                 );
         }

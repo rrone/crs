@@ -60,5 +60,8 @@ require PROJECT_ROOT . '/app/middleware.php';
 // Register routes
 require PROJECT_ROOT . '/app/routes.php';
 
+// Register sessions
+require PROJECT_ROOT . '/app/sessions.php';
+
 // Run!
 $app->run();

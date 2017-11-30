@@ -18,8 +18,6 @@ ini_set('memory_limit','1G');
 
 require PROJECT_ROOT . '/vendor/autoload.php';
 
-//session_start();
-
 // Instantiate the app
 $settings = require PROJECT_ROOT . '/app/settings.php';
 
@@ -45,6 +43,9 @@ require PROJECT_ROOT . '/app/middleware.php';
 
 // Register routes
 require PROJECT_ROOT . '/app/routes.php';
+
+// Register sessions
+require PROJECT_ROOT . '/app/sessions.php';
 
 // Run!
 $app->run();

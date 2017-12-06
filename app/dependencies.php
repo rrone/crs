@@ -1,6 +1,22 @@
 <?php
-// DIC configuration
 
+use Slim\Http\Request;
+use Slim\Http\Response;
+use Slim\Container;
+use Illuminate\Database\Capsule\Manager;
+use App\Action\DataWarehouse;
+use App\Action\Admin\AdminController;
+use App\Action\Admin\AdminView;
+use App\Action\Logon\LogonController;
+use App\Action\Logon\LogonView;
+use App\Action\Reports\ReportsController;
+use App\Action\Reports\ReportsView;
+use App\Action\Export\ExportController;
+use App\Action\Export\ExportXl;
+use App\Action\Admin\LogExportController;
+use App\Action\Admin\LogExport;
+
+// DIC configuration
 $container = $app->getContainer();
 
 // -----------------------------------------------------------------------------
@@ -45,6 +61,8 @@ $container['view'] = function (\Slim\Container $c) {
 
     $view->getEnvironment()->addFilter($filter_cast_to_array);
 
+    $view->getEnvironment()->setCache(false);
+
     return $view;
 };
 
@@ -56,8 +74,8 @@ $container['flash'] = function () {
 unset($container['errorHandler']);
 
 //Override the default Not Found Handler
-$container['notFoundHandler'] = function (\Slim\Container $c) {
-    return function ($request, $response) use ($c) {
+$container['notFoundHandler'] = function (Container $c) {
+    return function (Request $request, Response $response) use ($c) {
         return $response->withRedirect('/', 301);
     };
 };
@@ -67,7 +85,7 @@ $container['notFoundHandler'] = function (\Slim\Container $c) {
 // -----------------------------------------------------------------------------
 
 // monolog
-$container['logger'] = function (\Slim\Container $c) {
+$container['logger'] = function (Container $c) {
     $settings = $c->get('settings');
     $logger = new Monolog\Logger($settings['logger']['name']);
     $logger->pushProcessor(new Monolog\Processor\UidProcessor());
@@ -85,8 +103,8 @@ $container['logger'] = function (\Slim\Container $c) {
     return $logger;
 };
 
-$container['db'] = function (\Slim\Container $c) {
-    $capsule = new Illuminate\Database\Capsule\Manager;
+$container['db'] = function (Container $c) {
+    $capsule = new Manager;
 
     $capsule->addConnection($c['settings']['dbConfig']);
 
@@ -96,9 +114,9 @@ $container['db'] = function (\Slim\Container $c) {
     return $capsule;
 };
 
-$container['dw'] = function (\Slim\Container $c) {
+$container['dw'] = function (Container $c) {
     $db = $c->get('db');
-    $dataWarehouse = new \App\Action\DataWarehouse($db);
+    $dataWarehouse = new DataWarehouse($db);
 
     return $dataWarehouse;
 };
@@ -111,78 +129,78 @@ $dw = $container->get('dw');
 $view = $container->get('view');
 $uploadPath = $container->get('settings')['upload_path'];
 
-$container[App\Action\DataWarehouse::class] = function ($db) {
+$container[DataWarehouse::class] = function ($db) {
 
-    return new \App\Action\DataWarehouse($db);
+    return new DataWarehouse($db);
 };
 
 // -----------------------------------------------------------------------------
 // Admin class
 // -----------------------------------------------------------------------------
-$container[App\Action\Admin\AdminView::class] = function ($c) use ($dw) {
+$container[AdminView::class] = function ($c) use ($dw) {
 
-    return new \App\Action\Admin\AdminView($c, $dw);
+    return new AdminView($c, $dw);
 };
 
-$container[App\Action\Admin\AdminController::class] = function ($c) use ($dw) {
-    $v = new \App\Action\Admin\AdminView($c, $dw);
+$container[AdminController::class] = function ($c) use ($dw) {
+    $v = new AdminView($c, $dw);
 
-    return new \App\Action\Admin\AdminController($c, $v);
+    return new AdminController($c, $v);
 };
 
 // -----------------------------------------------------------------------------
 // LogExport class
 // -----------------------------------------------------------------------------
-$container[App\Action\Admin\LogExport::class] = function ($c) use ($dw) {
+$container[LogExport::class] = function ($c) use ($dw) {
 
-    return new \App\Action\Admin\LogExport($c, $dw);
+    return new LogExport($c, $dw);
 };
 
-$container[App\Action\Admin\LogExportController::class] = function ($c) use ($dw) {
-    $v = new \App\Action\Admin\LogExport($c, $dw);
+$container[LogExportController::class] = function ($c) use ($dw) {
+    $v = new LogExport($c, $dw);
 
-    return new \App\Action\Admin\LogExportController($c, $v);
+    return new LogExportController($c, $v);
 };
 
 // -----------------------------------------------------------------------------
 // Logon class
 // -----------------------------------------------------------------------------
-$container[App\Action\Logon\LogonView::class] = function ($c) use ($dw) {
+$container[LogonView::class] = function ($c) use ($dw) {
 
-    return new \App\Action\Logon\LogonView($c, $dw);
+    return new LogonView($c, $dw);
 };
 
-$container[App\Action\Logon\LogonController::class] = function ($c) use ($dw) {
-    $v = new \App\Action\Logon\LogonView($c, $dw);
+$container[LogonController::class] = function ($c) use ($dw) {
+    $v = new LogonView($c, $dw);
 
-    return new \App\Action\Logon\LogonController($c, $v);
+    return new LogonController($c, $v);
 };
 
 // -----------------------------------------------------------------------------
 // Reports class
 // -----------------------------------------------------------------------------
-$container[App\Action\Reports\ReportsView::class] = function ($c) use ($dw) {
+$container[ReportsView::class] = function ($c) use ($dw) {
 
-    return new \App\Action\Reports\ReportsView($c, $dw);
+    return new ReportsView($c, $dw);
 };
 
-$container[App\Action\Reports\ReportsController::class] = function ($c) use ($dw) {
-    $v = new \App\Action\Reports\ReportsView($c, $dw);
+$container[ReportsController::class] = function ($c) use ($dw) {
+    $v = new ReportsView($c, $dw);
 
-    return new \App\Action\Reports\ReportsController($c, $v);
+    return new ReportsController($c, $v);
 };
 
 // -----------------------------------------------------------------------------
 // Export class
 // -----------------------------------------------------------------------------
-$container[App\Action\Export\ExportXl::class] = function () use ($dw) {
+$container[ExportXl::class] = function () use ($dw) {
 
-    return new \App\Action\Export\ExportXl($dw);
+    return new ExportXl($dw);
 };
 
-$container[App\Action\Export\ExportController::class] = function ($c) use ($dw) {
-    $v = new \App\Action\Export\ExportXl($dw);
+$container[ExportController::class] = function ($c) use ($dw) {
+    $v = new ExportXl($dw);
 
-    return new \App\Action\Export\ExportController($c, $v);
+    return new ExportController($c, $v);
 };
 

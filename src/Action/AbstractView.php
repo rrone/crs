@@ -2,6 +2,7 @@
 namespace App\Action;
 
 use Slim\Container;
+use Psr\Container\ContainerInterface;
 use Slim\Views\Twig;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -32,10 +33,10 @@ abstract class AbstractView
     protected $uri;
 
 
-    public function __construct(Container $container, DataWarehouse $dataWarehouse)
+    public function __construct(ContainerInterface $container, DataWarehouse $dataWarehouse)
     {
         $this->container = $container;
-        $this->view = $container->get('view');
+        $this->view =  $this->container->get('view');
         $this->dw = $dataWarehouse;
 
         $this->page_title = "Section 1: Certification Reporting System";

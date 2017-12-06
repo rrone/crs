@@ -4,6 +4,8 @@ namespace App\Action;
 
 use Slim\Container;
 use Slim\Http\Request;
+use Slim\Http\Response;
+use Psr\Container\ContainerInterface;
 
 abstract class AbstractController
 {
@@ -21,11 +23,11 @@ abstract class AbstractController
     protected $user;
     protected $authed;
 
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
 
-        $this->root = __DIR__ . '/../../var';
+        $this->root = __DIR__.'/../../var';
     }
 
     private function isTest()
@@ -112,7 +114,7 @@ abstract class AbstractController
     {
         $request = $this->container->get('request');
 
-        $baseUri = $request->getUri()->getBasePath() . $this->container->get($path);
+        $baseUri = $request->getUri()->getBasePath().$this->container->get($path);
 
         return $baseUri;
     }

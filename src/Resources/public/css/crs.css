@@ -45,6 +45,9 @@ h3 {
 hr {
     margin: 10px 0;
 }
+ul.indent li h3 {
+    padding: 0;
+}
 .h3-btn {
     margin-top: 20px;
     line-height: 3em;

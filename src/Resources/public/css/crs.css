@@ -173,3 +173,13 @@ legend {
     font-weight: bold;
     color: red;
 }
+.ui-dialog {
+    position: fixed !important;
+    height: auto;
+    width: 300px;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 101;
+    display: none;
+}

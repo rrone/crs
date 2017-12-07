@@ -85,6 +85,7 @@ EOD;
             }
         }
 
+        $html .= "</ul>\n";
         $html .= "<hr>\n";
         $href = $this->getBaseURL('end');
         $html .= "<h3 class=\"center\"><a href=$href >Log Off</a></h3>\n";

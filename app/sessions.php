@@ -167,7 +167,7 @@ $handler = new CRSSessionHandler();
 
 session_set_save_handler($handler, true);
 
-//session_name('CRSID');
+session_name('CRSID');
 
 session_start();
 

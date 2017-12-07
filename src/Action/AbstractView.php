@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Action;
 
 use Slim\Container;
@@ -36,7 +37,7 @@ abstract class AbstractView
     public function __construct(ContainerInterface $container, DataWarehouse $dataWarehouse)
     {
         $this->container = $container;
-        $this->view =  $this->container->get('view');
+        $this->view = $this->container->get('view');
         $this->dw = $dataWarehouse;
 
         $this->page_title = "Section 1: Certification Reporting System";
@@ -44,10 +45,7 @@ abstract class AbstractView
 
     protected function handler(Request $request, Response $response)
     {
-        $maxlifetime = ini_get("session.gc_maxlifetime");
-
-        $this->dw->cleanSessionData($maxlifetime);
-   }
+    }
 
     abstract protected function render(Response &$response);
 
@@ -73,7 +71,7 @@ abstract class AbstractView
     protected function getBaseURL($path)
     {
         $request = $this->container->get('request');
-        $baseUri = $request->getUri()->getBasePath() . $this->container->get($path);
+        $baseUri = $request->getUri()->getBasePath().$this->container->get($path);
 
         return $baseUri;
     }

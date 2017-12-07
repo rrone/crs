@@ -30,8 +30,6 @@ require PROJECT_ROOT . '/vendor/autoload.php';
 
 Debug::enable();
 
-//session_start();
-
 // Instantiate the app
 $settings = require PROJECT_ROOT . '/app/settings.php';
 

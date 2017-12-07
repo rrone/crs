@@ -289,6 +289,48 @@ class DataWarehouse
     }
 
     /**
+     * @param mixed $userKey
+     * @param integer $limit
+     * @return Collection
+     */
+    public function getSafeHavenRefs($userKey = null, $limit = self::BIGINT)
+    {
+        if (is_null($userKey)) {
+            $userKey = '%%';
+        } else {
+            $userKey = "%$userKey%";
+        }
+
+        $results = $this->db->table('tmp_safehaven')
+            ->where('sar', 'like', "%$userKey%")
+            ->limit($limit)
+            ->get();
+
+        return $results;
+    }
+
+    /**
+     * @param mixed $userKey
+     * @param integer $limit
+     * @return Collection
+     */
+    public function getRefsConcussion($userKey = null, $limit = self::BIGINT)
+    {
+        if (is_null($userKey)) {
+            $userKey = '%%';
+        } else {
+            $userKey = "%$userKey%";
+        }
+
+        $results = $this->db->table('tmp_ref_cdc')
+            ->where('sar', 'like', "%$userKey%")
+            ->limit($limit)
+            ->get();
+
+        return $results;
+    }
+
+    /**
      * @return \Illuminate\Support\Collection
      */
     public function getReports()
@@ -395,86 +437,4 @@ class DataWarehouse
         return $timestamp;
     }
 
-    //Session data procedures
-
-    /**
-     * @param $sess_id
-     * @return string
-     */
-    public function readSessionData($sess_id)
-    {
-        $record = $this->db->table('sessions')
-            ->where('id', '=', $sess_id)
-            ->get();
-
-        if (isset($record[0])) {
-            return $record[0]->data;
-        }
-
-        return '';
-    }
-
-    /**
-     * @param $sess_id
-     * @param $sess_data
-     * @return bool
-     */
-    public function writeSessionData($sess_id, $sess_data)
-    {
-        $access = time();
-
-        $result = $this->db->table('sessions')
-            ->where(['id' => $sess_id])
-            ->get();
-
-        if (empty($result[0])) {
-            $this->db->table('sessions')
-                ->insert(
-                    [
-                        'id' => $sess_id,
-                        'access' => $access,
-                        'data' => $sess_data,
-                    ]
-                );
-        } else {
-            $this->db->table('sessions')
-                ->where(['id' => $sess_id])
-                ->update(
-                    [
-                        'access' => $access,
-                        'data' => $sess_data,
-                    ]
-                );
-        }
-
-        return true;
-    }
-
-    /**
-     * @param $sess_id
-     * @return bool
-     */
-    public function destroySessionData($sess_id)
-    {
-        $this->db->table('sessions')
-            ->where('id', '=', $sess_id)
-            ->delete();
-
-        return true;
-    }
-
-    /**
-     * @param $max
-     * @return bool
-     */
-    public function cleanSessionData($max)
-    {
-        $old = time() - $max;
-
-        $this->db->table('sessions')
-            ->where('access', '<', $old)
-            ->delete();
-
-        return true;
-    }
 }

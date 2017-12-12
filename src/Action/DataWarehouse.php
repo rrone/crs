@@ -437,4 +437,69 @@ class DataWarehouse
         return $timestamp;
     }
 
+//Session functions
+
+    /**
+     * @param $sess_id
+     * @return string
+     */
+    function sessionRead()
+    {
+        $sess_id = $GLOBALS['_COOKIE'][ini_get('session.name')];
+
+//    $sess_id = $this->db::raw($sess_id);
+
+        $record = $this->db->table('sessions')
+            ->where('id', '=', $sess_id)
+            ->get();
+
+        if (isset($record[0])) {
+
+            session_decode($record[0]->data);
+
+            return true;
+        }
+
+        return '';
+    }
+
+    function sessionWrite()
+    {
+        $sess_id = $GLOBALS['_COOKIE'][ini_get('session.name')];
+
+        $access = time();
+
+//    $sess_id = $this->sess_db::raw($sess_id);
+//    $access = $this->sess_db::raw($access);
+//    $sess_data = $this->sess_db::raw($sess_data);
+
+        $sess_data = session_encode();
+
+        $result = $this->db->table('sessions')
+            ->where(['id' => $sess_id])
+            ->get();
+
+        if (empty($result[0])) {
+            $this->db->table('sessions')
+                ->insert(
+                    [
+                        'id' => $sess_id,
+                        'access' => $access,
+                        'data' => $sess_data,
+                    ]
+                );
+        } else {
+            $this->db->table('sessions')
+                ->where(['id' => $sess_id])
+                ->update(
+                    [
+                        'access' => $access,
+                        'data' => $sess_data,
+                    ]
+                );
+        }
+
+        return true;
+    }
+
 }

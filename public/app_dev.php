@@ -58,8 +58,12 @@ require PROJECT_ROOT . '/app/middleware.php';
 // Register routes
 require PROJECT_ROOT . '/app/routes.php';
 
-// Register sessions
-require PROJECT_ROOT . '/app/sessions.php';
+$container = $app->getContainer();
+session_set_save_handler($container[SessionHandler::class], true);
+
+session_name('CRSID');
+
+session_start();
 
 // Run!
 $app->run();

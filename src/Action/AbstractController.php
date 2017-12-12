@@ -3,6 +3,7 @@
 namespace App\Action;
 
 use Slim\Container;
+use App\Action\DataWarehouse;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Psr\Container\ContainerInterface;
@@ -14,6 +15,9 @@ abstract class AbstractController
 
     /* @var Container */
     protected $container;
+
+    /* @var DataWarehouse */
+    protected $dw;
 
     //shared variables
     protected $root;
@@ -27,6 +31,8 @@ abstract class AbstractController
     {
         $this->container = $container;
 
+        $this->dw = $this->container['dw'];
+
         $this->root = __DIR__.'/../../var';
     }
 
@@ -37,6 +43,8 @@ abstract class AbstractController
 
     protected function isAuthorized()
     {
+        $this->dw->sessionRead();
+
         if ($this->isTest() && isset($this->container['session'])) {
             unset ($_SESSION);
             $session = $this->container['session'];

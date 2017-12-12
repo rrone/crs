@@ -60,6 +60,8 @@ class LogonView extends AbstractView
             }
         }
 
+        $this->dw->sessionWrite();
+
         return null;
     }
 

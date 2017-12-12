@@ -15,7 +15,7 @@ use Illuminate\Database\Capsule\Manager;
  * Reference: http://shiflett.org/articles/storing-sessions-in-a-database
  */
 
-class SessionHandler
+class SessionHandler implements \SessionHandlerInterface
 {
     private $sess_db;
     
@@ -25,17 +25,17 @@ class SessionHandler
 
     }
 
-    function _open($sess_path, $sess_name)
+    function open($sess_path, $sess_name)
     {
         return true;
     }
 
-    function _close()
+    function close()
     {
         return true;
     }
 
-    function _read($sess_id)
+    function read($sess_id)
     {
 
 //    $sess_id = $this->sess_db::raw($sess_id);
@@ -45,13 +45,14 @@ class SessionHandler
             ->get();
 
         if (isset($record[0])) {
+
             return $record[0]->data;
         }
 
         return '';
     }
 
-    function _write($sess_id, $sess_data)
+    function write($sess_id, $sess_data)
     {
         $access = time();
 
@@ -86,7 +87,7 @@ class SessionHandler
         return true;
     }
 
-    function _destroy($sess_id)
+    function destroy($sess_id)
     {
 //    $sess_id = $this->sess_db::raw($sess_id);
 
@@ -97,7 +98,7 @@ class SessionHandler
         return true;
     }
 
-    function _clean($max)
+    function gc($max)
     {
         $old = time() - $max;
 //    $old = $this->sess_db::raw($old);

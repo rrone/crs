@@ -104,6 +104,7 @@ class AppWebTestClient extends WebTestClient
 
         // Invoke request
         $app = $this->app;
+
         $this->response = $app($this->request, $response);
 
         // Return the application output

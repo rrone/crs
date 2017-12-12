@@ -4,6 +4,7 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Container;
 use Illuminate\Database\Capsule\Manager;
+use App\Action\SessionHandler;
 use App\Action\DataWarehouse;
 use App\Action\Admin\AdminController;
 use App\Action\Admin\AdminView;
@@ -128,6 +129,12 @@ $db = $container->get('db');
 $dw = $container->get('dw');
 $view = $container->get('view');
 $uploadPath = $container->get('settings')['upload_path'];
+
+$container[SessionHandler::class] = function (Container $c) {
+    $db = $c->get('db');
+
+    return new SessionHandler($db);
+};
 
 $container[DataWarehouse::class] = function ($db) {
 

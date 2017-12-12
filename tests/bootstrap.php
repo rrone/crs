@@ -11,6 +11,7 @@ date_default_timezone_set('UTC');
 
 use Slim\App;
 use App\Action\DataWarehouse;
+use App\Action\SessionHandler;
 use Slim\Container;
 use There4\Slim\Test\WebTestCase;
 use Slim\Http\Environment;
@@ -65,6 +66,13 @@ class AppTestCase extends WebTestCase
 
         $app = new App($settings);
 
+        $container = $app->getContainer();
+        session_set_save_handler($container[SessionHandler::class], true);
+
+        session_name('CRSID');
+
+        session_start();
+
 // Set up dependencies
         require PROJECT_ROOT.'/app/dependencies.php';
 
@@ -118,8 +126,6 @@ class AppTestCase extends WebTestCase
     {
         $this->cookies[$name] = $value;
     }
-}
-
-;
+};
 
 /* End of file bootstrap.php */

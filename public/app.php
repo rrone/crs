@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\Debug\Debug;
+use App\Action\SessionHandler;
 
 // To help the built-in PHP dev server, check if the request was actually for
 // something which should probably be served as a static file
@@ -58,8 +59,12 @@ require PROJECT_ROOT . '/app/middleware.php';
 // Register routes
 require PROJECT_ROOT . '/app/routes.php';
 
-// Register sessions
-require PROJECT_ROOT . '/app/sessions.php';
+$container = $app->getContainer();
+session_set_save_handler($container[SessionHandler::class], true);
+
+session_name('CRSID');
+
+session_start();
 
 // Run!
 $app->run();

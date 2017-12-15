@@ -440,11 +440,15 @@ class DataWarehouse
 //Session functions
 
     /**
-     * @param $sess_id
      * @return string
      */
     function sessionRead()
     {
+        if (!isset($GLOBALS['_COOKIE'][ini_get('session.name')])) {
+
+            return '';
+        }
+
         $sess_id = $GLOBALS['_COOKIE'][ini_get('session.name')];
 
 //    $sess_id = $this->db::raw($sess_id);
@@ -463,8 +467,16 @@ class DataWarehouse
         return '';
     }
 
+    /**
+     * @return bool|string
+     */
     function sessionWrite()
     {
+        if (!isset($GLOBALS['_COOKIE'][ini_get('session.name')])) {
+
+            return '';
+        }
+
         $sess_id = $GLOBALS['_COOKIE'][ini_get('session.name')];
 
         $access = time();

@@ -47,6 +47,7 @@ class AppTestCase extends WebTestCase
 
     private $cookies = array();
 
+
     public function getSlimInstance()
     {
         $this->config = include(PROJECT_ROOT.'/config/config.php');
@@ -65,13 +66,6 @@ class AppTestCase extends WebTestCase
 //Define where the log goes: syslog
 
         $app = new App($settings);
-
-        $container = $app->getContainer();
-        session_set_save_handler($container[SessionHandler::class], true);
-
-        session_name('CRSID');
-
-        session_start();
 
 // Set up dependencies
         require PROJECT_ROOT.'/app/dependencies.php';

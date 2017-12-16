@@ -43,10 +43,6 @@ abstract class AbstractView
         $this->page_title = "Section 1: Certification Reporting System";
     }
 
-    protected function handler(Request $request, Response $response)
-    {
-    }
-
     abstract protected function render(Response &$response);
 
     protected function isRepost(Request $request)

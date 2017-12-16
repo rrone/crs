@@ -20,8 +20,6 @@ class ReportsView extends AbstractView
 
     public function handler(Request $request, Response $response)
     {
-        parent::handler($request, $response);
-
         $this->user = $request->getAttribute('user');
     }
 

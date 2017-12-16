@@ -2,7 +2,7 @@
 ## Exit immediately if a command exits with a non-zero status.
 set -e
 #set distribution folder alias
-dist="$HOME"/GoogleDrive-rick.roberts.9/ayso/s1/web/ayso1ref/certrs
+dist="$HOME"/GoogleDrive-rick.roberts.9/ayso/s1/web/ayso1ref/services/certrs
 config="$HOME"/Sites/AYSO/certrs/config
 PHP=/usr/local/etc/php/7.1
 

@@ -62,7 +62,7 @@ $container['view'] = function (\Slim\Container $c) {
 
     $view->getEnvironment()->addFilter($filter_cast_to_array);
 
-    $view->getEnvironment()->setCache(false);
+//    $view->getEnvironment()->setCache(false);
 
     return $view;
 };
@@ -107,7 +107,7 @@ $container['logger'] = function (Container $c) {
 $container['db'] = function (Container $c) {
     $capsule = new Manager;
 
-    $capsule->addConnection($c['settings']['dbConfig']);
+    $capsule->addConnection($c->get('settings')['dbConfig']);
 
     $capsule->setAsGlobal();
     $capsule->bootEloquent();

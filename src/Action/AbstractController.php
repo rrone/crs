@@ -43,8 +43,6 @@ abstract class AbstractController
 
     protected function isAuthorized()
     {
-        $this->dw->sessionRead();
-
         if ($this->isTest() && isset($this->container['session'])) {
             unset ($_SESSION);
             $session = $this->container['session'];

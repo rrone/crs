@@ -25,8 +25,6 @@ class LogonView extends AbstractView
 
     public function handler(Request $request, Response $response)
     {
-        parent::handler($request, $response);
-
         if ($request->isPost()) {
             $_POST = $request->getParsedBody();
 
@@ -59,8 +57,6 @@ class LogonView extends AbstractView
                 }
             }
         }
-
-        $this->dw->sessionWrite();
 
         return null;
     }

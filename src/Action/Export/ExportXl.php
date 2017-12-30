@@ -54,38 +54,46 @@ class ExportXl extends AbstractExporter
         $user = explode(' ', $this->user->name);
         $u = strtolower(str_replace('/', '', end($user)));
 
-        $this->outFileName = "$uri.$u." . $this->outFileName;
-
         switch ($uri) {
             case 'hrc':
+                $this->outFileName = "HighestRefCerts.$u.$this->outFileName";
                 $results = $this->dw->getHighestRefCerts($userKey, $limit);
                 break;
             case 'ra':
+                $this->outFileName = "RefAssessors.$u.$this->outFileName";
                 $results = $this->dw->getRefAssessors($userKey, $limit);
                 break;
             case 'ri':
+                $this->outFileName = "RefInstructors.$u.$this->outFileName";
                 $results = $this->dw->getRefInstructors($userKey, $limit);
                 break;
             case 'rie':
+                $this->outFileName = "RefInstructorEvaluators.$u.$this->outFileName";
                 $results = $this->dw->getRefInstructorEvaluators($userKey, $limit);
                 break;
             case 'nocerts':
+                $this->outFileName = "RefsWithNoBSCerts.$u.$this->outFileName";
                 $results = $this->dw->getRefsWithNoBSCerts($userKey, $limit);
                 break;
             case 'ruc':
+                $this->outFileName = "RefUpgrades.$u.$this->outFileName";
                 $results = $this->dw->getRefUpgrades($userKey, $limit);
                 break;
             case 'urr':
+                $this->outFileName = "UnregisteredRefs.$u.$this->outFileName";
                 $results = $this->dw->getUnregisteredRefs($userKey, $limit);
                 break;
             case 'rcdc':
+                $this->outFileName = "ConcussionRefs.$u.$this->outFileName";
                 $results = $this->dw->getRefsConcussion($userKey, $limit);
                 break;
             case 'rsh':
+                $this->outFileName = "SafeHavenRefs.$u.$this->outFileName";
                 $results = $this->dw->getSafeHavenRefs($userKey, $limit);
                 break;
             case 'nra':
                 if($this->user->admin) {
+                    $this->outFileName = "NationalRefAssessors.$u.$this->outFileName";
                     $results = $this->dw->getRefNationalAssessors($userKey, $limit);
                 } else {
                     $results = null;

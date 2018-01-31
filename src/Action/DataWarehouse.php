@@ -366,6 +366,17 @@ class DataWarehouse
         return $updated;
     }
 
+    public function getTableHeaders($tableName)
+    {
+        if(is_null($tableName)) {
+           return null;
+        }
+
+        $results = $this->db::schema()->getColumnListing($tableName);
+
+        return $results;
+    }
+
 //Log writer
 
     /**

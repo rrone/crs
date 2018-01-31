@@ -124,7 +124,7 @@ class ExportXl extends AbstractExporter
 
     private function generateExport(&$content, $certs)
     {
-        if (is_null($certs)) {
+        if ($certs->isEmpty()) {
             return null;
         }
 
@@ -175,6 +175,72 @@ class ExportXl extends AbstractExporter
             $content['report']['options']['horizontalAlignment'] = ['B1:Z' => 'left'];
         } else {
             return null;
+        }
+
+        return $content;
+    }
+
+    private function tableHeaders($uri)
+    {
+        if (is_null($uri)) {
+            return null;
+        }
+
+        $tableName = null;
+
+        switch ($uri) {
+            case 'hrc':
+                $tableName = 'tmp_hrc';
+                break;
+            case 'ra':
+                $tableName = 'tmp_ra';
+                break;
+            case 'ri':
+                $tableName = 'tmp_ri';
+                break;
+            case 'rie':
+                $tableName = 'tmp_rie';
+                break;
+            case 'nocerts':
+                $tableName = 'tmp_nocerts';
+                break;
+            case 'ruc':
+                $tableName = 'tmp_ruc';
+                break;
+            case 'urr':
+                $tableName = 'tmp_urr';
+                break;
+            case 'rcdc':
+                $tableName = 'tmp_rcdc';
+                break;
+            case 'rsh':
+                $tableName = 'tmp_rsh';
+                break;
+            case 'nra':
+                if($this->user->admin) {
+                    $tableName = 'tmp_nra';
+                } else {
+                    $results = null;
+                }
+                break;
+            default:
+                $results = null;
+        }
+
+        $content = [];
+
+        $results = $this->dw->getTableHeaders($tableName);
+
+        //set the header labels
+        if (!empty($results)) {
+            $rec = (array)$results[0];
+
+            $labels = [];
+            foreach ($rec as $hdr => $val) {
+                $labels[] = $val;
+            }
+
+            $content = array($labels);
         }
 
         return $content;

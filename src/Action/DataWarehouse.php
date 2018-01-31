@@ -251,7 +251,7 @@ class DataWarehouse
      * @param integer $limit
      * @return Collection
      */
-    public function getRefUpgrades($userKey = null, $limit = self::BIGINT)
+    public function getRefUpgradeCandidates($userKey = null, $limit = self::BIGINT)
     {
         if (is_null($userKey)) {
             $userKey = '%%';

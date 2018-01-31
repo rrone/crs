@@ -76,8 +76,8 @@ class ExportXl extends AbstractExporter
                 $results = $this->dw->getRefsWithNoBSCerts($userKey, $limit);
                 break;
             case 'ruc':
-                $this->outFileName = "RefUpgrades.$u.$this->outFileName";
-                $results = $this->dw->getRefUpgrades($userKey, $limit);
+                $this->outFileName = "RefUpgradeCandidates.$u.$this->outFileName";
+                $results = $this->dw->getRefUpgradeCandidates($userKey, $limit);
                 break;
             case 'urr':
                 $this->outFileName = "UnregisteredRefs.$u.$this->outFileName";

@@ -124,7 +124,7 @@ class ExportXl extends AbstractExporter
 
     private function generateExport(&$content, $certs)
     {
-        if ($certs->isEmpty()) {
+        if (is_null($certs) or $certs->isEmpty()) {
             return null;
         }
 

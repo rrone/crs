@@ -2,10 +2,7 @@
 
 namespace App\Action;
 
-use PHPExcel;
-use PHPExcel_IOFactory;
-use PHPExcel_Style_Protection;
-use PHPExcel_Style_Alignment;
+use PhpOffice\PhpSpreadsheet;
 
 /*
     // Sample array of data to publish
@@ -29,7 +26,7 @@ abstract class AbstractExporter
     public function __construct($format)
     {
         $this->format = $format;
-        $this->objPHPExcel = new PHPExcel();
+        $this->objPHPExcel = new PhpSpreadsheet\Spreadsheet();
 
         switch ($format) {
             case 'xls':
@@ -124,7 +121,7 @@ abstract class AbstractExporter
         $xl->removeSheetByIndex(0);
 
         //write to application output buffer
-        $objWriter = PHPExcel_IOFactory::createWriter($xl, 'Excel2007');
+        $objWriter = PhpSpreadsheet\IOFactory::createWriter($xl, 'Xlsx');
 
         ob_start();
         $objWriter->save('php://output'); // Instead of file name
@@ -208,19 +205,19 @@ abstract class AbstractExporter
 
                 switch ($format) {
                     case 'center':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
                         break;
                     case 'general':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_GENERAL);
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PhpSpreadsheet\Style\Alignment::HORIZONTAL_GENERAL);
                         break;
                     case 'justify':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_JUSTIFY);
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PhpSpreadsheet\Style\Alignment::HORIZONTAL_JUSTIFY);
                         break;
                     case 'left':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
                         break;
                     case 'right':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                         break;
                 }
             }
@@ -240,7 +237,7 @@ abstract class AbstractExporter
 
             //now unprotect requested range
             foreach ($range as $cells) {
-                $ws->getStyle($cells)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+                $ws->getStyle($cells)->getProtection()->setLocked(PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
             }
         }
 

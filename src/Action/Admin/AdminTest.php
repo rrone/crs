@@ -168,19 +168,19 @@ class AdminTest extends AppTestCase
         $this->assertContains('.xlsx', $contentDisposition);
     }
 
-    public function testPOSTPWChange()
-    {
-        /* TODO: Add POST Test for PW change */
-    }
-
-    public function testPOSTLogMemo()
-    {
-        /* TODO: Add POST Test for Log memo */
-    }
-
-    public function testDoneButton()
-    {
-        /* TODO: Add POST Test for Done button */
-    }
+//    public function testPOSTPWChange()
+//    {
+//        /* TODO: Add POST Test for PW change */
+//    }
+//
+//    public function testPOSTLogMemo()
+//    {
+//        /* TODO: Add POST Test for Log memo */
+//    }
+//
+//    public function testDoneButton()
+//    {
+//        /* TODO: Add POST Test for Done button */
+//    }
 
 }

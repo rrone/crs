@@ -155,8 +155,8 @@ legend {
 
 .legend {
     font-size: 12px;
-    width: 80%;
-    margin: 0 auto;
+    width: 100%;
+    margin: 50px auto;
     line-height: 2rem;
 }
 .no-border {

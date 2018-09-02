@@ -6,6 +6,7 @@ use App\Action\AbstractExporter;
 use App\Action\DataWarehouse;
 use Slim\Http\Response;
 use Slim\Http\Request;
+use Illuminate\Support\Collection;
 
 class ExportXl extends AbstractExporter
 {
@@ -30,9 +31,9 @@ class ExportXl extends AbstractExporter
         $this->user = $request->getAttribute('user');
         $this->baseURL = $request->getAttribute('baseURL');
 
-        if($this->user->admin) {
+        if ($this->user->admin) {
             $userKey = '%%';
-        }else{
+        } else {
             $key = explode(' ', $this->user->name);
             $userKey = end($key);
             $userKey = $userKey == '10' ? '1' : $userKey;
@@ -50,9 +51,9 @@ class ExportXl extends AbstractExporter
         }
 
         $uri = str_replace('/', '', $uri);
-        
+
         $user = explode(' ', $this->user->name);
-        $u = strtolower(str_replace('/', '', end($user)));
+        $u = strtoupper(str_replace('/', '', end($user)));
 
         switch ($uri) {
             case 'hrc':
@@ -92,22 +93,27 @@ class ExportXl extends AbstractExporter
                 $results = $this->dw->getSafeHavenRefs($userKey, $limit);
                 break;
             case 'nra':
-                if($this->user->admin) {
+                if ($this->user->admin) {
                     $this->outFileName = "NationalRefAssessors.$u.$this->outFileName";
                     $results = $this->dw->getRefNationalAssessors($userKey, $limit);
                 } else {
                     $results = null;
                 }
                 break;
+            case 'bshca':
+                $this->outFileName = "CompositeRefCerts.$u.$this->outFileName";
+                $results = $this->dw->getCompositeRefCerts($userKey, $limit);
+                break;
             default:
                 $results = null;
         }
 
         $content = null;
-        $this->generateExport($content, $results);
 
         if (is_null($results)) {
             return $response->withRedirect($this->baseURL);
+        } else {
+            $this->generateExport($content, $results);
         }
         // generate the response
         $response = $response->withHeader('Content-Type', $this->contentType);
@@ -122,7 +128,7 @@ class ExportXl extends AbstractExporter
         return $response;
     }
 
-    private function generateExport(&$content, $certs)
+    private function generateExport(&$content, Collection $certs)
     {
         if (is_null($certs) or $certs->isEmpty()) {
             return null;
@@ -152,7 +158,7 @@ class ExportXl extends AbstractExporter
                             case 'Last Name':
                             case 'Address':
                             case 'City':
-                            $value = ucwords(strtolower($value));
+                                $value = ucwords(strtolower($value));
                                 break;
                             case 'Email':
                                 $value = strtolower($value);
@@ -180,71 +186,71 @@ class ExportXl extends AbstractExporter
         return $content;
     }
 
-    private function tableHeaders($uri)
-    {
-        if (is_null($uri)) {
-            return null;
-        }
-
-        $tableName = null;
-
-        switch ($uri) {
-            case 'hrc':
-                $tableName = 'tmp_hrc';
-                break;
-            case 'ra':
-                $tableName = 'tmp_ra';
-                break;
-            case 'ri':
-                $tableName = 'tmp_ri';
-                break;
-            case 'rie':
-                $tableName = 'tmp_rie';
-                break;
-            case 'nocerts':
-                $tableName = 'tmp_nocerts';
-                break;
-            case 'ruc':
-                $tableName = 'tmp_ruc';
-                break;
-            case 'urr':
-                $tableName = 'tmp_urr';
-                break;
-            case 'rcdc':
-                $tableName = 'tmp_rcdc';
-                break;
-            case 'rsh':
-                $tableName = 'tmp_rsh';
-                break;
-            case 'nra':
-                if($this->user->admin) {
-                    $tableName = 'tmp_nra';
-                } else {
-                    $results = null;
-                }
-                break;
-            default:
-                $results = null;
-        }
-
-        $content = [];
-
-        $results = $this->dw->getTableHeaders($tableName);
-
-        //set the header labels
-        if (!empty($results)) {
-            $rec = (array)$results[0];
-
-            $labels = [];
-            foreach ($rec as $hdr => $val) {
-                $labels[] = $val;
-            }
-
-            $content = array($labels);
-        }
-
-        return $content;
-    }
+//    private function tableHeaders($uri)
+//    {
+//        if (is_null($uri)) {
+//            return null;
+//        }
+//
+//        $tableName = null;
+//
+//        switch ($uri) {
+//            case 'hrc':
+//                $tableName = 'tmp_hrc';
+//                break;
+//            case 'ra':
+//                $tableName = 'tmp_ra';
+//                break;
+//            case 'ri':
+//                $tableName = 'tmp_ri';
+//                break;
+//            case 'rie':
+//                $tableName = 'tmp_rie';
+//                break;
+//            case 'nocerts':
+//                $tableName = 'tmp_nocerts';
+//                break;
+//            case 'ruc':
+//                $tableName = 'tmp_ruc';
+//                break;
+//            case 'urr':
+//                $tableName = 'tmp_urr';
+//                break;
+//            case 'rcdc':
+//                $tableName = 'tmp_rcdc';
+//                break;
+//            case 'rsh':
+//                $tableName = 'tmp_rsh';
+//                break;
+//            case 'nra':
+//                if($this->user->admin) {
+//                    $tableName = 'tmp_nra';
+//                } else {
+//                    $results = null;
+//                }
+//                break;
+//            default:
+//                $results = null;
+//        }
+//
+//        $content = [];
+//
+//        $results = $this->dw->getTableHeaders($tableName);
+//
+//        //set the header labels
+//        if (!empty($results)) {
+//            $rec = (array)$results[0];
+//
+//            $labels = [];
+//            foreach ($rec as $hdr => $val) {
+//                $labels[] = $val;
+//            }
+//
+//            $content = array($labels);
+//        }
+//
+//        return $content;
+//    }
 
     static function sortOnRep($a, $b)
     {

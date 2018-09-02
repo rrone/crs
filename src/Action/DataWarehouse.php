@@ -331,6 +331,22 @@ class DataWarehouse
     }
 
     /**
+     * @param mixed $userKey
+     * @param integer $limit
+     * @return mixed
+     */
+    public function getCompositeRefCerts($userKey, $limit = self::BIGINT)
+    {
+        $results = $this->db->table('tmp_ref_certs')
+            ->where('sar', 'like', "%$userKey%")
+            ->limit($limit)
+            ->get();
+
+        return $results;
+    }
+
+
+    /**
      * @return \Illuminate\Support\Collection
      */
     public function getReports()

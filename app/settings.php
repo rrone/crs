@@ -28,7 +28,7 @@ $settings = [
         ],
 
         'version' => [
-            'version' => '2018.01.31.02'
+            'version' => '2018.09.01.00'
         ],
 
         'sra' => [

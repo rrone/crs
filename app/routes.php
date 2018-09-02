@@ -51,6 +51,8 @@ $app->get('/rcdc', ExportController::class)
     ->setName('rcdc');
 $app->get('/rsh', ExportController::class)
     ->setName('rsh');
+$app->get('/bshca', ExportController::class)
+    ->setName('bshca');
 $container['hrc'] = $container->get('router')->pathFor('hrc');
 $container['ra'] = $container->get('router')->pathFor('ra');
 $container['ri'] = $container->get('router')->pathFor('ri');
@@ -61,3 +63,4 @@ $container['nra'] = $container->get('router')->pathFor('nra');
 $container['nocerts'] = $container->get('router')->pathFor('nocerts');
 $container['rcdc'] = $container->get('router')->pathFor('rcdc');
 $container['rsh'] = $container->get('router')->pathFor('rsh');
+$container['bshca'] = $container->get('router')->pathFor('bshca');

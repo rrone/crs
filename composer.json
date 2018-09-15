@@ -63,6 +63,7 @@
         "illuminate/database": "~5.1",
         "ircmaxell/password-compat": "^1.0",
         "dflydev/fig-cookies": "^1.0",
-        "phpoffice/phpspreadsheet": "^1.4"
+        "phpoffice/phpspreadsheet": "^1.4",
+        "ext-PDO": "^7.2"
     }
 }

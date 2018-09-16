@@ -5,7 +5,7 @@
 # to each configured DirectoryIndex file (e.g. index.php, index.html, index.pl).
 DirectoryIndex app.php
 
-php_value max_input_vars 5001
+# php_value max_input_vars 5001 #disallowed in SiteGround.  Use PHP INI variables tool to set
 
 # By default, Apache does not evaluate symbolic links if you did not enable this
 # feature in your server configuration. Uncomment the following line if you

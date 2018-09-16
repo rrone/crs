@@ -16,6 +16,8 @@ ini_set("log_errors", 1);
 ini_set('max_execution_time', 300);
 ini_set('memory_limit','1G');
 
+ini_set('max_input_vars', 5001);
+
 require PROJECT_ROOT . '/vendor/autoload.php';
 
 session_start();

@@ -3,26 +3,24 @@
 {% block style %} {% endblock %}
 
 {% block content %}
-    <div class="maincontent">
-        <div class="right">
-            <p><b>Last Refresh:</b> {{ updated | raw }}</p>
-            <p style="text-align: right"><b>User:</b> {{ user | raw }}</p>
-        </div>
+    <div class="right">
+        <p><b>Last Refresh:</b> {{ updated | raw }}</p>
+        <p style="text-align: right"><b>User:</b> {{ user | raw }}</p>
+    </div>
 
-        <p class="center"><span style="color: #FF0000">{{ message | raw }}</span></p>
-        {{ header | raw }}
-        <br>
+    <p class="center"><span style="color: #FF0000">{{ message | raw }}</span></p>
+    {{ header | raw }}
+    <br>
 
-        <div class="legend">
-            <h3>Notes on these reports:</h3>
-            <ol>
-                {% for key, value in notes|cast_to_array %}
-                    <li>{{ value.1 | raw }}</li>
-                {% endfor %}
-            </ol>
-            <hr>
-            {{ content | raw }}
-        </div>
+    <div class="legend">
+        <h3>Notes on these reports:</h3>
+        <ol>
+            {% for key, value in notes|cast_to_array %}
+                <li>{{ value.1 | raw }}</li>
+            {% endfor %}
+        </ol>
+        <hr>
+        {{ content | raw }}
     </div>
 
     <div id="preparing-file-modal" title="Preparing report..." style="display: none;">

@@ -7,6 +7,8 @@ use Psr\Container\ContainerInterface;
 use Slim\Views\Twig;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use DateTime;
+use DateTimeZone;
 
 abstract class AbstractView
 {
@@ -70,6 +72,16 @@ abstract class AbstractView
         $baseUri = $request->getUri()->getBasePath().$this->container->get($path);
 
         return $baseUri;
+    }
+
+    protected function getUpdateTimestamp()
+    {
+        $utc = $this->dw->getUpdateTimestamp();
+
+        $ts = new DateTime($utc, new DateTimeZone('UTC'));
+        $ts->setTimezone(new DateTimeZone('America/Los_Angeles'));
+
+        return $ts->format('Y-m-d H:i T');
     }
 
 }

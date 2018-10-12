@@ -5,23 +5,23 @@
 {% block content %}
     <div class="maincontent">
         <div class="right">
-            <p style="text-align: right"><b>User:</b> {{ view.user | raw }}</p>
-            <p><b>Last Refresh:</b> {{ view.updated | raw }}</p>
+            <p><b>Last Refresh:</b> {{ updated | raw }}</p>
+            <p style="text-align: right"><b>User:</b> {{ user | raw }}</p>
         </div>
 
-        <p class="center"><span style="color: #FF0000">{{ view.message | raw }}</span></p>
-        {{ view.header | raw }}
+        <p class="center"><span style="color: #FF0000">{{ message | raw }}</span></p>
+        {{ header | raw }}
         <br>
 
         <div class="legend">
             <h3>Notes on these reports:</h3>
             <ol>
-                {% for key, value in view.notes|cast_to_array %}
+                {% for key, value in notes|cast_to_array %}
                     <li>{{ value.1 | raw }}</li>
                 {% endfor %}
             </ol>
             <hr>
-            {{ view.content | raw }}
+            {{ content | raw }}
         </div>
     </div>
 

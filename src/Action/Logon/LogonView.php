@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: rick
- * Date: 11/6/16
- * Time: 8:59 AM
- */
 
 namespace App\Action\Logon;
 
@@ -67,6 +61,7 @@ class LogonView extends AbstractView
             'content' => $this->renderView(),
             'users' => $this->getBaseURL('logon'),
             'message' => $this->msg,
+            'updated' => $this->getUpdateTimestamp(),
         );
 
         $this->view->render($response, 'logon.html.twig', $content);

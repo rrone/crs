@@ -2,6 +2,10 @@
 
 {% block content %}
     <table width="98%" class="maincontent">
+        <div class="right">
+            <p><b>Last Refresh:</b> {{ updated | raw }}</p>
+        </div>
+
         <tr>
             <td>
                 <p class="center"><span style="color: #FF0000">{{ message | raw }}</span></p>

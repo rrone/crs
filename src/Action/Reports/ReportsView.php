@@ -7,8 +7,6 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Action\AbstractView;
 use App\Action\DataWarehouse;
-use DateTime;
-use DateTimeZone;
 
 class ReportsView extends AbstractView
 {
@@ -26,7 +24,6 @@ class ReportsView extends AbstractView
     public function render(Response &$response)
     {
         $content = array(
-            'view' => array(
                 'admin' => $this->user->admin,
                 'user' => $this->user->name,
                 'header' => $this->renderHeader(),
@@ -34,7 +31,6 @@ class ReportsView extends AbstractView
                 'content' => $this->renderView(),
                 'message' => null,
                 'updated' => $this->getUpdateTimestamp(),
-            ),
         );
 
         $this->view->render($response, 'reports.html.twig', $content);
@@ -90,15 +86,5 @@ EOD;
 
         return $html;
 
-    }
-
-    protected function getUpdateTimestamp()
-    {
-        $utc = $this->dw->getUpdateTimestamp();
-
-        $ts = new DateTime($utc, new DateTimeZone('UTC'));
-        $ts->setTimezone(new DateTimeZone('America/Los_Angeles'));
-
-        return $ts->format('Y-m-d H:i T');
     }
 }

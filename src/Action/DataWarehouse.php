@@ -135,7 +135,7 @@ class DataWarehouse
      */
     public function getHighestRefCerts($userKey, $limit = self::BIGINT)
     {
-        $results = $this->db->table('tmp_hrc')
+        $results = $this->db->table('rpt_hrc')
             ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
@@ -156,7 +156,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->table('tmp_ra')
+        $results = $this->db->table('rpt_ra')
             ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
@@ -175,7 +175,7 @@ class DataWarehouse
             $userKey = '';
         }
 
-        $results = $this->db->table('tmp_nra')
+        $results = $this->db->table('rpt_nra')
             ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
@@ -196,7 +196,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->table('tmp_ri')
+        $results = $this->db->table('rpt_ri')
             ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
@@ -217,7 +217,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->table('tmp_rie')
+        $results = $this->db->table('rpt_rie')
             ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
@@ -238,7 +238,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->table('tmp_nocerts')
+        $results = $this->db->table('rpt_nocerts')
             ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
@@ -259,7 +259,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->table('tmp_ref_upgrades')
+        $results = $this->db->table('rpt_ref_upgrades')
             ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
@@ -280,7 +280,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->table('tmp_unregistered_refs')
+        $results = $this->db->table('rpt_unregistered_refs')
             ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
@@ -301,7 +301,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->table('tmp_safehaven')
+        $results = $this->db->table('rpt_safehaven')
             ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
@@ -322,7 +322,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->table('tmp_ref_cdc')
+        $results = $this->db->table('rpt_ref_cdc')
             ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
@@ -337,7 +337,7 @@ class DataWarehouse
      */
     public function getCompositeRefCerts($userKey, $limit = self::BIGINT)
     {
-        $results = $this->db->table('tmp_ref_certs')
+        $results = $this->db->table('rpt_ref_certs')
             ->where('sar', 'like', "%$userKey%")
             ->limit($limit)
             ->get();
@@ -372,7 +372,7 @@ class DataWarehouse
      */
     public function getUpdateTimestamp()
     {
-        $ts = $this->db->table('lastUpdate')
+        $ts = $this->db->table('rpt_lastUpdate')
             ->orderBy('timestamp', 'desc')
             ->limit(1)
             ->get();

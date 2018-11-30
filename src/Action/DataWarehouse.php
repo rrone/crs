@@ -137,6 +137,13 @@ class DataWarehouse
     {
         $results = $this->db->table('rpt_hrc')
             ->where('sar', 'like', "%$userKey%")
+            ->orWhere('area', '=', "")
+            ->orderByRAW("`Section`, `Area`, ABS(`Region`), 
+                    FIELD(`CertificationDesc`, 'National Referee','National 2 Referee', 'Advanced Referee', 
+                    'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee', 
+                    'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official', 
+                    'U-8 Official & Safe Haven Referee', '') , `Last Name` , `First Name` , `AYSOID`"
+            )
             ->limit($limit)
             ->get();
 
@@ -158,6 +165,8 @@ class DataWarehouse
 
         $results = $this->db->table('rpt_ra')
             ->where('sar', 'like', "%$userKey%")
+            ->orWhere('area', '=', "")
+            ->orderByRAW("`Section`, `Area`, ABS(`Region`), FIELD(`CertificationDesc`, 'National Referee Assessor', 'Referee Assessor', '') , `Last Name` , `First Name` , `AYSOID`")
             ->limit($limit)
             ->get();
 
@@ -177,6 +186,8 @@ class DataWarehouse
 
         $results = $this->db->table('rpt_nra')
             ->where('sar', 'like', "%$userKey%")
+            ->orWhere('area', '=', "")
+            ->orderByRAW("`Section`, `Area`, ABS(`Region`), FIELD(`CertificationDesc`, 'National Referee Assessor', '') , `Last Name` , `First Name` , `AYSOID`")
             ->limit($limit)
             ->get();
 
@@ -198,6 +209,8 @@ class DataWarehouse
 
         $results = $this->db->table('rpt_ri')
             ->where('sar', 'like', "%$userKey%")
+            ->orWhere('area', '=', "")
+            ->orderByRAW("`Section`, `Area`, ABS(`Region`), FIELD(`CertificationDesc`, 'National Referee Instructor', 'Advanced Referee Instructor', 'Intermediate Referee Instructor', 'Regional Referee Instructor', '') , `Last Name` , `First Name` , `AYSOID`")
             ->limit($limit)
             ->get();
 
@@ -219,27 +232,8 @@ class DataWarehouse
 
         $results = $this->db->table('rpt_rie')
             ->where('sar', 'like', "%$userKey%")
-            ->limit($limit)
-            ->get();
-
-        return $results;
-    }
-
-    /**
-     * @param mixed $userKey
-     * @param integer $limit
-     * @return Collection
-     */
-    public function getRefsWithNoBSCerts($userKey = null, $limit = self::BIGINT)
-    {
-        if (is_null($userKey)) {
-            $userKey = '%%';
-        } else {
-            $userKey = "%$userKey%";
-        }
-
-        $results = $this->db->table('rpt_nocerts')
-            ->where('sar', 'like', "%$userKey%")
+            ->orWhere('area', '=', "")
+            ->orderByRAW("`Section`, `Area`, ABS(`Region`), FIELD(`RefereeInstructorCert`, 'National Referee Instructor', 'Advanced Referee Instructor', 'Intermediate Referee Instructor', 'Regional Referee Instructor', 'Referee Instructor') , `Last Name` , `First Name` , `AYSOID`")
             ->limit($limit)
             ->get();
 
@@ -261,6 +255,8 @@ class DataWarehouse
 
         $results = $this->db->table('rpt_ref_upgrades')
             ->where('sar', 'like', "%$userKey%")
+            ->orWhere('area', '=', "")
+            ->orderByRAW("`Section`, `Area`, ABS(`Region`),FIELD(`CertificationDesc`, 'National Referee Course', 'Advanced Referee Course', 'Intermediate Referee Course', 'National Referee Assessor Course', 'Referee Assessor Course', 'Advanced Referee Instructor Course', 'Intermediate Referee Instructor Course', 'Regional Referee Instructor Course', 'Referee Instructor Course', '') , `Last Name` , `First Name` , `AYSOID`")
             ->limit($limit)
             ->get();
 
@@ -282,6 +278,37 @@ class DataWarehouse
 
         $results = $this->db->table('rpt_unregistered_refs')
             ->where('sar', 'like', "%$userKey%")
+            ->orWhere('area', '=', "")
+            ->orderByRAW("`Section`, `Area`, ABS(`Region`), 
+                    FIELD(`CertificationDesc`, 'National Referee','National 2 Referee', 'Advanced Referee', 
+                    'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee', 
+                    'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official', 
+                    'U-8 Official & Safe Haven Referee', '') , `Last Name` , `First Name` , `AYSOID`"
+            )
+            ->limit($limit)
+            ->get();
+
+        return $results;
+    }
+
+    /**
+     * @param mixed $userKey
+     * @param integer $limit
+     * @return Collection
+     */
+    public function getRefsConcussion($userKey = null, $limit = self::BIGINT)
+    {
+        if (is_null($userKey)) {
+            $userKey = '%%';
+        } else {
+            $userKey = "%$userKey%";
+        }
+
+        $results = $this->db->table('rpt_ref_cdc')
+            ->where('sar', 'like', "%$userKey%")
+            ->orWhere('area', '=', "")
+            ->orderByRAW("`Section` , `Area` , ABS(`Region`) , `Last Name` , `First Name` , `AYSOID`"
+            )
             ->limit($limit)
             ->get();
 
@@ -312,18 +339,19 @@ class DataWarehouse
     /**
      * @param mixed $userKey
      * @param integer $limit
-     * @return Collection
+     * @return mixed
      */
-    public function getRefsConcussion($userKey = null, $limit = self::BIGINT)
+    public function getCompositeRefCerts($userKey, $limit = self::BIGINT)
     {
-        if (is_null($userKey)) {
-            $userKey = '%%';
-        } else {
-            $userKey = "%$userKey%";
-        }
-
-        $results = $this->db->table('rpt_ref_cdc')
+        $results = $this->db->table('rpt_ref_certs')
             ->where('sar', 'like', "%$userKey%")
+            ->orWhere('area', '=', "")
+            ->orderByRAW("`Section`, `Area`, ABS(`Region`), 
+                    FIELD(`CertificationDesc`, 'National Referee','National 2 Referee', 'Advanced Referee', 
+                    'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee', 
+                    'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official', 
+                    'U-8 Official & Safe Haven Referee', '') , `Last Name` , `First Name` , `AYSOID`"
+            )
             ->limit($limit)
             ->get();
 
@@ -333,18 +361,30 @@ class DataWarehouse
     /**
      * @param mixed $userKey
      * @param integer $limit
-     * @return mixed
+     * @return Collection
      */
-    public function getCompositeRefCerts($userKey, $limit = self::BIGINT)
+    public function getRefsWithNoBSCerts($userKey = null, $limit = self::BIGINT)
     {
-        $results = $this->db->table('rpt_ref_certs')
+        if (is_null($userKey)) {
+            $userKey = '%%';
+        } else {
+            $userKey = "%$userKey%";
+        }
+
+        $results = $this->db->table('rpt_nocerts')
             ->where('sar', 'like', "%$userKey%")
+            ->orWhere('area', '=', "")
+            ->orderByRAW("`Section`, `Area`, ABS(`Region`), 
+                    FIELD(`CertificationDesc`, 'National Referee','National 2 Referee', 'Advanced Referee', 
+                    'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee', 
+                    'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official', 
+                    'U-8 Official & Safe Haven Referee', '') , `Last Name` , `First Name` , `AYSOID`"
+            )
             ->limit($limit)
             ->get();
 
         return $results;
     }
-
 
     /**
      * @return \Illuminate\Support\Collection
@@ -384,8 +424,8 @@ class DataWarehouse
 
     public function getTableHeaders($tableName)
     {
-        if(is_null($tableName)) {
-           return null;
+        if (is_null($tableName)) {
+            return null;
         }
 
         $results = $this->db::schema()->getColumnListing($tableName);
@@ -436,7 +476,8 @@ class DataWarehouse
     /**
      * @param $key
      * @param $userName
-     * @return null|string
+     * @return string|null
+     * @throws \Exception
      */
     public function getLastLogon($key, $userName)
     {

@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 22, 2018 at 08:34 PM
--- Server version: 5.7.23-0ubuntu0.18.04.1
+-- Generation Time: Nov 30, 2018 at 04:22 PM
+-- Server version: 5.7.24-0ubuntu0.18.04.1
 -- PHP Version: 7.2.10-0ubuntu0.18.04.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -28,11 +28,59 @@ DELIMITER $$
 --
 -- Procedures
 --
+DROP PROCEDURE IF EXISTS `BuildIRITable`$$
+CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `BuildIRITable` ()  BEGIN
+DROP TABLE IF EXISTS tmp_intermediate_referee_instructors;
+CREATE TEMPORARY TABLE tmp_intermediate_referee_instructors (SELECT DISTINCT 
+AYSOID, Name, SAR, CertificationDesc, CertDate FROM crs_rpt_ri WHERE (`CertificationDesc` = 'Referee Instructor' OR `CertificationDesc` = 'Referee Instructor') AND `CertDate` < '2018-09-01');   
+
+DROP TABLE IF EXISTS crs_intermediate_referee_instructors;
+CREATE TABLE crs_intermediate_referee_instructors SELECT 
+	AYSOID, Name, SAR, CertificationDesc, CertDate 
+	FROM 
+		(SELECT 
+			*,
+			@rank:=IF(@id = `AYSOID`, @rank + 1, 1) AS rank,
+			@id:=`AYSOID`
+		FROM 
+			(SELECT * 
+				FROM tmp_intermediate_referee_instructors
+				GROUP BY `AYSOID`, FIELD(`CertificationDesc`, 'National Referee Instructor', 'Advanced Referee Instructor', 'Referee Instructor', 'Basic Referee Instructor', 'Grade2 Referee Instructor')
+				) tmp 
+			) ranked
+	WHERE
+		rank = 1;
+ALTER TABLE `crs_intermediate_referee_instructors` ADD INDEX (`aysoid`);
+
+
+SELECT *
+FROM
+    crs_intermediate_referee_instructors;
+END$$
+
 DROP PROCEDURE IF EXISTS `CertTweaks`$$
 CREATE DEFINER=`root`@`%` PROCEDURE `CertTweaks` ()  BEGIN
 # rick roberts
 UPDATE `crs_certs` SET `Email` = 'ayso1sra@gmail.com' WHERE `AYSOID` = 97815888;
+UPDATE `crs_certs` SET `SAR` = '1', `Area` = '', `Region` = '' WHERE `AYSOID` = 97815888;
+UPDATE `crs_certs` SET `SAR` = '1', `Area` = '', `Region` = '' WHERE `SAR` = '1/';
 
+# Update Referee Instructors
+UPDATE `crs_certs` SET `CertificationDesc` = 'Regional Referee Instructor' WHERE `CertificationDesc` = 'Referee Instructor' OR `CertificationDesc` = 'Basic Referee Instructor';   
+UPDATE `crs_certs` SET `CertificationDesc` = 'Intermediate Referee Instructor' WHERE `AYSOID` IN (SELECT AYSOID FROM crs_intermediate_referee_instructors); 
+
+# Non-Board members on Section 1 portal
+# Alfred Medina
+UPDATE `crs_certs` SET `SAR` = '1', `Area` = 'H', `Region` = '' WHERE `AYSOID` = 51370299;
+
+# Manuel Del Rio
+UPDATE `crs_certs` SET `SAR` = '1', `Area` = 'H', `Region` = '' WHERE `AYSOID` = 55290662;
+
+# Janet Orcutt
+UPDATE `crs_certs` SET `SAR` = '1', `Area` = 'G', `Region` = '' WHERE `AYSOID` = 55189421;
+
+
+# Merge records
 # Chris Call
 UPDATE `crs_certs` SET `AYSOID` = 66280719 WHERE `AYSOID` = 200284566;
 UPDATE `crs_certs` SET `AYSOID` = 66280719 WHERE `AYSOID` = 202333632;
@@ -46,16 +94,31 @@ UPDATE `crs_certs` SET `AYSOID` = 65397057 WHERE `AYSOID` = 201245499;
 # Michael Wolff
 DELETE FROM `crs_certs` WHERE `AYSOID` = 56234203 AND `SAR` LIKE '1/D/%';
 
+# Rick Ramirez
+UPDATE `crs_certs` SET `AYSOID` = 200019230 WHERE `AYSOID` = 54288898;
+
 # Michael Raycraft
 DELETE FROM `crs_certs` WHERE `Email` = 'mlraycraft.aysoinstructor@gmail.com';
 DELETE FROM `crs_certs` WHERE `Name` = 'Michael Raycraft' AND `CertificationDesc` LIKE 'National Referee Assessor';
 
 # Peter Fink
-## DELETE FROM `crs_certs` WHERE `AYSOID` = 203686950;
+DELETE FROM `crs_certs` WHERE `AYSOID` = 94012088;
 
-# Robert Osborne duplicate eAYSO record
+# Vince O'Hara
+DELETE FROM `crs_certs` WHERE `AYSOID` = 58214480;
+
+# Eric Martinez
+DELETE FROM `crs_certs` WHERE AYSOID = 99811587;
+
+# Robert Osborne 
+# duplicate eAYSO record
 DELETE FROM `eAYSO.MY2016.certs` WHERE `AYSOID` = 79403530;
 DELETE FROM `crs_certs` WHERE `AYSOID` = 79403530;
+
+# missing Referee Instructor cert
+INSERT INTO `crs_certs` 
+(`Program Name`, `Volunteer Role`, AYSOID, Name, `First Name`, `Last Name`, Address, City, State, Zip, `Home Phone`, `Cell Phone`, Email, Gender, CertificationDesc, CertDate, SAR, Section, Area, Region, `Membership Year`)
+VALUES ('MY2018', 'Volunteer', '71409033', 'Robert Osborne', 'Robert', 'Osborne', '5124 Inadale Ave', 'Los Angeles', 'CA', '90043', '(323) 293-7923', '(562) 216-4601', 'robertosborne72@gmail.com', 'M', 'Referee Instructor', '2018-10-04', '1/P/0076', '1', 'P', '76', 'MY2018');
 
 # Jimmy Molinar
 DELETE FROM `crs_certs` WHERE `AYSOID` = 56272832;
@@ -63,6 +126,8 @@ DELETE FROM `crs_certs` WHERE `AYSOID` = 56272832;
 # Nelson Flores
 UPDATE `crs_certs` SET `Membership Year` = 'MY2018' WHERE `AYSOID` = 94012355 AND `Membership Year` < 'MY2018';
 
+# Dennis Raymond
+UPDATE `crs_certs` SET `Membership Year` = 'MY2018' WHERE `AYSOID` = 55296033 AND `Membership Year` < 'MY2018';
  
 # Invalid National Referee Assessors
 # Yui-Bin	Chen
@@ -76,11 +141,8 @@ DELETE FROM `crs_certs` WHERE `AYSOID` = 99871834 AND `CertificationDesc` LIKE '
 # Donald Ramsay
 DELETE FROM `crs_certs` WHERE `AYSOID` = 204673909 AND `CertificationDesc` LIKE 'Referee Instructor Evaluator';
 
-# Mark Christian
-DELETE FROM `crs_certs` WHERE `CertificationDesc`='National Referee Assessor' AND `AYSOID` = 66477494;
 # Spencer Horwitz
 DELETE FROM `crs_certs` WHERE `CertificationDesc`='National Referee Assessor' AND `AYSOID` = 95025758;
-
 
 # Matt Kilroy
 DELETE FROM `crs_certs` WHERE `Name` = 'Regional Commissioner';
@@ -575,10 +637,10 @@ DROP TABLE IF EXISTS crs_rpt_ref_certs;
 CREATE TABLE crs_rpt_ref_certs SELECT * FROM
     (SELECT DISTINCT
         hrc.*,
-            sh.CertificationDesc AS shCertificationDesc,
-            sh.CertDate AS shCertDate,
-    cdc.CertificationDesc AS cdcCertficationDesc,
-    cdc.CertDate AS cdcCertDate 
+		sh.CertificationDesc AS shCertificationDesc,
+		sh.CertDate AS shCertDate,
+		cdc.CDCCert AS cdcCertficationDesc,
+		cdc.CDCCertDate AS cdcCertDate 
     FROM
         crs_rpt_hrc hrc
 			LEFT JOIN 
@@ -730,10 +792,10 @@ FROM
             AND `CertificationDesc` <> 'Z-Online Regional Referee'
             AND `CertificationDesc` <> 'Z-Online Safe Haven Referee'
             AND `CertificationDesc` <> 'Safe Haven Referee'
-    GROUP BY `AYSOID` , `SAR` , FIELD(`CertificationDesc`, 'National Referee', 'National 2 Referee', 'Advanced Referee', 'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee', 'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official', 'U-8 Official & Safe Haven Referee', '')) ordered) ranked
+    GROUP BY `AYSOID` , `Section`, `Area` , FIELD(`CertificationDesc`, 'National Referee', 'National 2 Referee', 'Advanced Referee', 'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee', 'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official', 'U-8 Official & Safe Haven Referee', '')) ordered) ranked
     WHERE
         rankID = 1
-    ORDER BY FIELD(`CertificationDesc`, 'National Referee', 'National 2 Referee', 'Advanced Referee', 'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee', 'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official', 'U-8 Official & Safe Haven Referee', '', `Section`, `Area`, `Region`, `Last Name`, `First Name`, AYSOID)) hrc;
+    ORDER BY FIELD(`CertificationDesc`, 'National Referee', 'National 2 Referee', 'Advanced Referee', 'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee', 'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official', 'U-8 Official & Safe Haven Referee', ''), `Section`, `Area`, `Region`, `Last Name`, `First Name`, AYSOID) hrc;
 ");
 
 PREPARE stmt FROM @s;
@@ -744,6 +806,14 @@ DEALLOCATE PREPARE stmt;
 
 ALTER TABLE `crs_rpt_hrc` ADD INDEX (`AYSOID`);
 
+END$$
+
+DROP PROCEDURE IF EXISTS `RefreshIntermediateRefereeInstructors`$$
+CREATE DEFINER=`root`@`127.0.0.1` PROCEDURE `RefreshIntermediateRefereeInstructors` ()  BEGIN
+UPDATE tmp_rpt_ri SET `CertificationDesc` = 'Regional Referee Instructor' WHERE `CertificationDesc` = 'Referee Instructor' OR `CertificationDesc` = 'Basic Referee Instructor';   
+
+# Voluteer updates
+UPDATE tmp_rpt_ri SET `CertificationDesc` = 'Intermediate Referee Instructor' WHERE `AYSOID` IN (SELECT AYSOID FROM crs_intermediate_referee_instructors); 
 END$$
 
 DROP PROCEDURE IF EXISTS `RefreshNationalRefereeAssessors`$$
@@ -770,6 +840,7 @@ CREATE TEMPORARY TABLE tmp_nra SELECT * FROM
 		`SAR`,
 		`Section`,
 		`Area`,
+        `Region`,
 		`Membership Year`
     FROM
         (SELECT 
@@ -915,7 +986,7 @@ SET @id:= 0;
 
 DROP TABLE IF EXISTS crs_rpt_rie;
 
-CREATE TABLE crs_rpt_rie SELECT DISTINCT * FROM
+CREATE TEMPORARY TABLE crs_rpt_rie SELECT DISTINCT * FROM
     (SELECT 
         `AYSOID`,
 		`Name`,
@@ -966,7 +1037,7 @@ SET @id:= 0;
 
 DROP TABLE IF EXISTS crs_rpt_ri;
 
-CREATE TABLE crs_rpt_ri SELECT * FROM
+CREATE TEMPORARY TABLE crs_rpt_ri SELECT * FROM
     (SELECT 
         `AYSOID`,
 		`Name`,
@@ -1009,17 +1080,8 @@ CREATE TABLE crs_rpt_ri SELECT * FROM
             AND NOT `CertificationDesc` LIKE '%Safe Haven%'
     GROUP BY `AYSOID` , FIELD(`CertificationDesc`, 'National Referee Instructor', 'Advanced Referee Instructor', 'Referee Instructor', 'Basic Referee Instructor', 'Grade2 Referee Instructor')) ordered) ranked
     WHERE
-        rank = 1
-    ORDER BY FIELD(`CertificationDesc`, 'National Referee Instructor', 'Advanced Referee Instructor', 'Referee Instructor', 'Basic Referee Instructor', 'Grade2 Referee Instructor', 'Referee Instructor Evaluator') , `Section` , `Area` , `Region` , `Last Name` , `First Name`) ri;
+        rank = 1) ri;
     
-UPDATE crs_rpt_ri SET `CertificationDesc` = 'Intermediate Referee Instructor' WHERE `CertificationDesc` = 'Referee Instructor' AND `CertDate` < '2018-09-01';   
-
-UPDATE crs_rpt_ri SET `CertificationDesc` = 'Regional Referee Instructor' WHERE `CertificationDesc` = 'Referee Instructor' AND `CertDate` >= '2018-09-01';   
-
-UPDATE crs_rpt_ri SET `CertificationDesc` = 'Intermediate Referee Instructor' WHERE `CertificationDesc` = 'Basic Referee Instructor' AND `CertDate` < '2018-09-01';   
-
-UPDATE crs_rpt_ri SET `CertificationDesc` = 'Regional Referee Instructor' WHERE `CertificationDesc` = 'Referee Instructor' AND `CertDate` >= '2018-09-01';   
-
 END$$
 
 DROP PROCEDURE IF EXISTS `RefreshRefereeUpgradeCandidates`$$
@@ -1558,9 +1620,10 @@ CREATE TABLE crs_rpt_safehaven SELECT
 		sh.`Region`
     FROM 
         crs_shcerts sh RIGHT JOIN crs_rpt_hrc hrc USING (`AYSOID`)
-    GROUP BY sh.`AYSOID`, sh.`CertDate` DESC, 
-    FIELD(sh.`CertificationDesc`, 'Z-Online AYSOs Safe Haven', 'Webinar-AYSOs Safe Haven','Safe Haven Referee', 'Regional Referee & Safe Haven Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official & Safe Haven Referee'),
-    sh.`Membership Year` DESC ) ordered) ranked
+	WHERE sh.`CertificationDesc` LIKE '%AYSOs Safe Haven'
+		OR sh.`CertificationDesc` LIKE '%Refugio Seguro de AYSO'
+    ORDER BY sh.`CertDate` DESC, sh.`Membership Year` DESC) ordered
+    GROUP BY `AYSOID`, `CertDate`, `Membership Year`) ranked
 WHERE
     rank = 1
 ORDER BY `Section`, `Area`, `Region`, `Last Name`, `First Name`");
@@ -1578,10 +1641,9 @@ DROP PROCEDURE IF EXISTS `RefreshUnregisteredReferees`$$
 CREATE DEFINER=`root`@`%` PROCEDURE `RefreshUnregisteredReferees` ()  BEGIN
 SET @dfields := "'National Referee', 'National 2 Referee', 'Advanced Referee', 'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee', 'z-Online Regional Referee without Safe Haven', 'Z-Online Regional Referee', 'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official', 'U-8 Official & Safe Haven Referee', 'Z-Online Safe Haven Referee', 'Safe Haven Referee', ''";
 
-SELECT 
-    @maxMY:=MAX(`Membership Year`)
+SET @maxMY = (SELECT MAX(`Membership Year`)
 FROM
-    ayso1ref_services.crs_rpt_hrc;
+    ayso1ref_services.crs_rpt_hrc);
 
 DROP TABLE IF EXISTS crs_rpt_unregistered_refs;
 
@@ -1788,7 +1850,7 @@ CREATE TEMPORARY TABLE `tmp_composite` SELECT * FROM
 				`Membership Year`
 		FROM
 			.crs_rpt_hrc) hrc
-		GROUP BY `AYSOID` , Field(`Membership Year`, 'MY2018', 'MY2017', 'MY2016'), `SAR`) ordered) ranked
+		GROUP BY `AYSOID` , Field(`Membership Year`, 'MY2018', 'MY2017', 'MY2016'), `Section`, `Area`) ordered) ranked
 		ORDER BY AYSOID, `Membership Year` DESC) composite;
 ");
 
@@ -1900,8 +1962,18 @@ DELIMITER ;
 
 DROP TABLE IF EXISTS `crs_rpt_lastUpdate`;
 CREATE TABLE `crs_rpt_lastUpdate` (
-  `timestamp` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
+  `timestamp` datetime NOT NULL DEFAULT '1901-01-01 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `crs_rpt_lastUpdate`
+--
+ALTER TABLE `crs_rpt_lastUpdate`
+  ADD UNIQUE KEY `timestamp` (`timestamp`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

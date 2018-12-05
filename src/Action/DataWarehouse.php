@@ -330,6 +330,9 @@ class DataWarehouse
 
         $results = $this->db->table('rpt_safehaven')
             ->where('sar', 'like', "%$userKey%")
+            ->orWhere('area', '=', "")
+            ->orderByRAW("`Section` , `Area` , ABS(`Region`) , `Last Name` , `First Name` , `AYSOID`"
+            )
             ->limit($limit)
             ->get();
 

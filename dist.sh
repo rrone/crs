@@ -4,7 +4,7 @@ set -e
 #set distribution folder alias
 dist="$HOME"/GoogleDrive-rick.roberts.9/ayso/s1/web/ayso1ref/services/certrs
 config="$HOME"/Sites/AYSO/certrs/config
-PHP=/usr/local/etc/php/7.2/conf.d
+PHP=/usr/local/etc/php/7.3/conf.d
 
 ## clear the screen
 echo -e "\0033"

@@ -395,6 +395,7 @@ class DataWarehouse
     public function getReports()
     {
         return $this->db->table('reports')
+            ->where('show','=', 1)
             ->orderBy('seq')
             ->get();
     }

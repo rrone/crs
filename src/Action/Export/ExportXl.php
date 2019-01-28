@@ -7,6 +7,8 @@ use App\Action\DataWarehouse;
 use Slim\Http\Response;
 use Slim\Http\Request;
 use Illuminate\Support\Collection;
+use DateTime;
+use DateTimeZone;
 
 class ExportXl extends AbstractExporter
 {
@@ -22,8 +24,11 @@ class ExportXl extends AbstractExporter
         parent::__construct('xls');
 
         $this->dw = $dataWarehouse;
-
-        $this->outFileName = 'Report_'.date('Ymd_His').'.'.$this->getFileExtension();
+        $utc = $this->dw->getUpdateTimestamp();
+        $ts = new DateTime($utc, new DateTimeZone('UTC'));
+        $ts->setTimezone(new DateTimeZone('America/Los_Angeles'));
+        $ts = $ts->format('Ymd_His');
+        $this->outFileName = 'Report_'.$ts.'.'.$this->getFileExtension();
     }
 
     public function handler(Request $request, Response $response)
@@ -120,9 +125,8 @@ class ExportXl extends AbstractExporter
         $response = $response->withHeader('Content-Disposition', 'attachment; filename='.$this->outFileName);
         $response = $response->withHeader('Set-Cookie', 'fileDownload=true; path=/');
 
-        /** @noinspection PhpUndefinedMethodInspection */
         $body = $response->getBody();
-        /** @noinspection PhpUndefinedMethodInspection */
+
         $body->write($this->export($content));
 
         return $response;

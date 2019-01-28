@@ -28,7 +28,7 @@ $settings = require PROJECT_ROOT . '/app/settings.php';
 $settings['debug'] = false;
 
 $settings['settings']['banner'] = null;
-$settings['settings']['dbConfig'] = $config['wpe'];
+$settings['settings']['dbConfig'] = $config['prod'];
 
 $settings['settings']['env_uri'] = 'http://';
 if (isset($_SERVER['HTTPS'])) {

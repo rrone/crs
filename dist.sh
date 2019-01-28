@@ -24,6 +24,7 @@ then
     mv $PHP"/ext-xdebug.ini" $PHP"/ext-xdebug.~ini"
 fi
 composer install --no-dev
+yarn install --production=true
 echo
 
 echo "  Clear distribution folder..."
@@ -34,6 +35,7 @@ echo "  Setup distribution folder..."
 mkdir $dist
 mkdir $dist/var
 mkdir $dist/var/uploads
+mkdir $dist/var/node_modules
 mkdir $dist/src
 mkdir $dist/config
 echo
@@ -41,6 +43,7 @@ echo
 echo "  Copying app folders to distribution..."
 cp -f -r app $dist/app
 cp -f -r vendor $dist/vendor
+cp -f -r node_modules $dist/node_modules
 cp -f -r public $dist/public
 cp -f -r templates $dist/templates
 cp -f -r $config/config_prod.php $dist/config/config.php
@@ -71,6 +74,7 @@ then
     mv $PHP"/ext-xdebug.~ini" $PHP"/ext-xdebug.ini"
 fi
 composer install
+yarn install
 echo
 
 echo "...distribution complete"

@@ -17,13 +17,15 @@ echo "  Build public resources..."
 ./node_modules/.bin/gulp build
 echo
 
-echo "  Purge composer development items..."
+echo "  Setup production environment..."
 ## Disable xdebug for composer performance
 if [ -e $PHP"/ext-xdebug.ini" ]
 then
     mv $PHP"/ext-xdebug.ini" $PHP"/ext-xdebug.~ini"
 fi
+echo "  Purge composer development items..."
 composer install --no-dev
+echo "  Purge yarn development items..."
 yarn install --production=true
 echo
 
@@ -67,13 +69,15 @@ rm -f -r $dist/public/app_dev.php
 ##find $dist/config -type f -name '.env' -delete
 echo
 
-echo "  Restore composer development items..."
+echo "  Restore development environment..."
 ## Restore xdebug
 if [ -e $PHP"/ext-xdebug.~ini" ]
 then
     mv $PHP"/ext-xdebug.~ini" $PHP"/ext-xdebug.ini"
 fi
+echo "  Restore composer development items..."
 composer install
+echo "  Restore composer development items..."
 yarn install
 echo
 

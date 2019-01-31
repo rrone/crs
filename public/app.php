@@ -1,7 +1,6 @@
 <?php
 
 use Symfony\Component\Debug\Debug;
-use App\Action\SessionHandler;
 
 // To help the built-in PHP dev server, check if the request was actually for
 // something which should probably be served as a static file
@@ -14,9 +13,11 @@ if (PHP_SAPI === 'cli-server' && $_SERVER['SCRIPT_FILENAME'] !== __FILE__) {
 if (isset($_SERVER['HTTP_CLIENT_IP'])
     || isset($_SERVER['HTTP_X_FORWARDED_FOR'])
     || !(in_array(@$_SERVER['REMOTE_ADDR'], ['127.0.0.1', 'fe80::1', '::1']) || php_sapi_name() === 'cli-server')
-    //VirtualHostX Local Domain
+    //VirtualHostX Local URL
     && (!strpos($_SERVER['SERVER_NAME'],'.vhx.cloud') )
-    //VirtualHostX Local Network Domain
+    //VirtualHostX Public URL
+    && (!strpos($_SERVER['SERVER_NAME'],'.ngrok.io') )
+    //VirtualHostX LAN URL
     && (!strpos($_SERVER['SERVER_NAME'],'.xip.io') )  ) {
     header('HTTP/1.0 403 Forbidden');
     exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');

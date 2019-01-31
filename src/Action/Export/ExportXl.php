@@ -256,21 +256,21 @@ class ExportXl extends AbstractExporter
 //        return $content;
 //    }
 
-    static function sortOnRep($a, $b)
-    {
-        if ($a == $b) {
-            return 0;
-        }
-
-        if ($a[0] == 'Assignor') {
-            return -1;
-        }
-
-        if ($b[0] == 'Assignor') {
-            return 1;
-        }
-
-        return ($a[0] < $b[0]) ? -1 : 1;
-    }
+//    static function sortOnRep($a, $b)
+//    {
+//        if ($a == $b) {
+//            return 0;
+//        }
+//
+//        if ($a[0] == 'Assignor') {
+//            return -1;
+//        }
+//
+//        if ($b[0] == 'Assignor') {
+//            return 1;
+//        }
+//
+//        return ($a[0] < $b[0]) ? -1 : 1;
+//    }
 
 }

@@ -4,8 +4,8 @@ namespace App\Action;
 
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Support\Collection;
-use DateTime;
-use DateTimeZone;
+//use DateTime;
+//use DateTimeZone;
 
 /**
  * Class DataWarehouse
@@ -91,42 +91,42 @@ class DataWarehouse
      * @param $user
      * @return null
      */
-    public function setUser($user)
-    {
-        if (empty($user)) {
-            return null;
-        }
-
-        $u = $this->getUserByName($user['name']);
-        if (empty($u)) {
-            $newUser = array(
-                'name' => $user['name'],
-                'enabled' => $user['enabled'],
-                'hash' => $user['hash'],
-            );
-
-            $this->db->table('users')
-                ->insert([$newUser]);
-
-            $newUser = $this->getUserByName($newUser['name']);
-
-            return $newUser->id;
-
-        } else {
-            $hash = $user['hash'];
-
-            $this->db->table('users')
-                ->where('id', $u->id)
-                ->update(
-                    [
-                        'hash' => $hash,
-                    ]
-                );
-
-            return $u->id;
-        }
-
-    }
+//    public function setUser($user)
+//    {
+//        if (empty($user)) {
+//            return null;
+//        }
+//
+//        $u = $this->getUserByName($user['name']);
+//        if (empty($u)) {
+//            $newUser = array(
+//                'name' => $user['name'],
+//                'enabled' => $user['enabled'],
+//                'hash' => $user['hash'],
+//            );
+//
+//            $this->db->table('users')
+//                ->insert([$newUser]);
+//
+//            $newUser = $this->getUserByName($newUser['name']);
+//
+//            return $newUser->id;
+//
+//        } else {
+//            $hash = $user['hash'];
+//
+//            $this->db->table('users')
+//                ->where('id', $u->id)
+//                ->update(
+//                    [
+//                        'hash' => $hash,
+//                    ]
+//                );
+//
+//            return $u->id;
+//        }
+//
+//    }
 
     /**
      * @param mixed $userKey
@@ -426,16 +426,16 @@ class DataWarehouse
         return $updated;
     }
 
-    public function getTableHeaders($tableName)
-    {
-        if (is_null($tableName)) {
-            return null;
-        }
-
-        $results = $this->db::schema()->getColumnListing($tableName);
-
-        return $results;
-    }
+//    public function getTableHeaders($tableName)
+//    {
+//        if (is_null($tableName)) {
+//            return null;
+//        }
+//
+//        $results = $this->db::schema()->getColumnListing($tableName);
+//
+//        return $results;
+//    }
 
 //Log writer
 
@@ -470,10 +470,10 @@ class DataWarehouse
     /**
      *
      */
-    public function showVariables()
-    {
-        return $this->db->getConnection();
-    }
+//    public function showVariables()
+//    {
+//        return $this->db->getConnection();
+//    }
 
 //Log reader
 
@@ -483,30 +483,30 @@ class DataWarehouse
      * @return string|null
      * @throws \Exception
      */
-    public function getLastLogon($key, $userName)
-    {
-        $timestamp = null;
-
-        $ts = $this->db->table('log')
-            ->where(
-                [
-                    ['projectKey', 'like', $key],
-                    ['note', 'like', "$userName: CRS logon%"],
-                ]
-            )
-            ->orderBy('timestamp', 'desc')
-            ->limit(1)
-            ->get();
-
-        $ts = $this->getZero($ts);
-
-        if (!empty($ts)) {
-            $utc = new DateTime($ts->timestamp, new DateTimeZone('UTC'));
-            $time = $utc->setTimezone(new DateTimeZone('America/Los_Angeles'));
-            $timestamp = $time->format('Y-M-j H:i');
-        }
-
-        return $timestamp;
-    }
+//    public function getLastLogon($key, $userName)
+//    {
+//        $timestamp = null;
+//
+//        $ts = $this->db->table('log')
+//            ->where(
+//                [
+//                    ['projectKey', 'like', $key],
+//                    ['note', 'like', "$userName: CRS logon%"],
+//                ]
+//            )
+//            ->orderBy('timestamp', 'desc')
+//            ->limit(1)
+//            ->get();
+//
+//        $ts = $this->getZero($ts);
+//
+//        if (!empty($ts)) {
+//            $utc = new DateTime($ts->timestamp, new DateTimeZone('UTC'));
+//            $time = $utc->setTimezone(new DateTimeZone('America/Los_Angeles'));
+//            $timestamp = $time->format('Y-M-j H:i');
+//        }
+//
+//        return $timestamp;
+//    }
 
 }

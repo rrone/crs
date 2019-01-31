@@ -48,7 +48,12 @@ class ExportsTest extends AppTestCase
         $this->RefereeInstructorEvaluators();
         $this->RefereeUpgradeCandidates();
         $this->UnregisteredReferees();
+        $this->NoCertsReferees();
+        $this->CDCReferees();
+        $this->SafeHavenReferees();
+        $this->CompositeRefCerts();
         $this->NationalRefereeAssessorsNotAllowed();
+        $this->UndefinedCall();
     }
 
     public function testExportAsAdmin()
@@ -68,7 +73,12 @@ class ExportsTest extends AppTestCase
         $this->RefereeInstructorEvaluators();
         $this->RefereeUpgradeCandidates();
         $this->UnregisteredReferees();
+        $this->NoCertsReferees();
+        $this->CDCReferees();
+        $this->SafeHavenReferees();
+        $this->CompositeRefCerts();
         $this->NationalRefereeAssessorsAllowed();
+        $this->UndefinedCall();
     }
 
     protected function HighestRefereeCertification()
@@ -163,6 +173,66 @@ class ExportsTest extends AppTestCase
         $this->assertContains('.xlsx', $contentDisposition);
     }
 
+    protected function NoCertsReferees()
+    {
+        //Unregistered Referees
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->get('/nocerts?20');
+
+        $contentType = $response->getHeader('Content-Type')[0];
+        $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        $this->assertEquals($cType, $contentType);
+
+        $contentDisposition = $response->getHeader('Content-Disposition')[0];
+        $this->assertContains('attachment; filename=', $contentDisposition);
+        $this->assertContains('.xlsx', $contentDisposition);
+    }
+
+    protected function CDCReferees()
+    {
+        //Concussion Training for Referees
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->get('/rcdc?20');
+
+        $contentType = $response->getHeader('Content-Type')[0];
+        $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        $this->assertEquals($cType, $contentType);
+
+        $contentDisposition = $response->getHeader('Content-Disposition')[0];
+        $this->assertContains('attachment; filename=', $contentDisposition);
+        $this->assertContains('.xlsx', $contentDisposition);
+    }
+
+    protected function SafeHavenReferees()
+    {
+        //Safe Haven Referees
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->get('/rsh?20');
+
+        $contentType = $response->getHeader('Content-Type')[0];
+        $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        $this->assertEquals($cType, $contentType);
+
+        $contentDisposition = $response->getHeader('Content-Disposition')[0];
+        $this->assertContains('attachment; filename=', $contentDisposition);
+        $this->assertContains('.xlsx', $contentDisposition);
+    }
+
+    protected function CompositeRefCerts()
+    {
+        //Safe Haven Referees
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->get('/bshca?20');
+
+        $contentType = $response->getHeader('Content-Type')[0];
+        $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        $this->assertEquals($cType, $contentType);
+
+        $contentDisposition = $response->getHeader('Content-Disposition')[0];
+        $this->assertContains('attachment; filename=', $contentDisposition);
+        $this->assertContains('.xlsx', $contentDisposition);
+    }
+
     protected function NationalRefereeAssessorsNotAllowed()
     {
         //National Referee Assessors -- not allowed
@@ -191,4 +261,19 @@ class ExportsTest extends AppTestCase
         $this->assertContains('.xlsx', $contentDisposition);
 
     }
+
+    protected function UndefinedCall()
+    {
+        //Safe Haven Referees
+        $this->client->returnAsResponseObject(true);
+        $response = (object)$this->client->get('/xxx?null');
+
+        $this->assertEquals(isset($response->getHeader('Content-Type')[0]), false);
+
+        $response = (object)$this->client->get('/xxx');
+
+        $this->assertEquals(isset($response->getHeader('Content-Type')[0]), false);
+
+    }
+
 }

@@ -47,24 +47,24 @@ abstract class AbstractView
 
     abstract protected function render(Response &$response);
 
-    protected function isRepost(Request $request)
-    {
-        if ($request->isPost()) {
-            $_POST = $request->getParsedBody();
-
-            if (isset($_SESSION['postdata'])) {
-                if ($_POST == $_SESSION['postdata']) {
-                    return true;
-                } else {
-                    $_SESSION['postdata'] = $_POST;
-                }
-            } else {
-                $_SESSION['postdata'] = $_POST;
-            }
-        }
-
-        return false;
-    }
+//    protected function isRepost(Request $request)
+//    {
+//        if ($request->isPost()) {
+//            $_POST = $request->getParsedBody();
+//
+//            if (isset($_SESSION['postdata'])) {
+//                if ($_POST == $_SESSION['postdata']) {
+//                    return true;
+//                } else {
+//                    $_SESSION['postdata'] = $_POST;
+//                }
+//            } else {
+//                $_SESSION['postdata'] = $_POST;
+//            }
+//        }
+//
+//        return false;
+//    }
 
     protected function getBaseURL($path)
     {

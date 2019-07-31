@@ -1,5 +1,5 @@
 {
-    "name": "ayso1ref/certification reporting system",
+    "name": "ayso1ref/certification_reporting_system",
     "description": "Slim Framework for ",
     "license": "BSD-3-Clause",
     "type": "project",
@@ -37,7 +37,6 @@
         "sebastian/object-enumerator": "^3.0",
         "sebastian/resource-operations": "^1.0",
         "sebastian/version": "^2.0",
-        "symfony/debug": "^3.1",
         "phpunit/phpunit": "^6",
         "phpunit/php-invoker": "^2.0",
         "phpunit/php-code-coverage": "^5.3",
@@ -64,6 +63,7 @@
         "ircmaxell/password-compat": "^1.0",
         "dflydev/fig-cookies": "^1.0",
         "phpoffice/phpspreadsheet": "^1.4",
-        "ext-PDO": "^7.2"
+        "ext-PDO": "^7.2",
+        "symfony/debug": "^4.3"
     }
 }

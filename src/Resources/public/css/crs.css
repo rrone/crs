@@ -113,7 +113,8 @@ td {
     clear: both;
 }
 .btn  {
-    margin: 10px 20px;
+    margin: 10px;
+    font-size: 0.8rem;
 }
 #btnDone {
     background-color: lightgrey;
@@ -143,7 +144,7 @@ legend {
 }
 .export {
     margin-top: 0;
-    margin-bottom: 0;
+    margin-bottom: 1rem;
 }
 
 @media only screen and (max-width: 768px){
@@ -167,7 +168,7 @@ legend {
     border: 1px solid transparent;
 }
 .indent {
-    margin-left: 30px;
+    margin-left: 40px;
 }
 .new {
     font-style: italic;

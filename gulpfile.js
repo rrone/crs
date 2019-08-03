@@ -1,90 +1,92 @@
-const path   = require('path');
-const gulp   = require('gulp');
-const concat = require('gulp-concat');
+/*jslint node: true */
+"use strict";
 
-const appResourceDir   = path.join(__dirname, 'src/resources/public');
-const nodeModulesDir = path.join(__dirname,'node_modules');
-const vendorDir = path.join(__dirname,'vendor');
-const appWebDir   = path.join(__dirname, 'public');
+let gulp = require("gulp");
+let {src, dest, series, parallel} = gulp;
+let concat = require("gulp-concat");
+let minifyCSS = require("gulp-csso");
+let path = require("path");
+let del = require("del");
+let uglify = require("gulp-uglify");
+let fs = require("fs-extra");
 
-const appTask = function() {
+let appResourceDir = path.join(__dirname, "src/Resources/public");
+let nodeModulesDir = path.join(__dirname, "node_modules");
+let appWebDir = path.join(__dirname, "public");
 
+// Set the browser that you want to support
+function css() {
     // Control the order
-    gulp.src([
-            appResourceDir + '/css/style.css',
-            appResourceDir + '/css/crs.css'
-        ])
-        .pipe(concat("app.css"))
-        .pipe(gulp.dest(appWebDir + '/css'));
+    return src([
+        appResourceDir + "/css/style.css",
+        appResourceDir + "/css/crs.css"
+    ]).pipe(
+        concat("app.css")
+    ).pipe(
+        minifyCSS()
+    ).pipe(dest(appWebDir + "/css"));
+}
 
-     //Java scripts
-    gulp.src([
-            appResourceDir + '/js/jquery.filedownload.js'
-        ])
-        .pipe(concat("filedownload.js"))
-        .pipe(gulp.dest(appWebDir + '/js'));
-        
+function js() {
+    //Java scripts
+    return src([
+        appResourceDir + "/js/jquery.filedownload.js"
+    ]).pipe(
+        concat("filedownload.js")
+    ).pipe(
+        uglify()
+    ).pipe(dest(appWebDir + "/js"));
+}
+
+function image() {
     // images
-    gulp.src([
-            appResourceDir + '/images/*.png',
-            appResourceDir + '/images/*.ico',
-            appResourceDir + '/images/*.gif'
+    return src([
+        appResourceDir + "/images/*.png",
+        appResourceDir + "/images/*.ico",
+        appResourceDir + "/images/*.gif"
 
-        ])
-        .pipe(gulp.dest(appWebDir +'/images'));
-};
-gulp.task('app',appTask);
+    ]).pipe(dest(appWebDir + "/images"));
+}
 
-const nodeModulesTask = function() {
+function node() {
+    //vendor assets
+    src([
+        path.join(nodeModulesDir, "normalize.css/normalize.css"),
+        path.join(nodeModulesDir, "purecss/build/base-min.css"),
+        path.join(nodeModulesDir, "purecss/build/grids-responsive-min.css"),
+        path.join(nodeModulesDir, "purecss/build/buttons-min.css"),
+        path.join(nodeModulesDir, "purecss/build/pure-nr-min.css")
+    ]).pipe(dest(appWebDir + "/css"));
 
-    gulp.src([
-            path.join(nodeModulesDir,'normalize.css/normalize.css'),
-            path.join(nodeModulesDir,'bootstrap/dist/css/bootstrap.min.css'),
-            path.join(nodeModulesDir,'purecss/build/base-min.css'),
-            path.join(nodeModulesDir,'purecss/build/grids-responsive-min.css'),
-            path.join(nodeModulesDir,'purecss/build/buttons-min.css'),
-            path.join(nodeModulesDir,'purecss/build/pure-nr-min.css'),
-            path.join(nodeModulesDir,'jquery-datetimepicker/build/jquery.datetimepicker.min.css')
-        ])
-        .pipe(gulp.dest(appWebDir + '/css'));
-    //
-    gulp.src([
-            path.join(nodeModulesDir,'jquery/dist/jquery.min.js'),
-            path.join(nodeModulesDir,'bootstrap/dist/js/bootstrap.min.js'),
-            path.join(nodeModulesDir,'jquery-datetimepicker/build/jquery.datetimepicker.full.js')
-        ])
-        .pipe(gulp.dest(appWebDir +'/js'));
-    //
-    gulp.src([
-        path.join(vendorDir,'components/bootstrap/fonts/glyphicons-halflings-regular.ttf'),
-        path.join(vendorDir,'components/bootstrap/fonts/glyphicons-halflings-regular.woff'),
-        path.join(vendorDir,'components/bootstrap/fonts/glyphicons-halflings-regular.woff2')
-    ])
-        .pipe(gulp.dest(appWebDir +'/fonts'));
+    return src([
+        path.join(nodeModulesDir, "jquery/dist/jquery.min.js")
+    ]).pipe(dest(appWebDir + "/js"));
 
-};
-gulp.task('node_modules',nodeModulesTask);
+}
 
-const buildTask = function()
-{
-    appTask();
-    nodeModulesTask();
-};
-gulp.task('build',buildTask);
+function cleanPath(path) {
+    del(path);
+    return fs.ensureDir(path);
+}
 
-const watchTask = function()
-{
-    buildTask();
+function clean() {
+    cleanPath(appWebDir + "/css/*");
+    cleanPath(appWebDir + "/js/*");
+    return cleanPath(appWebDir + "/images/*");
+}
 
-    // Why the warnings, seems to work fine
-    gulp.watch([
-        appResourceDir + '/css/*.css',
-        appResourceDir + '/js/*.js',
-        appResourceDir + '/images/*.png',
-        appResourceDir + '/images/*.ico'
-    ],  ['app']);
-};
-gulp.task('watch',watchTask);
+function build(done) {
+    series(clean, parallel(css, js, image, node))(done);
+}
+
+function watch() {
+    gulp.watch(appResourceDir + "/css/**/*.css", css);
+    gulp.watch(appResourceDir + "/js/**/*.js", js);
+    gulp.watch(appResourceDir + "/images/**/*.(?:ico|png)$", image);
+}
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['build']);
+exports.clean = clean;
+exports.build = build;
+exports.watch = series(build, watch);
+exports.default = build;

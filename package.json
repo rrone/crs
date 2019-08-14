@@ -1,31 +1,16 @@
 {
-  "name": "certifcation-reporting-system",
-  "version": "1.0.0",
-  "description": "Slim Framework 3 application to provide certification reports",
-  "main": "gulpfile.js",
-  "scripts": {
-    "build": "gulp build",
-    "watch": "gulp watch",
-    "test": "php ~/Sites/AYSO/certrs/vendor/phpunit/phpunit/phpunit --bootstrap ~/Sites/AYSO/certrs/tests/bootstrap.php --configuration ~/Sites/AYSO/certrs/phpunit.xml",
-    "deploy": "dist.sh",
-    "coverage": "open var/coverage/index.html"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "del": "^5.0.0",
-    "fs-extra": "^8.1.0",
-    "gulp": "^4.0.2",
-    "gulp-concat": "^2.6.1",
-    "gulp-csso": "^3.0.1",
-    "gulp-uglify": "^3.0.2",
-    "run-sequence": "^2.2.1"
-  },
-  "dependencies": {
-    "bootstrap": "^4.3.1",
-    "jquery": "^3.3.1",
-    "normalize.css": "^8.0.1",
-    "popper.js": "^1.14.6",
-    "purecss": "^1.0.1"
-  }
+    "devDependencies": {
+        "@symfony/webpack-encore": "^0.28.0",
+        "core-js": "^3.0.0",
+        "regenerator-runtime": "^0.13.2",
+        "webpack-notifier": "^1.6.0"
+    },
+    "license": "UNLICENSED",
+    "private": true,
+    "scripts": {
+        "dev-server": "encore dev-server",
+        "dev": "encore dev",
+        "watch": "encore dev --watch",
+        "build": "encore production --progress"
+    }
 }

@@ -1,0 +1,52 @@
+{% extends "layout.html.twig" %}
+
+{% block head %}{% endblock %}
+
+{% block style %} {% endblock %}
+
+{% block content %}
+    <div class="right">
+        <p><b>Last Refresh:</b> {{ updated | raw }}</p>
+        <p style="text-align: right"><b>User:</b> {{ user | raw }}</p>
+    </div>
+
+    <p class="center"><span style="color: #FF0000">{{ message | raw }}</span></p>
+    {{ header | raw }}
+    <br>
+
+    <div class="legend">
+        <h3>Notes on these reports:</h3>
+        <ol>
+            {% for key, value in notes|cast_to_array %}
+                <li>{{ value.1 | raw }}</li>
+            {% endfor %}
+        </ol>
+        <hr>
+        {{ content | raw }}
+    </div>
+
+    <div id="preparing-file-modal" title="Preparing report..." style="display: none;">
+        We are preparing your report, please wait...
+    </div>
+
+    <div id="error-modal" title="Error" style="display: none;">
+        There was a problem generating your report, please try again.
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="{{ env_uri }}/js/filedownload.js"></script>
+
+    <script>
+        $(document).on("click", "a.reportDownload", function () {
+            $.fileDownload($(this).prop('href'), {
+                preparingMessageHtml: "Your report is being prepared, hydrate...",
+                failMessageHtml: "There was a problem generating your report, please try again."
+            });
+            return false; //this is critical to stop the click event which will trigger a normal file download!
+        });
+
+    </script>
+{% endblock %}

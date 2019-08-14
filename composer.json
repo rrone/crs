@@ -1,69 +1,83 @@
 {
-    "name": "ayso1ref/certification_reporting_system",
-    "description": "Slim Framework for ",
-    "license": "BSD-3-Clause",
     "type": "project",
-    "keywords": ["section1"],
-    "authors": [
-        {
-            "name": "Rick Roberts",
-            "email": "ayso1ref@gmail.com",
-            "homepage": "https://ayso1ref.com"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "App\\": "src",
-            "Tests\\": "tests"
-        }
+    "license": "proprietary",
+    "require": {
+        "php": "^7.1.3",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "phpoffice/phpspreadsheet": "^1.8",
+        "sensio/framework-extra-bundle": "^5.1",
+        "symfony/asset": "4.3.*",
+        "symfony/console": "4.3.*",
+        "symfony/dotenv": "4.3.*",
+        "symfony/expression-language": "4.3.*",
+        "symfony/flex": "^1.3.1",
+        "symfony/form": "4.3.*",
+        "symfony/framework-bundle": "4.3.*",
+        "symfony/http-client": "4.3.*",
+        "symfony/intl": "4.3.*",
+        "symfony/monolog-bundle": "^3.1",
+        "symfony/orm-pack": "*",
+        "symfony/process": "4.3.*",
+        "symfony/security-bundle": "4.3.*",
+        "symfony/serializer-pack": "*",
+        "symfony/swiftmailer-bundle": "^3.1",
+        "symfony/translation": "4.3.*",
+        "symfony/twig-bundle": "4.3.*",
+        "symfony/validator": "4.3.*",
+        "symfony/web-link": "4.3.*",
+        "symfony/yaml": "4.3.*"
     },
     "require-dev": {
-        "php": "^7.1",
-        "ext-dom": "*",
-        "ext-json": "*",
-        "ext-libxml": "*",
-        "ext-mbstring": "*",
-        "ext-xml": "*",
-        "doctrine/instantiator": "^1.1",
-        "myclabs/deep-copy": "^1.6",
-        "phar-io/manifest": "^1.0",
-        "phar-io/version": "^1.0",
-        "phpspec/prophecy": "^1.7",
-        "sebastian/comparator": "^2",
-        "sebastian/diff": "^2",
-        "sebastian/environment": "^3.1",
-        "sebastian/exporter": "^3.1",
-        "sebastian/global-state": "^2.0",
-        "sebastian/object-enumerator": "^3.0",
-        "sebastian/resource-operations": "^1.0",
-        "sebastian/version": "^2.0",
-        "phpunit/phpunit": "^6",
-        "phpunit/php-invoker": "^2.0",
-        "phpunit/php-code-coverage": "^5.3",
-        "phpunit/php-file-iterator": "^1.4",
-        "phpunit/php-text-template": "^1.2",
-        "phpunit/php-timer": "^1",
-        "components/bootstrap-default": "^3.3",
-        "symfony/browser-kit": "^3.1",
-        "there4/slim-test-helpers": "^2.1",
-        "symfony/console": "^3.2",
-        "symfony/event-dispatcher": "^3.2",
-        "symfony/filesystem": "^3.2",
-        "symfony/process": "^3.2",
-        "symfony/flex": "^1.1"
-
+        "symfony/debug-pack": "*",
+        "symfony/maker-bundle": "^1.0",
+        "symfony/profiler-pack": "*",
+        "symfony/test-pack": "*",
+        "symfony/web-server-bundle": "4.3.*"
     },
-    "require": {
-        "slim/slim": "^3.0",
-        "slim/twig-view": "~2.0",
-        "slim/flash": "^0.1.0",
-        "monolog/monolog": "^1.13",
-        "flexsounds/slim-symfony-di-container": "^1.0",
-        "illuminate/database": "~5.1",
-        "ircmaxell/password-compat": "^1.0",
-        "dflydev/fig-cookies": "^1.0",
-        "phpoffice/phpspreadsheet": "^1.4",
-        "ext-PDO": "^7.2",
-        "symfony/debug": "^4.3"
+    "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "replace": {
+        "paragonie/random_compat": "2.*",
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php71": "*",
+        "symfony/polyfill-php70": "*",
+        "symfony/polyfill-php56": "*"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "4.3.*"
+        }
     }
 }

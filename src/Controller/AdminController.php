@@ -26,7 +26,7 @@ class AdminController extends AbstractController2
     }
 
     /**
-     * @Route("/admin", name="index")
+     * @Route("/admin", name="admin")
      * @param Request $request
      * @param Response $response
      * @return RedirectResponse|null

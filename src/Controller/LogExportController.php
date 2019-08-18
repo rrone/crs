@@ -26,7 +26,7 @@ class LogExportController extends AbstractController2
     }
 
     /**
-     * @Route("/log", name="index")
+     * @Route("/log", name="log")
      * @param Request $request
      * @param Response $response
      * @return RedirectResponse|Response

@@ -3,10 +3,11 @@
 namespace App\Abstracts;
 
 use App\Repository\DataWarehouse;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Configuration;
+use Doctrine\DBAL\DriverManager;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use \Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Psr\Container\ContainerInterface;
 
 abstract class AbstractController2 extends AbstractController
 {
@@ -16,6 +17,9 @@ abstract class AbstractController2 extends AbstractController
     /* @var DataWarehouse */
     protected $dw;
 
+    /* @var bool */
+    protected $isTest;
+
     //shared variables
     protected $root;
 
@@ -24,14 +28,21 @@ abstract class AbstractController2 extends AbstractController
     protected $user;
     protected $authed;
 
-    public function __construct()
+    public function __construct($url)
     {
         $this->root = __DIR__.'/../..';
+        $config = new Configuration();
+
+        $connParams = array('url' => $url);
+        $conn = DriverManager::getConnection($connParams, $config);
+        $this->dw = new DataWarehouse($conn);
+
+        $this->isTest = false;
     }
 
     private function isTest()
     {
-        return $this->container->get('settings.test');
+        return $this->getParameter('settings.test');
     }
 
     protected function isAuthorized()
@@ -72,23 +83,23 @@ abstract class AbstractController2 extends AbstractController
             return null;
         }
 
-        $_GET = $request->getParams();
-        $uri = $request->getUri()->getPath();
+        $_GET = $request->query;
+        $uri = $request->getUri();
         $user = isset($this->user) ? $this->user->name : 'Anonymous';
-        $post = $request->isPost() ? 'with updated ref assignments' : '';
+        $post = $request->isMethod('post') ? 'with updated ref assignments' : '';
 
         switch ($uri) {
-            case $this->getBaseURL('logon'):
+            case $this->generateUrl('logon'):
             case '/':
             case '/logon':
                 //TODO: Why is $uri == '/adm' passing this case?
-                $logMsg = $uri != $this->getBaseURL('admin') ? "$user: CRS logon" : null;
+                $logMsg = $uri != $this->generateUrl('admin') ? "$user: CRS logon" : null;
                 break;
-            case $this->getBaseURL('end'):
+            case $this->generateUrl('end'):
             case '/end':
                 $logMsg = "$user: CRS log off";
                 break;
-            case $this->getBaseURL('reports'):
+            case $this->generateUrl('reports'):
             case '/reports':
                 if (!empty($post)) {
                     $logMsg = "$user: CRS $uri dispatched $post";
@@ -102,20 +113,11 @@ abstract class AbstractController2 extends AbstractController
         }
 
         if (!is_null($logMsg)) {
-            $dw->logInfo('CRS', $logMsg);
+            $this->dw->logInfo('CRS', $logMsg);
         }
 
         return null;
 
-    }
-
-    protected function getBaseURL($path)
-    {
-        $request = $this->container->get('request');
-
-        $baseUri = $request->getUri()->getBasePath().$this->container->get($path);
-
-        return $baseUri;
     }
 
 }

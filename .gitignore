@@ -1,0 +1,21 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea/
+/src/*/.gitignore
+/tests/.gitignore
+README.md
+/var/
+/vendor/
+*.base
+.env.local
+.env.test
+
+###> phpunit/phpunit ###
+/phpunit.xml
+###< phpunit/phpunit ###
+
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###

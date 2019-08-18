@@ -27,7 +27,7 @@ class ReportsController extends AbstractController2
     }
 
     /**
-     * @Route("/reports", name="index")
+     * @Route("/reports", name="reports")
      * @param Request $request
      * @param Response $response
      * @return RedirectResponse|Response

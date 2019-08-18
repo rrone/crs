@@ -10,6 +10,8 @@ use App\Repository\DataWarehouse;
 
 class LogonView extends AbstractView
 {
+    private $baseUrl;
+
     public function __construct(DataWarehouse $repository)
     {
         parent::__construct($repository);
@@ -17,10 +19,12 @@ class LogonView extends AbstractView
         $this->dw = $repository;
     }
 
-    public function handler(Request $request, Response $response)
+    public function handler(Request $request)
     {
-        if ($request->isPost()) {
-            $_POST = $request->getParsedBody();
+        if ($request->isMethod('post')) {
+            $_POST = $request->query;
+
+            $this->baseUrl = $request->query->get('baseUrl');
 
             $userName = isset($_POST['user']) ? $_POST['user'] : null;
             $user = $this->dw->getUserByName($userName);
@@ -55,18 +59,16 @@ class LogonView extends AbstractView
         return null;
     }
 
-    public function render(Response &$response)
+    public function render()
     {
         $content = array(
             'content' => $this->renderView(),
-            'users' => $this->getBaseURL('logon'),
+            'users' => $this->baseUrl,
             'message' => $this->msg,
             'updated' => $this->getUpdateTimestamp(),
         );
 
-        $this->view->render($response, 'logon.html.twig', $content);
-
-        return $response;
+        return $content;
     }
 
     protected function renderView()
@@ -75,7 +77,7 @@ class LogonView extends AbstractView
 
         $users = $this->dw->getAllUsers();
 
-        $logonPath = $this->getBaseURL('logon');
+        $logonPath = $this->baseUrl;
 
         if (count($users) > 0) {
             $html .= <<<EOD
@@ -83,8 +85,8 @@ class LogonView extends AbstractView
         <div class="center">
 			<table>
 				<tr>
-					<td width="50%"><div class="right">Report Admin: </div></td>
-					<td width="50%"><select id="user" class="form-control left-margin" name="user">
+					<td style="width: 50%"><div class="right">Report Admin: </div></td>
+					<td style="width: 50%"><select id="user" class="form-control left-margin" name="user">
 EOD;
 
             $html .= $this->selectedUsers($users);
@@ -94,7 +96,7 @@ EOD;
 				</tr>
 
 				<tr>
-					<td width="50%"><div class="right">Password: </div></td>
+					<td style="width: 50%"><div class="right">Password: </div></td>
 					<td><input class="form-control" type="password" name="passwd"></td>
 				</tr>
 			</table>

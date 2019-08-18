@@ -25,7 +25,7 @@ class ExportController extends AbstractController2
     }
 
     /**
-     * @Route("/export", name="index")
+     * @Route("/export", name="export")
      * @param Request $request
      * @param Response $response
      * @return RedirectResponse|Response

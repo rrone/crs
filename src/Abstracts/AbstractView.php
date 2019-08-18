@@ -36,8 +36,6 @@ abstract class AbstractView
         $this->page_title = "Section 1: Certification Reporting System";
     }
 
-    abstract protected function render(Response &$response);
-
     protected function getUpdateTimestamp()
     {
         $utc = $this->dw->getUpdateTimestamp();

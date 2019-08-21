@@ -1,18 +1,19 @@
 <?php
 namespace App\Controller;
 
-use App\Repository\DataWarehouse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Abstracts\AbstractController2;
 
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;@Route::class;
 
 class EndController extends AbstractController2
 {
-    public function __construct(DataWarehouse $dw)
+    public function __construct(RequestStack $requestStack)
     {
-        parent::__construct($dw, false);
+        parent::__construct($requestStack);
+
     }
 
     /**
@@ -26,14 +27,12 @@ class EndController extends AbstractController2
 
         $this->logStamp($request);
 
-        $resp = $this->redirectToRoute($this->generateUrl('logon'));
-
         if(session_status() == PHP_SESSION_ACTIVE){
-            session_unset();
-            session_destroy();
+            $session = $this->request->getSession();
+            $session->invalidate();
         }
 
-        return $resp;
+        return $this->redirectToRoute('logon');
     }
 }
 

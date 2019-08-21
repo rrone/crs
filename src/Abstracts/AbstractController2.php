@@ -2,17 +2,23 @@
 
 namespace App\Abstracts;
 
+use DateTime;
+use DateTimeZone;
+
 use App\Repository\DataWarehouse;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Configuration;
-use Doctrine\DBAL\DriverManager;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use \Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 abstract class AbstractController2 extends AbstractController
 {
     //database connection
     protected $conn;
+
+    /* @var Request */
+    protected $request;
 
     /* @var DataWarehouse */
     protected $dw;
@@ -22,22 +28,32 @@ abstract class AbstractController2 extends AbstractController
 
     //shared variables
     protected $root;
-
-    //session variables
     protected $event;
     protected $user;
-    protected $authed;
 
-    public function __construct($url)
+    //view variables
+    protected $page_title;
+    protected $dates;
+    protected $location;
+    protected $msg;
+    protected $msgStyle;
+    protected $menu;
+    protected $server;
+
+    protected $uri;
+
+    public function __construct(RequestStack $requestStack)
     {
         $this->root = __DIR__.'/../..';
-        $config = new Configuration();
 
-        $connParams = array('url' => $url);
-        $conn = DriverManager::getConnection($connParams, $config);
-        $this->dw = new DataWarehouse($conn);
+        $this->dw = new DataWarehouse();
+
+        $this->page_title = "Section 1: Certification Reporting System";
 
         $this->isTest = false;
+
+        $this->request = $requestStack->getCurrentRequest();
+
     }
 
     private function isTest()
@@ -47,39 +63,26 @@ abstract class AbstractController2 extends AbstractController
 
     protected function isAuthorized()
     {
-        if ($this->isTest() && isset($this->container['session'])) {
-            unset ($_SESSION);
-            $session = $this->container['session'];
-            $_SESSION['authed'] = $session['authed'];
-            $_SESSION['user'] = $session['user'];
-            if (isset($session['game_id'])) {
-                $_SESSION['game_id'] = $session['game_id'];
-            }
-        }
+        $session = $this->request->getSession();
 
-        $this->authed = isset($_SESSION['authed']) ? $_SESSION['authed'] : null;
-        if (!$this->authed) {
+        if (!$session->get('authed')) {
             return null;
         }
 
-        $this->user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
-
-        if (is_null($this->user)) {
+        if (is_null($session->get('user'))) {
             return null;
         }
+
+        $this->user = $session->get('user');
 
         return true;
     }
 
     protected function logStamp(Request $request)
     {
-        if (isset($_SESSION['admin'])) {
-            return null;
-        }
+        $session = $this->request->getSession();
 
-        $dw = $this->container['dw'];
-
-        if (is_null($dw)) {
+        if (is_null($session->get('admin'))) {
             return null;
         }
 
@@ -91,7 +94,6 @@ abstract class AbstractController2 extends AbstractController
         switch ($uri) {
             case $this->generateUrl('logon'):
             case '/':
-            case '/logon':
                 //TODO: Why is $uri == '/adm' passing this case?
                 $logMsg = $uri != $this->generateUrl('admin') ? "$user: CRS logon" : null;
                 break;
@@ -120,4 +122,29 @@ abstract class AbstractController2 extends AbstractController
 
     }
 
+    protected function getUpdateTimestamp()
+    {
+        $utc = $this->dw->getUpdateTimestamp();
+
+        $ts = new DateTime($utc, new DateTimeZone('UTC'));
+        $ts->setTimezone(new DateTimeZone('America/Los_Angeles'));
+
+        return $ts->format('Y-m-d H:i T');
+    }
+
+    protected function getBaseContent()
+    {
+        $server = $this->request->server->get('SERVER_NAME');
+        $banner = str_replace('$server',$server,$this->getParameter('banner') );
+
+        return array(
+            'banner' => $banner,
+            'root' => $this->generateUrl('logon'),
+            'email' => $this->getParameter('sra')['email'],
+            'issueTracker' => $this->getParameter('issueTracker'),
+            'version' => $this->getParameter('app.version'),
+            'updated' => $this->getUpdateTimestamp(),
+        );
+
+    }
 }

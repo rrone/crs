@@ -4,11 +4,14 @@ namespace App\Services;
 
 use App\Abstracts\AbstractExporter;
 use App\Repository\DataWarehouse;
+
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 use DateTime;
 use DateTimeZone;
+use Exception;
 
 class ExportXl extends AbstractExporter
 {
@@ -19,6 +22,11 @@ class ExportXl extends AbstractExporter
     private $user;
     private $baseURL;
 
+    /**
+     * ExportXl constructor.
+     * @param DataWarehouse $dataWarehouse
+     * @throws Exception
+     */
     public function __construct(DataWarehouse $dataWarehouse)
     {
         parent::__construct('xls');
@@ -31,10 +39,14 @@ class ExportXl extends AbstractExporter
         $this->outFileName = 'Report_'.$ts.'.'.$this->getFileExtension();
     }
 
-    public function handler(Request $request, Response $response)
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function invoke(Request $request)
     {
-        $this->user = $request->get('user');
-        $this->baseURL = $request->get('baseURL');
+        $this->user = $request->request->get('user');
+        $this->baseURL = $request->request->get('baseURL');
 
         if ($this->user->admin) {
             $userKey = '%%';
@@ -44,16 +56,10 @@ class ExportXl extends AbstractExporter
             $userKey = $userKey == '10' ? '1' : $userKey;
         }
 
-        $uri = $request->getUri()->getPath();
+        $uri = $request->attributes->get('_route');
 
-        $params = $request->getParams();
-        if (!is_null($params)) {
-            $params = array_keys($params);
-            $limit = isset($params[0]) ? (integer)$params[0] : null;
-            $limit = $limit == 0 ? null : $limit;
-        } else {
-            $limit = null;
-        }
+        $limit = $request->query->get('limit');
+        $limit = is_null($limit) ? $this->dw->bigLimit() : $limit;
 
         $uri = str_replace('/', '', $uri);
 
@@ -114,27 +120,31 @@ class ExportXl extends AbstractExporter
         }
 
         $content = null;
+        $response = new Response();
 
         if (is_null($results)) {
-            return $response->withRedirect($this->baseURL);
+            return new RedirectResponse($this->baseURL);
         } else {
             $this->generateExport($content, $results);
         }
         // generate the response
-        $response = $response->withHeader('Content-Type', $this->contentType);
-        $response = $response->withHeader('Content-Disposition', 'attachment; filename='.$this->outFileName);
-        $response = $response->withHeader('Set-Cookie', 'fileDownload=true; path=/');
+        $response->headers->set('Content-Type', $this->contentType);
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$this->outFileName);
+        $response->headers->set('Set-Cookie', 'fileDownload=true; path=/');
 
-        $body = $response->getBody();
-
-        $body->write($this->export($content));
+        $response->setContent($this->export($content));
 
         return $response;
     }
 
-    private function generateExport(&$content, Collection $certs)
+    /**
+     * @param $content
+     * @param array $certs
+     * @return array | null
+     */
+    private function generateExport(&$content, array $certs)
     {
-        if (is_null($certs) or $certs->isEmpty()) {
+        if (is_null($certs) or empty($certs)) {
             return null;
         }
 

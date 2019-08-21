@@ -1,0 +1,3 @@
+# config/packages/prod
+parameters:
+    banner: ''

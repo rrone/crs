@@ -34,7 +34,7 @@ class LogExportController extends AbstractController2
     public function index(Request $request, Response $response)
     {
         if(!$this->isAuthorized()) {
-            return $this->redirectToRoute('logon');
+            return $this->redirectToRoute('/');
         };
 
         if (!$this->user->admin) {

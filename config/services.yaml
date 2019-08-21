@@ -5,7 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
-    app.version: '2019.08.18.00'
+    app.version: '2019.08.21.00'
 
     sra:
         name: 'Rick Roberts'
@@ -37,8 +37,6 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
-        bind:
-            $url: '%env(resolve:DATABASE_URL)%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

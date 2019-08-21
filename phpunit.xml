@@ -10,22 +10,18 @@
         convertWarningsToExceptions = "false"
         processIsolation            = "false"
         stopOnFailure               = "false"
-        syntaxCheck                 = "true"
-        bootstrap                   = "tests/bootstrap.php">
+>
     <logging>
         <log type="coverage-html" target="var/coverage/"/>
     </logging>
     <testsuites>
-        <testsuite name="Unit Test Suite">
-            <directory suffix=".php">src/Action</directory>
+        <testsuite name="Functional Test Suite">
+            <directory suffix=".php">tests</directory>
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src/Action</directory>
-            <exclude>
-                <directory suffix="Test.php">src/Action</directory>
-            </exclude>
+        <whitelist>
+            <directory suffix=".php">tests</directory>
         </whitelist>
     </filter>
 

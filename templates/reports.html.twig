@@ -17,8 +17,8 @@
     <div class="legend">
         <h3>Notes on these reports:</h3>
         <ol>
-            {% for key, value in notes|cast_to_array %}
-                <li>{{ value.1 | raw }}</li>
+            {% for key, value in notes %}
+                <li>{{ value.text | raw }}</li>
             {% endfor %}
         </ol>
         <hr>
@@ -37,7 +37,7 @@
 
 {% block script %}
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script src="{{ env_uri }}/js/filedownload.js"></script>
+    <script src="{{ absolute_url('/') }}build/jquery.fileDownload.js"></script>
 
     <script>
         $(document).on("click", "a.reportDownload", function () {

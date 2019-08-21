@@ -2,8 +2,8 @@
 
 namespace  App\Controller;
 
-
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -16,33 +16,45 @@ class ExportController extends AbstractController2
 {
     private $exportXl;
 
-	public function __construct(ExportXl $exportXl)
+    /**
+     * ExportController constructor.
+     * @param RequestStack $requestStack
+     * @param ExportXl $exportXl
+     */
+    public function __construct(RequestStack $requestStack, ExportXl $exportXl)
     {
-		parent::__construct();
+		parent::__construct($requestStack);
 
         $this->exportXl = $exportXl;
 
     }
 
     /**
-     * @Route("/export", name="export")
+     * @Route("/bshca", name="bshca")
+     * @Route("/hrc", name="hrc")
+     * @Route("/ra", name="ra")
+     * @Route("/ri", name="ri")
+     * @Route("/rie", name="rie")
+     * @Route("/ruc", name="ruc")
+     * @Route("/urr", name="urr")
+     * @Route("/rcdc", name="rcdc")
+     * @Route("/rsh", name="rsh")
+     * @Route("/nra", name="nra")
      * @param Request $request
-     * @param Response $response
      * @return RedirectResponse|Response
      */
-    public function index(Request $request, Response $response)
+    public function index(Request $request)
     {
-
         if(!$this->isAuthorized()) {
-            return $this->redirectToRoute('logon');
+            return $this->redirectToRoute('/');
         };
 
         $this->logStamp($request);
 
-        $request->query->set('user', $this->user);
-        $request->query->set('baseURL', $this->generateUrl('logon'));
+        $request->request->set('user', $this->user);
+        $request->request->set('baseURL', $this->generateUrl('logon'));
 
-        $response = $this->exportXl->handler($request, $response);
+        $response = $this->exportXl->invoke($request);
 
         return $response;
 		

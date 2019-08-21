@@ -1,12 +1,69 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>S1: {% block title %}Certification Reporting System{% endblock %}</title>
+
+    {% block head %}{% endblock %}
+
+    <link rel="icon" href="{{ absolute_url('/') }}build/s1logo_crs.png" sizes="16x16">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />
+    {{ encore_entry_link_tags('app') }}
+    <link rel='apple-touch-icon-precomposed' href="{{ absolute_url('/') }}build/s1logo_crs.png" />
+    <style>
+        {% block style %}{% endblock %}
+    </style>
+</head>
+
+<body>
+<div class="banner">
+    {{ banner | raw }}
+</div>
+<div class="maincontent">
+    {% block layout %}{% endblock %}
+
+    <!-- footer -->
+    <div class="footer clear-fix">
+        <div class="center">
+            <p>Questions? Contact the <a href="mailto:{{ email }}" target="_blank">Section 1 Referee Administrator.</a></p>
+            {% if ( admin ) %}
+                <p>Find an issue with the Certification Reporting System? Log it in the <a href="{{ issueTracker }}"
+                                                                                           target="_blank">issue
+                        tracker</a><a
+                            href='{{ '%kernel.project_dir%' }}/admin'>.</a></p>
+            {% else %}
+                <p>Find an issue with the Certification Reporting System? Log it in the <a href="{{ issueTracker }}"
+                  target="_blank">issue tracker.</a></p>
+            {% endif %}
+            <p>Version {{ version }}</p>
+        </div>
+    </div>
+</div>
+</body>
+
+{#<script type="text/javascript">#}
+{#var _gaq = _gaq || [];#}
+{#_gaq.push(['_setAccount', 'UA-XXXXXXXX-X']);#}
+{#_gaq.push(['_trackPageview']);#}
+
+{#(function () {#}
+{#var ga = document.createElement('script');#}
+{#ga.type = 'text/javascript';#}
+{#ga.async = true;#}
+{#ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';#}
+{#var s = document.getElementsByTagName('script')[0];#}
+{#s.parentNode.insertBefore(ga, s);#}
+{#})();#}
+{#//</script>#}
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+{% block script %}{% endblock %}
 </html>

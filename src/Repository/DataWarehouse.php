@@ -2,10 +2,12 @@
 
 namespace App\Repository;
 
+use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
-
 use Doctrine\DBAL\DriverManager;
+use Doctrine;
+
 use Exception;
 
 /**
@@ -16,9 +18,9 @@ class DataWarehouse
 {
 
     /**
-     * @var Connection $connection
+     * @var Connection $conn
      */
-    protected $db;
+    protected $conn;
 
     /**
      * @const BIGINT
@@ -27,12 +29,21 @@ class DataWarehouse
 
     /**
      * DataWarehouse constructor.
-     * @param $conn
      */
-    public function __construct(Connection $conn)
+    public function __construct()
     {
-        $this->db = $conn;
+        global $kernel;
 
+        $this->conn = $kernel->getContainer()->get('doctrine.dbal.default_connection');
+
+    }
+
+    /**
+     * @return int
+     */
+    public function bigLimit()
+    {
+        return self::BIGINT;
     }
 
     /**
@@ -47,12 +58,14 @@ class DataWarehouse
     //User fetchAll functions
 
     /**
-     * @return mixed[]
+     * @return object
      */
     public function getAllUsers()
     {
 
-        return $this->db->fetchAll('SELECT * FROM crs_users');
+        $users = $this->conn->fetchAll('SELECT * FROM crs_users');
+
+        return $users;
     }
 
     /**
@@ -65,7 +78,7 @@ class DataWarehouse
             return null;
         }
 
-        $user = $this->db->fetchAll("SELECT * FROM crs_users WHERE `name` LIKE $name");
+        $user = $this->conn->fetchAll("SELECT * FROM crs_users WHERE `name` LIKE '$name'");
 
         return $this->getZero($user);
 
@@ -82,7 +95,7 @@ class DataWarehouse
             return null;
         }
 
-        $user = $this->db->fetchAll("SELECT * FROM crs_users WHERE `hash` LIKE $hash");
+        $user = $this->conn->fetchAll("SELECT * FROM crs_users WHERE `hash` LIKE $hash");
 
         return $this->getZero($user);
 
@@ -106,7 +119,7 @@ class DataWarehouse
 //                'hash' => $user['hash'],
 //            );
 //
-//            $this->db->fetchAll('users')
+//            $this->conn->fetchAll('users')
 //                ->insert([$newUser]);
 //
 //            $newUser = $this->getUserByName($newUser['name']);
@@ -116,7 +129,7 @@ class DataWarehouse
 //        } else {
 //            $hash = $user['hash'];
 //
-//            $this->db->fetchAll('users')
+//            $this->conn->fetchAll('users')
 //                ->where('id', $u->id)
 //                ->update(
 //                    [
@@ -136,7 +149,7 @@ class DataWarehouse
      */
     public function getHighestRefCerts($userKey, $limit = self::BIGINT)
     {
-        $results = $this->db->fetchAll(
+        $results = $this->conn->fetchAll(
             "
             SELECT * from crs_rpt_hrc 
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -164,7 +177,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->fetchAll(
+        $results = $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_ra 
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -187,7 +200,7 @@ class DataWarehouse
             $userKey = '';
         }
 
-        $results = $this->db->fetchAll(
+        $results = $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_nra 
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -212,7 +225,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->fetchAll(
+        $results = $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_ri 
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -237,7 +250,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->fetchAll(
+        $results = $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_rie 
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -263,7 +276,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->fetchAll(
+        $results = $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_ref_upgrades
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -288,7 +301,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->fetchAll(
+        $results = $this->conn->fetchAll(
             "
             SELECT * FROM `crs_rpt_unregistered_refs`
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -317,7 +330,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->fetchAll(
+        $results = $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_ref_cdc
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -342,7 +355,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->fetchAll(
+        $results = $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_safehaven
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -361,7 +374,7 @@ class DataWarehouse
      */
     public function getCompositeRefCerts($userKey, $limit = self::BIGINT)
     {
-        $results = $this->db->fetchAll(
+        $results = $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_ref_certs
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -390,7 +403,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->db->fetchAll(
+        $results = $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_nocerts
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -411,11 +424,11 @@ class DataWarehouse
      */
     public function getReports()
     {
-        return $this->db->fetchAll(
+        return $this->conn->fetchAll(
             "
             SELECT * FROM crs_reports
             WHERE `show` = 1
-            ORDER BY 'seq'
+            ORDER BY `seq`
         "
         );
     }
@@ -425,7 +438,7 @@ class DataWarehouse
      */
     public function getReportNotes()
     {
-        return $this->db->fetchAll(
+        return $this->conn->fetchAll(
             "
             SELECT * FROM crs_report_notes
             ORDER BY `seq`
@@ -439,7 +452,7 @@ class DataWarehouse
      */
     public function getUpdateTimestamp()
     {
-        $ts = $this->db->fetchAll(
+        $ts = $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_lastUpdate
             ORDER BY `timestamp`
@@ -458,7 +471,7 @@ class DataWarehouse
 //            return null;
 //        }
 //
-//        $results = $this->db::schema()->getColumnListing($tableName);
+//        $results = $this->conn::schema()->getColumnListing($tableName);
 //
 //        return $results;
 //    }
@@ -479,7 +492,7 @@ class DataWarehouse
             'note' => $msg,
         ];
 
-        $this->db->insert('crs_log', $data);
+        $this->conn->insert('crs_log', $data);
 
         return null;
     }
@@ -489,7 +502,7 @@ class DataWarehouse
      */
     public function getAccessLog()
     {
-        return $this->db->fetchAll("SELECT * FROM crs_log");
+        return $this->conn->fetchAll("SELECT * FROM crs_log");
     }
 
     /**
@@ -497,7 +510,7 @@ class DataWarehouse
      */
 //    public function showVariables()
 //    {
-//        return $this->db->getConnection();
+//        return $this->conn->getConnection();
 //    }
 
 //Log reader
@@ -512,7 +525,7 @@ class DataWarehouse
 //    {
 //        $timestamp = null;
 //
-//        $ts = $this->db->fetchAll('log')
+//        $ts = $this->conn->fetchAll('log')
 //            ->where(
 //                [
 //                    ['projectKey', 'like', $key],

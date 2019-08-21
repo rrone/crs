@@ -2,13 +2,12 @@
 .idea/
 /src/*/.gitignore
 /tests/.gitignore
+/tests--old/
 README.md
 /var/
 /vendor/
 *.base
-.env.local
-.env.test
-/tests--old/
+.env.*
 
 ###> phpunit/phpunit ###
 /phpunit.xml

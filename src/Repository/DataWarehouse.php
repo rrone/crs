@@ -310,7 +310,7 @@ class DataWarehouse
                     'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee', 
                     'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official', 
                     'U-8 Official & Safe Haven Referee', '') , `Last Name` , `First Name` , `AYSOID`
-            LIMIT ($limit)
+            LIMIT $limit
             "
         );
 

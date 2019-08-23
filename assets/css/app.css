@@ -176,7 +176,7 @@ legend {
     color: red;
 }
 
-.ui-dialog-titlebar { display: none }
-.ui-dialog-titlebar-close { display: none}
+/*.ui-dialog-titlebar { display: none }*/
+/*.ui-dialog-titlebar-close { display: none}*/
 
 .ui-resizable-handle { display: none }

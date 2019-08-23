@@ -36,17 +36,4 @@
 {% endblock %}
 
 {% block script %}
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script src="{{ absolute_url('/') }}build/jquery.fileDownload.js"></script>
-
-    <script>
-        $(document).on("click", "a.reportDownload", function () {
-            $.fileDownload($(this).prop('href'), {
-                preparingMessageHtml: "Your report is being prepared, hydrate...",
-                failMessageHtml: "There was a problem generating your report, please try again."
-            });
-            return false; //this is critical to stop the click event which will trigger a normal file download!
-        });
-
-    </script>
 {% endblock %}

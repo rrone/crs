@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Abstracts\AbstractExporter;
 use App\Repository\DataWarehouse;
 
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,6 +67,8 @@ class ExportXl extends AbstractExporter
         $user = explode(' ', $this->user->name);
         $u = strtoupper(str_replace('/', '', end($user)));
 
+        $directDownload = false;
+
         switch ($uri) {
             case 'hrc':
                 $this->outFileName = "HighestRefCerts.$u.$this->outFileName";
@@ -113,26 +116,31 @@ class ExportXl extends AbstractExporter
                 break;
             case 'bshca':
                 $this->outFileName = "CompositeRefCerts.$u.$this->outFileName";
-                $results = $this->dw->getCompositeRefCerts($userKey, $limit);
+                if($this->user->admin OR $this->user->section ){
+                    $results = $this->dw->getCompositeRefCertsFile();
+                    $directDownload = true;
+                } else {
+                    $results = $this->dw->getCompositeRefCerts($userKey, $limit);
+                }
                 break;
             default:
                 $results = null;
         }
 
-        $content = null;
-        $response = new Response();
-
+        // generate the response
         if (is_null($results)) {
             return new RedirectResponse($this->baseURL);
+        } else if($directDownload) {
+            $response = new BinaryFileResponse($results);
         } else {
+            $response = new Response();
+            $content = null;
             $this->generateExport($content, $results);
+            $response->setContent($this->export($content));
         }
-        // generate the response
         $response->headers->set('Content-Type', $this->contentType);
         $response->headers->set('Content-Disposition', 'attachment; filename='.$this->outFileName);
         $response->headers->set('Set-Cookie', 'fileDownload=true; path=/');
-
-        $response->setContent($this->export($content));
 
         return $response;
     }
@@ -199,88 +207,5 @@ class ExportXl extends AbstractExporter
 
         return $content;
     }
-
-//    private function tableHeaders($uri)
-//    {
-//        if (is_null($uri)) {
-//            return null;
-//        }
-//
-//        $tableName = null;
-//
-//        switch ($uri) {
-//            case 'hrc':
-//                $tableName = 'tmp_hrc';
-//                break;
-//            case 'ra':
-//                $tableName = 'tmp_ra';
-//                break;
-//            case 'ri':
-//                $tableName = 'tmp_ri';
-//                break;
-//            case 'rie':
-//                $tableName = 'tmp_rie';
-//                break;
-//            case 'nocerts':
-//                $tableName = 'tmp_nocerts';
-//                break;
-//            case 'ruc':
-//                $tableName = 'tmp_ruc';
-//                break;
-//            case 'urr':
-//                $tableName = 'tmp_urr';
-//                break;
-//            case 'rcdc':
-//                $tableName = 'tmp_rcdc';
-//                break;
-//            case 'rsh':
-//                $tableName = 'tmp_rsh';
-//                break;
-//            case 'nra':
-//                if($this->user->admin) {
-//                    $tableName = 'tmp_nra';
-//                } else {
-//                    $results = null;
-//                }
-//                break;
-//            default:
-//                $results = null;
-//        }
-//
-//        $content = [];
-//
-//        $results = $this->dw->getTableHeaders($tableName);
-//
-//        //set the header labels
-//        if (!empty($results)) {
-//            $rec = (array)$results[0];
-//
-//            $labels = [];
-//            foreach ($rec as $hdr => $val) {
-//                $labels[] = $val;
-//            }
-//
-//            $content = array($labels);
-//        }
-//
-//        return $content;
-//    }
-
-//    static function sortOnRep($a, $b)
-//    {
-//        if ($a == $b) {
-//            return 0;
-//        }
-//
-//        if ($a[0] == 'Assignor') {
-//            return -1;
-//        }
-//
-//        if ($b[0] == 'Assignor') {
-//            return 1;
-//        }
-//
-//        return ($a[0] < $b[0]) ? -1 : 1;
-//    }
 
 }

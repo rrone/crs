@@ -46,7 +46,7 @@ abstract class AbstractController2 extends AbstractController
     {
         $this->root = __DIR__.'/../..';
 
-        $this->dw = new DataWarehouse();
+        $this->dw = new DataWarehouse('');
 
         $this->page_title = "Section 1: Certification Reporting System";
 

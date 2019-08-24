@@ -22,6 +22,8 @@ class DataWarehouse
      */
     protected $conn;
 
+    protected $root;
+
     /**
      * @const BIGINT
      */
@@ -29,13 +31,14 @@ class DataWarehouse
 
     /**
      * DataWarehouse constructor.
+     * @param string $projectDir
      */
-    public function __construct()
+    public function __construct(string $projectDir)
     {
         global $kernel;
 
         $this->conn = $kernel->getContainer()->get('doctrine.dbal.default_connection');
-
+        $this->root = $projectDir;
     }
 
     /**
@@ -388,6 +391,17 @@ class DataWarehouse
         );
 
         return $results;
+    }
+
+    public function getCompositeRefCertsFile()
+    {
+        $results = $this->conn->fetchAll(
+            "
+            SELECT * FROM crs_rpt_ref_certs_file
+            ");
+        $file = realpath(__DIR__ . '/../../var/xlsx/' . $results[0]['file']);
+
+        return $file;
     }
 
     /**

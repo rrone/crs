@@ -1,18 +1,16 @@
 {% extends "layout.html.twig" %}
 
 {% block content %}
-    <div class="right">
-        <p><b>Last Refresh:</b> {{ updated | raw }}</p>
-    </div>
-
     <table width="98%">
         <tr>
             <td>
                 <p class="center"><span style="color: #FF0000">{{ message | raw }}</span></p>
-                {{ content | raw }}
-
             </td>
         </tr>
-
+        <tr>
+            <td>
+                {{ content | raw }}
+            </td>
+        </tr>
     </table>
 {% endblock %}

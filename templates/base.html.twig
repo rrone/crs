@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     {{ encore_entry_link_tags('app') }}
-    <link rel='apple-touch-icon-precomposed' href="{{ absolute_url('/') }}build/s1logo_crs.png" />
+    <link rel='apple-touch-icon-precomposed' href="{{ absolute_url('/') }}build/s1logo_crs.png"/>
     <style>
         {% block style %}{% endblock %}
     </style>
@@ -20,13 +20,23 @@
 <div class="banner">
     {{ banner | raw }}
 </div>
+
+<div class="right">
+<b>Last Refresh:</b> {{ updated | raw }}
+</div>
+<br/>
+<div class="clear-fix; center">
+    <h1>Section 1: Certification Reporting System</h1>
+</div>
+
 <div class="maincontent">
     {% block layout %}{% endblock %}
 
     <!-- footer -->
     <div class="footer clear-fix">
         <div class="center">
-            <p>Questions? Contact the <a href="mailto:{{ email }}" target="_blank">Section 1 Referee Administrator.</a></p>
+            <p>Questions? Contact the <a href="mailto:{{ email }}" target="_blank">Section 1 Referee Administrator.</a>
+            </p>
             {% if ( admin ) %}
                 <p>Find an issue with the Certification Reporting System? Log it in the <a href="{{ issueTracker }}"
                                                                                            target="_blank">issue
@@ -34,7 +44,8 @@
                             href='{{ '%kernel.project_dir%' }}/admin'>.</a></p>
             {% else %}
                 <p>Find an issue with the Certification Reporting System? Log it in the <a href="{{ issueTracker }}"
-                  target="_blank">issue tracker.</a></p>
+                                                                                           target="_blank">issue
+                        tracker.</a></p>
             {% endif %}
             <p>Version {{ version }}</p>
         </div>

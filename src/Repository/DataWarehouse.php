@@ -393,17 +393,6 @@ class DataWarehouse
         return $results;
     }
 
-    public function getCompositeRefCertsFile()
-    {
-        $results = $this->conn->fetchAll(
-            "
-            SELECT * FROM crs_rpt_ref_certs_file
-            ");
-        $file = realpath(__DIR__ . '/../../var/xlsx/' . $results[0]['file']);
-
-        return $file;
-    }
-
     /**
      * @param mixed $userKey
      * @param integer $limit

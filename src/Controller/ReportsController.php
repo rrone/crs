@@ -46,7 +46,6 @@ class ReportsController extends AbstractController2
         $content = array(
             'admin' => $this->user->admin,
             'user' => $this->user->name,
-            'header' => $this->renderHeader(),
             'notes' =>  $this->dw->getReportNotes(),
             'content' => $this->renderContent(),
             'message' => null,
@@ -55,21 +54,6 @@ class ReportsController extends AbstractController2
         $content = array_merge($content, $this->getBaseContent());
 
         return $this->render('reports.html.twig', $content);
-    }
-
-    protected function renderHeader()
-    {
-        $html = null;
-
-        if ($_SERVER['APP_DEBUG']) {
-            $html .= <<<EOD
-<div class="center">
-    <h1>Section 1: Certification Reporting System</h1>
-</div>
-EOD;
-        }
-
-        return $html;
     }
 
     protected function renderContent()

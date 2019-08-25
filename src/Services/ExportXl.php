@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Abstracts\AbstractExporter;
 use App\Repository\DataWarehouse;
 
+use http\Env;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 use DateTime;
 use DateTimeZone;
 use Exception;
+
+define("xlsxFile", realpath(__DIR__.'/../../var/xlsx/CompositeRefCerts'));
 
 class ExportXl extends AbstractExporter
 {
@@ -116,12 +119,7 @@ class ExportXl extends AbstractExporter
                 break;
             case 'bshca':
                 $this->outFileName = "CompositeRefCerts.$u.$this->outFileName";
-                if($this->user->admin OR $this->user->section ){
-                    $results = $this->dw->getCompositeRefCertsFile();
-                    $directDownload = true;
-                } else {
-                    $results = $this->dw->getCompositeRefCerts($userKey, $limit);
-                }
+                $results = $this->dw->getCompositeRefCerts($userKey, $limit);
                 break;
             default:
                 $results = null;
@@ -130,13 +128,19 @@ class ExportXl extends AbstractExporter
         // generate the response
         if (is_null($results)) {
             return new RedirectResponse($this->baseURL);
-        } else if($directDownload) {
-            $response = new BinaryFileResponse($results);
         } else {
-            $response = new Response();
             $content = null;
-            $this->generateExport($content, $results);
-            $response->setContent($this->export($content));
+            if ($this->user->section) {
+                if ($_SERVER['APP_ENV'] === 'dev') {
+                    $this->generateExport($content, $results);
+                    file_put_contents(realpath(xlsxFile), $this->export($content));
+                }
+                $response = new BinaryFileResponse(realpath(xlsxFile));
+            } else {
+                $response = new Response();
+                $this->generateExport($content, $results);
+                $response->setContent($this->export($content));
+            }
         }
         $response->headers->set('Content-Type', $this->contentType);
         $response->headers->set('Content-Disposition', 'attachment; filename='.$this->outFileName);

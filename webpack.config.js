@@ -14,10 +14,6 @@ Encore
         from: "./assets/images"
     })
 
-    // copy image files to build folder
-    .copyFiles({
-        from: "./assets/js/vendor"
-    })
     /*
      * ENTRY CONFIG
      *

@@ -98,7 +98,6 @@ td {
     margin-bottom: 2rem;
 }
 .center {
-    display: inline-block;
     text-align: center;
 }
 .center.no-content h2 {

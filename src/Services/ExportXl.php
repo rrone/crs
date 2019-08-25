@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Abstracts\AbstractExporter;
 use App\Repository\DataWarehouse;
 
-use http\Env;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,8 +69,6 @@ class ExportXl extends AbstractExporter
         $user = explode(' ', $this->user->name);
         $u = strtoupper(str_replace('/', '', end($user)));
 
-        $directDownload = false;
-
         switch ($uri) {
             case 'hrc':
                 $this->outFileName = "HighestRefCerts.$u.$this->outFileName";
@@ -130,12 +127,21 @@ class ExportXl extends AbstractExporter
             return new RedirectResponse($this->baseURL);
         } else {
             $content = null;
-            if ($this->user->section) {
+            if ((bool) $this->user->section && $uri == 'bshca') {
                 if ($_SERVER['APP_ENV'] === 'dev') {
                     $this->generateExport($content, $results);
                     file_put_contents(realpath(xlsxFile), $this->export($content));
                 }
-                $response = new BinaryFileResponse(realpath(xlsxFile));
+
+                try{
+                    $response = new BinaryFileResponse(realpath(xlsxFile));
+                } catch (Exception $e) {
+                    $response = new Response();
+
+                    $this->generateExport($content, array());
+                    $response->setContent($this->export($content));
+
+                }
             } else {
                 $response = new Response();
                 $this->generateExport($content, $results);
@@ -157,6 +163,7 @@ class ExportXl extends AbstractExporter
     private function generateExport(&$content, array $certs)
     {
         if (is_null($certs) or empty($certs)) {
+            $content['report']['data'] = array('There was an error generating your report.');
             return null;
         }
 

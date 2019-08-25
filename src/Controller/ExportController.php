@@ -1,13 +1,14 @@
 <?php
 
-namespace  App\Controller;
+namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-use Symfony\Component\Routing\Annotation\Route;@Route::class;
+use Symfony\Component\Routing\Annotation\Route;
+@Route::class;
 
 use App\Abstracts\AbstractController2;
 use App\Services\ExportXl;
@@ -23,7 +24,7 @@ class ExportController extends AbstractController2
      */
     public function __construct(RequestStack $requestStack, ExportXl $exportXl)
     {
-		parent::__construct($requestStack);
+        parent::__construct($requestStack);
 
         $this->exportXl = $exportXl;
 
@@ -45,7 +46,7 @@ class ExportController extends AbstractController2
      */
     public function index(Request $request)
     {
-        if(!$this->isAuthorized()) {
+        if (!$this->isAuthorized()) {
             return $this->redirectToRoute('/');
         };
 
@@ -57,6 +58,6 @@ class ExportController extends AbstractController2
         $response = $this->exportXl->invoke($request);
 
         return $response;
-		
+
     }
 }

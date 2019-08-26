@@ -136,15 +136,13 @@ abstract class AbstractController2 extends AbstractController
     {
         $server = $this->request->server->get('SERVER_NAME');
         $banner = str_replace('$server',$server,$this->getParameter('banner') );
-
         return array(
             'banner' => $banner,
             'root' => $this->generateUrl('logon'),
             'email' => $this->getParameter('sra')['email'],
             'issueTracker' => $this->getParameter('issueTracker'),
             'version' => $this->getParameter('app.version'),
-            'updated' => $this->getUpdateTimestamp(),
+            'updated' => $this->getUpdateTimestamp()
         );
-
     }
 }

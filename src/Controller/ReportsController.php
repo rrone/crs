@@ -48,7 +48,7 @@ class ReportsController extends AbstractController2
             'user' => $this->user->name,
             'notes' =>  $this->dw->getReportNotes(),
             'content' => $this->renderContent(),
-            'message' => null,
+            'message' => null
         );
 
         $content = array_merge($content, $this->getBaseContent());

@@ -4,6 +4,13 @@
 
 {% block style %} {% endblock %}
 
+{% block user %}
+<div class="clear-fix right">
+    <b>User:</b> {{ user | raw }}
+    <br/>
+</div>
+{% endblock %}
+
 {% block content %}
     <div class="legend">
         <h3>Notes on these reports:</h3>

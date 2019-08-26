@@ -1,3 +1,8 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+#   must load last
+app_mystery_routes:
+    resource: "routes/mystery_routes.yaml"
+    prefix: /

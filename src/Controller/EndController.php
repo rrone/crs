@@ -18,6 +18,7 @@ class EndController extends AbstractController2
 
     /**
      * @Route("/end", name="end")
+     * @Route("/unk", name="unk")
      * @param Request $request
      * @return RedirectResponse
      */

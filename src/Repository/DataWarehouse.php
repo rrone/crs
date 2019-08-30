@@ -2,10 +2,8 @@
 
 namespace App\Repository;
 
-use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\DriverManager;
 use Doctrine;
 
 use Exception;
@@ -37,7 +35,7 @@ class DataWarehouse
     {
         global $kernel;
 
-        $this->conn = $kernel->getContainer()->get('doctrine.dbal.default_connection');
+        $this->conn  = $kernel->getContainer()->get('doctrine.dbal.default_connection');
         $this->root = $projectDir;
     }
 

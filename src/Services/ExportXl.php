@@ -14,7 +14,7 @@ use DateTime;
 use DateTimeZone;
 use Exception;
 
-define("xlsxFile", realpath(__DIR__.'/../../var/xlsx/CompositeRefCerts'));
+define("xlsxFile", realpath(__DIR__.'/../../var/xlsx/CompositeRefCerts.xlsx'));
 
 class ExportXl extends AbstractExporter
 {

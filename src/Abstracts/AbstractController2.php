@@ -44,7 +44,7 @@ abstract class AbstractController2 extends AbstractController
 
     public function __construct(RequestStack $requestStack)
     {
-        $this->root = __DIR__.'/../..';
+        global $kernel;
 
         $this->dw = new DataWarehouse('');
 

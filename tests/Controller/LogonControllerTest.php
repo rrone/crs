@@ -3,14 +3,15 @@ namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class LogonTest extends WebTestCase
+class LogonControllerTest extends WebTestCase
 {
-    protected $eventLabel;
-    protected $userName;
-    protected $passwd;
-
     public function testRoot()
     {
+        global $kernel;
+        self::bootKernel();
+
+        $kernel = self::$kernel;
+var_dump($kernel->getContainer());
         // instantiate the view and test it
 
         $client = static::createClient();
@@ -19,9 +20,9 @@ class LogonTest extends WebTestCase
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
-//        $client->request('GET', '/logon');
-//
-//        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $client->request('GET', '/logon');
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         // instantiate the controller
 

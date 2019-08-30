@@ -1,6 +1,6 @@
 {
     "type": "project",
-    "license": "proprietary",
+    "license": "UNLICENSED",
     "require": {
         "php": "^7.3",
         "ext-ctype": "*",
@@ -27,6 +27,8 @@
         "symfony/yaml": "4.3.*"
     },
     "require-dev": {
+        "dama/doctrine-test-bundle": "^6.0",
+        "symfony/apache-pack": "^1.0",
         "symfony/browser-kit": "4.3.*",
         "symfony/css-selector": "4.3.*",
         "symfony/debug-pack": "*",
@@ -34,7 +36,7 @@
         "symfony/maker-bundle": "^1.0",
         "symfony/phpunit-bridge": "^4.3",
         "symfony/profiler-pack": "*",
-        "symfony/test-pack": "*",
+        "symfony/test-pack": "^1.0",
         "symfony/web-server-bundle": "4.3.*"
     },
     "config": {
@@ -78,7 +80,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
+            "allow-contrib": true,
             "require": "4.3.*"
         }
     }

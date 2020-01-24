@@ -1,3 +1,2 @@
 # config/packages/dev
 parameters:
-    banner: "<h1 class=\"banner\">Development Server : $server</h1>"

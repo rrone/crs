@@ -1,72 +1,88 @@
 
-body,td,th {
+body, td, th {
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 12px;
     color: #000000;
 }
+
 body {
     background-color: #FFFFFF;
 }
+
 a:link {
     color: #0066CC;
     text-decoration: none;
 }
+
 a:visited {
     text-decoration: none;
     color: #0099FF;
 }
+
 a:hover {
     text-decoration: none;
     color: #0000FF;
     background-color: #FFFFCC;
 }
+
 a:active {
     text-decoration: none;
     color: #CC0000;
     background-color: #FFFFCC;
 }
+
 h1, h2, h3 {
     font-weight: bold;
 }
+
 h1 {
     font-size: 16px;
     line-height: 2.25rem;
 }
+
 h2 {
     font-size: 14px;
     line-height: 2.25rem;
 }
+
 h3 {
     font-size: 12px;
     padding: 0 20px;
     margin-top: 15px;
     margin-bottom: 15px;
 }
+
 hr {
     margin: 10px 0;
 }
+
 ul.indent li h3 {
     padding: 0;
     margin: 0;
 }
+
 .h3-btn {
     margin-top: 20px;
     line-height: 3em;
 }
+
 .style4 a:link {
     color: #FFFFFF;
     text-decoration: underline;
 }
+
 .style4 a:visited {
     color: #FFFFFF;
     text-decoration: underline;
 }
+
 table {
     margin: 0;
     padding: 0;
     width: 100%;
     border: 0;
 }
+
 th, td {
     line-height: 1.6rem;
 }
@@ -80,6 +96,7 @@ td {
     text-align: left;
     padding: 0 2px;
 }
+
 .maincontent {
     margin-top: 40px;
     padding-right: 15px;
@@ -88,6 +105,7 @@ td {
     vertical-align: top;
     text-align: left;
 }
+
 .banner {
     width: 100%;
     line-height: 3rem;
@@ -97,64 +115,84 @@ td {
     color: white;
     margin-bottom: 2rem;
 }
+
 .center {
     text-align: center;
 }
+
 .center.no-content h2 {
     margin: 20px 0;
 }
+
 .right {
     float: right;
     margin-right: 20px;
 }
+
 .left {
     float: left;
 }
+
 .clear-fix {
     clear: both;
 }
-.btn  {
+
+.btn {
     margin: 10px;
     font-size: 0.8rem;
 }
+
 #btnDone {
     background-color: lightgrey;
 }
+
 .left-margin {
     margin-left: 20px;
 }
+
 .form-control {
     width: 80%;
 }
+
 select.form-control,
 input.form-control {
     margin: 5px 20px;
     font-size: 13px;
     height: 2.25em;
 }
+
 .edit-table input.form-control {
     margin: inherit;
 }
+
 a.btn:visited, a.btn:link {
     color: #fff;
     background-color: #337ab7;
     border-color: #2e6da4;
 }
+
 legend {
     line-height: 3em;
 }
+
 .export {
     margin-top: 0;
     margin-bottom: 1rem;
 }
 
-@media only screen and (max-width: 768px){
+@media only screen and (max-width: 768px) {
     select.form-control, input.form-control {
         width: 90%;
     }
 }
-.panel { margin-bottom: inherit }
-.border { border: 1px solid #ddd }
+
+.panel {
+    margin-bottom: inherit
+}
+
+.border {
+    border: 1px solid #ddd
+}
 
 .legend {
     font-size: 12px;
@@ -162,15 +200,19 @@ legend {
     margin: 50px auto;
     line-height: 2rem;
 }
+
 .no-border {
     border: none;
 }
+
 .border {
     border: 1px solid transparent;
 }
+
 .indent {
     margin-left: 40px;
 }
+
 .new {
     font-style: italic;
     font-weight: bold;
@@ -180,4 +222,10 @@ legend {
 /*.ui-dialog-titlebar { display: none }*/
 /*.ui-dialog-titlebar-close { display: none}*/
 
-.ui-resizable-handle { display: none }
+.ui-resizable-handle {
+    display: none
+}
+
+.table98 {
+    width: 98%
+}

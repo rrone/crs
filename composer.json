@@ -1,6 +1,6 @@
 {
     "type": "project",
-    "license": "proprietary",
+    "license": "BSD-3-Clause",
     "require": {
         "php": "^7.3",
         "ext-ctype": "*",

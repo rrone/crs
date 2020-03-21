@@ -10,7 +10,6 @@ use App\Repository\DataWarehouse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 abstract class AbstractController2 extends AbstractController
 {
@@ -46,7 +45,8 @@ abstract class AbstractController2 extends AbstractController
     {
         global $kernel;
 
-        $this->dw = new DataWarehouse('');
+        $conn = $kernel->getContainer()->get('doctrine.dbal.default_connection');
+        $this->dw = new DataWarehouse('', $conn);
 
         $this->page_title = "Section 1: Certification Reporting System";
 

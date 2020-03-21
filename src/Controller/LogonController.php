@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class LogonController extends AbstractController2
 {
-    private $baseUrl;
+    private string $baseUrl;
 
     /**
      * LogonController constructor.
@@ -42,9 +42,7 @@ class LogonController extends AbstractController2
             return $this->redirectToRoute('reports');
         }
 
-        $response = $this->render('logon.html.twig', $this->renderPage());
-
-        return $response;
+        return $this->render('logon.html.twig', $this->renderPage());
     }
 
     public function invoke(Request $request)

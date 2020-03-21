@@ -30,12 +30,12 @@ class DataWarehouse
     /**
      * DataWarehouse constructor.
      * @param string $projectDir
+     * @param Connection $connection
+     * @throws Exception
      */
-    public function __construct(string $projectDir)
+    public function __construct(string $projectDir, Connection $connection)
     {
-        global $kernel;
-
-        $this->conn  = $kernel->getContainer()->get('doctrine.dbal.default_connection');
+        $this->conn  = $connection;
         $this->root = $projectDir;
     }
 

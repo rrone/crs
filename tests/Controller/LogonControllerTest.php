@@ -1,7 +1,11 @@
 <?php
 namespace Tests\Controller;
 
+use App\Controller\LogonController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Request;
 
 class LogonControllerTest extends WebTestCase
 {
@@ -26,19 +30,23 @@ class LogonControllerTest extends WebTestCase
 
     public function testRoot()
     {
-        // instantiate the view and test it
-        $this->client->request('GET', '/');
+//        instantiate the controller
+        $rs = new RequestStack();
 
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $rs->push($this->client->request('GET', '/'));
 
-        $this->client->request('GET', '/logon');
+        $controller = new LogonController($rs);
+        $this->assertTrue($controller instanceof AbstractController);
 
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+//        // instantiate the view and test it
+//        $this->client->request('GET', '/');
+//
+//        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+//
+//        $this->client->request('GET', '/logon');
+//
+//        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
-//         instantiate the controller
-
-//        $controller = new LogonController($this->c);
-//        $this->assertTrue($controller instanceof AbstractController);
 
     }
 

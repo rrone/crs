@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class LogonController extends AbstractController2
 {
-    private string $baseUrl;
+    private string $url;
 
     /**
      * LogonController constructor.
@@ -47,11 +47,12 @@ class LogonController extends AbstractController2
 
     public function invoke(Request $request)
     {
+
+        $this->url = $request->query->get('url');
+
         if ($request->isMethod('post')) {
             $userName = $request->request->get('user');
             $pass = $request->request->get('passwd');
-
-            $this->baseUrl = $request->query->get('baseUrl');
 
             $user = $this->dw->getUserByName($userName);
             $this->user = $user;
@@ -88,9 +89,10 @@ class LogonController extends AbstractController2
 
     public function renderPage()
     {
+
         $content = array(
             'content' => $this->renderContent(),
-            'users' => $this->baseUrl,
+            'users' => $this->url,
             'message' => $this->msg,
             'admin' => is_null($this->user) ? false : $this->user->admin,
         );

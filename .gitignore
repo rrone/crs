@@ -17,3 +17,4 @@ yarn-error.log
 .env.local.php
 *.cache
 bin/.phpunit
+sql

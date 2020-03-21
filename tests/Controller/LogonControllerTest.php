@@ -1,32 +1,43 @@
 <?php
-namespace App\Tests\Controller;
+namespace Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class LogonControllerTest extends WebTestCase
 {
-    public function testRoot()
+    protected $eventLabel;
+    protected $userName;
+    protected $passwd;
+    protected $client;
+
+    protected function setUp() : void
     {
         global $kernel;
-        self::bootKernel();
 
-        $kernel = self::$kernel;
-var_dump($kernel->getContainer());
+        parent::setUp();
+
+        $this->client = static::createClient([
+            'environment' => 'test',
+            'debug' => true
+        ]);
+
+        $kernel = $this->client->getKernel();
+    }
+
+    public function testRoot()
+    {
         // instantiate the view and test it
+        $this->client->request('GET', '/');
 
-        $client = static::createClient();
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
-        $client->request('GET', '/');
+        $this->client->request('GET', '/logon');
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
-        $client->request('GET', '/logon');
+//         instantiate the controller
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
-
-        // instantiate the controller
-
-//        $controller = new LogonController($this->c, $view);
+//        $controller = new LogonController($this->c);
 //        $this->assertTrue($controller instanceof AbstractController);
 
     }

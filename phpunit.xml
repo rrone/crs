@@ -1,40 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- https://phpunit.readthedocs.io/en/latest/configuration.html -->
-<phpunit
-<<<<<<< Updated upstream
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/7.5/phpunit.xsd"
-        backupGlobals="false"
-        colors="true"
-        convertErrorsToExceptions="false"
-        convertNoticesToExceptions="false"
-        convertWarningsToExceptions="false"
-        stopOnFailure="false"
-        bootstrap="tests/phpunit.bootstrap.php"
->
-    <php>
-        <ini name="error_reporting" value="-1"/>
-        <server name="APP_ENV" value="test" force="true"/>
-        <server name="SHELL_VERBOSITY" value="-1"/>
-        <server name="SYMFONY_PHPUNIT_REMOVE" value=""/>
-        <server name="SYMFONY_PHPUNIT_VERSION" value="7.5"/>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0" />
-=======
-        backupGlobals               = "false"
-        backupStaticAttributes      = "false"
-        colors                      = "true"
-        convertErrorsToExceptions   = "false"
-        convertNoticesToExceptions  = "false"
-        convertWarningsToExceptions = "false"
-        processIsolation            = "false"
-        stopOnFailure               = "false"
-        bootstrap                   = "./config/bootstrap.php"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         backupGlobals               = "false"
+         backupStaticAttributes      = "false"
+         colors                      = "true"
+         convertErrorsToExceptions   = "false"
+         convertNoticesToExceptions  = "false"
+         convertWarningsToExceptions = "false"
+         processIsolation            = "false"
+         stopOnFailure               = "false"
+         bootstrap                   = "tests/bootstrap.php"
 
 >
-    <extensions>
-        <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension"/>
-    </extensions>
 
     <php>
         <ini name="error_reporting" value="-1" />
@@ -42,8 +21,6 @@
         <env name="APP_ENV" value="test" />
         <env name="APP_DEBUG" value="1" />
         <env name="SHELL_VERBOSITY" value="-1" />
-        <!-- define your env variables for the test env here -->
->>>>>>> Stashed changes
     </php>
 
     <logging>
@@ -62,12 +39,11 @@
         </whitelist>
     </filter>
 
-    <extensions>
-        <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension" />
-    </extensions>
+<!--    <extensions>-->
+<!--        <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension" />-->
+<!--    </extensions>-->
 
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
-        <listener class="\DAMA\DoctrineTestBundle\PHPUnit\PHPUnitListener" />
-    </listeners>
+<!--    <listeners>-->
+<!--        <listener class="\DAMA\DoctrineTestBundle\PHPUnit\PHPUnitListener" />-->
+<!--    </listeners>-->
 </phpunit>

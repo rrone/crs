@@ -134,10 +134,7 @@ abstract class AbstractController2 extends AbstractController
 
     protected function getBaseContent()
     {
-        $server = $this->request->server->get('SERVER_NAME');
-        $banner = str_replace('$server',$server,$this->getParameter('banner') );
         return array(
-            'banner' => $banner,
             'root' => $this->generateUrl('logon'),
             'email' => $this->getParameter('sra')['email'],
             'issueTracker' => $this->getParameter('issueTracker'),

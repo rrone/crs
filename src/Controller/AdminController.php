@@ -11,15 +11,6 @@ use Symfony\Component\Routing\Annotation\Route;@Route::class;
 class AdminController extends AbstractController2
 {
     /**
-     * AdminController constructor.
-     */
-    public function __construct() {
-
-	    parent::__construct();
-
-    }
-
-    /**
      * @Route("/admin", name="admin")
      * @param Request $request
      * @param Response $response

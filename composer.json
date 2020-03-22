@@ -1,6 +1,6 @@
 {
     "type": "project",
-    "license": "BSD-3-Clause",
+    "license": "Creative Commons BY-SA 3.0",
     "require": {
         "php": "^7.4",
         "ext-ctype": "*",

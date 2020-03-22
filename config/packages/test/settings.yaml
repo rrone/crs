@@ -1,3 +1,15 @@
 # config/packages/test
 parameters:
     banner: "<h1 class=\"banner\">Development Server : $server</h1>"
+
+    user_test:
+        user: 'Area 1/B'
+        pw: 'Area 1/B'
+
+    admin_test:
+        user: 'Admin Section 1'
+        pw: 'Admin Section 1'
+
+    dev_test:
+        user: 'Admin Section 1'
+        pw: 'Admin'

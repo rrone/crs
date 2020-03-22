@@ -6,8 +6,8 @@
         "regenerator-runtime": "^0.13.2",
         "webpack-notifier": "^1.6.0"
     },
-    "license": "UNLICENSED",
-    "private": true,
+    "license": "Creative Commons BY-SA 3.0",
+    "private": false,
     "scripts": {
         "dev-server": "encore dev-server",
         "dev": "encore dev",
@@ -15,7 +15,10 @@
         "prod": "encore production --progress"
     },
     "dependencies": {
+        "acorn": "^7.1.1",
+        "minimist": "^1.2.5",
         "require": "^2.4.20",
-        "require.js": "^1.0.0"
+        "require.js": "^1.0.0",
+        "uglify-js": "^3.8.0"
     }
 }

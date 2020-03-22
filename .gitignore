@@ -1,5 +1,5 @@
 # Created by .ignore support plugin (hsz.mobi)
-.idea/
+.*
 /src/*/.gitignore
 /tests/.gitignore
 /tests--old/
@@ -7,14 +7,12 @@ README.md
 /var/
 /vendor/
 *.base
-.env*
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
-.env.local.php
-*.cache
 bin/.phpunit
 sql
+pw_hash.php

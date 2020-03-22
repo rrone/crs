@@ -1,159 +1,140 @@
 <?php
+
 namespace Tests\Controller;
 
 use App\Controller\LogonController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Request;
 
 class LogonControllerTest extends WebTestCase
 {
-    protected $eventLabel;
-    protected $userName;
-    protected $passwd;
-    protected $client;
+    private ContainerInterface $c;
+    private KernelBrowser $client;
+    private Crawler $crawler;
+    private string $user;
+    private string $pw;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         global $kernel;
 
         parent::setUp();
 
-        $this->client = static::createClient([
-            'environment' => 'test',
-            'debug' => true
-        ]);
+        $this->client = static::createClient(
+            [
+                'environment' => 'test',
+                'debug' => true,
+            ]
+        );
 
         $kernel = $this->client->getKernel();
+
+        $this->c = self::$container;
+
     }
 
     public function testRoot()
     {
-//        instantiate the controller
+        // instantiate the controller
         $rs = new RequestStack();
-
-        $rs->push($this->client->request('GET', '/'));
-
         $controller = new LogonController($rs);
         $this->assertTrue($controller instanceof AbstractController);
 
-//        // instantiate the view and test it
-//        $this->client->request('GET', '/');
-//
-//        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-//
-//        $this->client->request('GET', '/logon');
-//
-//        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        // instantiate the view and test it
+        $this->client->request('GET', '/');
 
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+
+        $this->client->request('GET', '/logon');
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 
     }
 
-//    public function testLogonAsUser()
-//    {
-//        $this->userName = $this->config['user_test']['user'];
-//        $this->passwd = $this->config['user_test']['passwd'];
-//
-//        $url = '/';
-//        $headers = array(
-//            'cache-control' => 'no-cache',
-//            'content-type' => 'multipart/form-data;'
-//        );
-//        $body = array(
-//            'user' => $this->userName,
-//            'passwd' => $this->passwd,
-//            'Submit' => 'Logon'
-//        );
-//
-//        $this->client->returnAsResponseObject(true);
-//        $response = (object)$this->client->post($url, $body, $headers);
-//
-//        $url = implode($response->getHeader('Location'));
-//        $this->assertEquals('/reports', $url);
-//
-//        $response = (object)$this->client->get($url);
-//        $view = (string)$response->getBody();
-//        $this->assertContains("<h3>Notes on these reports:</h3>", $view);
-//    }
-//
-//    public function testLogonAsUserWithBadPW()
-//    {
-//        $this->userName = $this->config['user_test']['user'];
-//
-//        $url = '/';
-//        $headers = array(
-//            'cache-control' => 'no-cache',
-//            'content-type' => 'multipart/form-data;'
-//        );
-//        $body = array(
-//            'user' => $this->userName,
-//            'passwd' => '',
-//            'Submit' => 'Logon'
-//        );
-//
-//        $this->client->returnAsResponseObject(true);
-//        $response = (object)$this->client->post($url, $body, $headers);
-//        $view = (string)$response->getBody();
-//        $this->assertContains('<td width="50%"><div class="right">Report Admin: </div></td>', $view);
-//        $this->assertContains("Unrecognized password for $this->userName", $view);
-//    }
-//
-//
-//    public function testLogonAsAdmin()
-//    {
-//        $this->userName = $this->config['admin_test']['user'];
-//        $this->passwd = $this->config['admin_test']['passwd'];
-//
-//        $url = '/';
-//        $headers = array(
-//            'cache-control' => 'no-cache',
-//            'content-type' => 'multipart/form-data;'
-//        );
-//        $body = array(
-//            'user' => $this->userName,
-//            'passwd' => $this->passwd,
-//            'Submit' => 'Logon'
-//        );
-//
-//        $this->client->returnAsResponseObject(true);
-//        $response = (object)$this->client->post($url, $body, $headers);
-//
-//        $url = implode($response->getHeader('Location'));
-//        $this->assertEquals('/reports', $url);
-//
-//        $response = (object)$this->client->get($url);
-//        $view = (string)$response->getBody();
-//        $this->assertContains("<h3>Notes on these reports:</h3>", $view);
-//
-//    }
-//
-//    public function testLogonAsDeveloper()
-//    {
-//        $this->userName = $this->config['dev_test']['user'];
-//        $this->passwd = $this->config['dev_test']['passwd'];
-//
-//        $url = '/';
-//        $headers = array(
-//            'cache-control' => 'no-cache',
-//            'content-type' => 'multipart/form-data;'
-//        );
-//        $body = array(
-//            'user' => $this->userName,
-//            'passwd' => $this->passwd,
-//            'Submit' => 'Logon'
-//        );
-//
-//        $this->client->returnAsResponseObject(true);
-//        $response = (object)$this->client->post($url, $body, $headers);
-//
-//        $url = implode($response->getHeader('Location'));
-//        $this->assertEquals('/reports', $url);
-//
-//        $response = (object)$this->client->get($url);
-//        $view = (string)$response->getBody();
-//        $this->assertContains("<h3>Notes on these reports:</h3>", $view);
-//
-//    }
+    public function testLogonAsUser()
+    {
+        $this->getNamePW('user_test');
+
+        $this->login($this->user, $this->pw);
+
+        $this->assertTrue($this->client->getResponse()->isRedirection());
+        $this->crawler = $this->client->followRedirect();
+
+        $view = $this->client->getResponse()->getContent();
+        $this->assertStringContainsString("<h3>Notes on these reports:</h3>", $view);
+
+    }
+
+    public function testLogonAsUserWithBadPW()
+    {
+        $this->getNamePW('user_test');
+        $pw = '';
+
+        $this->login($this->user, $pw);
+
+        $this->assertFalse($this->client->getResponse()->isRedirection());
+
+        $view = $this->client->getResponse()->getContent();
+        $this->assertStringContainsString("Unrecognized password for $this->user", $view);
+
+    }
+
+
+    public function testLogonAsAdmin()
+    {
+        $this->getNamePW('admin_test');
+
+        $this->login($this->user, $this->pw);
+
+        $this->assertTrue($this->client->getResponse()->isRedirection());
+        $this->crawler = $this->client->followRedirect();
+
+        $view = $this->client->getResponse()->getContent();
+        $this->assertStringContainsString("<h3>Notes on these reports:</h3>", $view);
+
+    }
+
+    public function testLogonAsDeveloper()
+    {
+        $this->getNamePW('dev_test');
+
+        $this->login($this->user, $this->pw);
+
+        $this->assertTrue($this->client->getResponse()->isRedirection());
+        $this->crawler = $this->client->followRedirect();
+
+        $view = $this->client->getResponse()->getContent();
+        $this->assertStringContainsString("<h3>Notes on these reports:</h3>", $view);
+
+    }
+
+    private function getNamePW($paramStr) {
+        $cred = self::$container->getParameter($paramStr);
+
+        $this->user = $cred['user'];
+        $this->pw = $cred['pw'];
+
+    }
+    private function login($user, $pwd)
+    {
+        $this->crawler = $this->client->request('GET', '/');
+
+        $this->formLogin($user, $pwd);
+
+    }
+
+    private function formLogin($user, $pwd)
+    {
+
+        $form = $this->crawler->selectButton("Submit")->form();
+        $form['user'] = $user;
+        $form['passwd'] = $pwd;
+        $this->client->submit($form);
+
+    }
 
 }

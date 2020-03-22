@@ -28,6 +28,7 @@ class LogonController extends AbstractController2
 
     /**
      * @Route("/", name="logon")
+     * @Route("/logon", name="/")
      * @return RedirectResponse|Response
      */
     public function index()

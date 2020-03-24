@@ -16,14 +16,14 @@
         <div class="panel panel-default">
             <!-- Form Name -->
             <div class="panel-heading"><h2>Add User</h2></div>
-            <form class="form-horizontal user-update" method="post" action="{{ view.action | raw }}">
+            <form class="form-horizontal" method="post" action="{{ action | raw }}">
                 <fieldset>
 
                     <!-- Select Basic -->
                     <p></p>
                     <div class="form-group">
                         <label class="col-xs-4 control-label col-xs-offset-1" for="userName">Add User
-                            </label>
+                        </label>
                         <div class="col-xs-6">
                             <input id="userName" type="text" name="userName" placeholder="User Name"
                                    class="form-control input-md">
@@ -51,8 +51,8 @@
                     </div>
 
                     <div class="form-group">
-                        {% if (view.messageStyleAdd != null) %}
-                            <p class="center" style={{ view.messageStyleAdd }}> {{ view.messageAdd | raw }}</p>
+                        {% if (messageStyleAdd != null) %}
+                            <p class="center" style={{ messageStyleAdd }}> {{ messageAdd | raw }}</p>
                         {% endif %}
                     </div>
 
@@ -64,17 +64,17 @@
         <div class="panel panel-default">
             <!-- Form Name -->
             <div class="panel-heading"><h2>Update User Password</h2></div>
-            <form class="form-horizontal user-update" method="post" action="{{ view.action | raw }}">
+            <form class="form-horizontal" method="post" action="{{ action | raw }}">
                 <fieldset>
 
                     <!-- Select Basic -->
                     <p></p>
                     <div class="form-group">
-                        <label class="col-xs-4 control-label col-xs-offset-1" for="selectUser">Select
+                        <label class="col-xs-4 control-label col-xs-offset-1" for="selectAssignor">Select
                             Assignor</label>
                         <div class="col-xs-6">
-                            <select id="selectUser" name="selectUser" class="form-control">
-                                {% for user in view.users %}
+                            <select id="selectAssignor" name="selectAssignor" class="form-control">
+                                {% for user in users %}
                                     <option>{{ user }}</option>
                                 {% endfor %}
                             </select>
@@ -101,8 +101,8 @@
                     </div>
 
                     <div class="form-group">
-                        {% if (view.messageStyleUpdate != null) %}
-                            <p class="center" style={{ view.messageStyleUpdate }}> {{ view.messageUpdate | raw }}</p>
+                        {% if (messageStyleUpdate != null) %}
+                            <p class="center" style={{ messageStyleUpdate }}> {{ messageUpdate | raw }}</p>
                         {% endif %}
                     </div>
 
@@ -110,25 +110,23 @@
             </form>
         </div>
 
-        {#Update User Password#}
+        {#Log Functions#}
         <div class="panel panel-default">
             <!-- Form Name -->
             <div class="panel-heading"><h2>Log Functions</h2></div>
 
             <!-- Action -->
             <div class="form-group">
-                <form class="form-horizontal user-update" method="post" action="{{ view.action | raw }}">
-                    <fieldset style="margin-top: 10px;" class="center">
-                        <div class="col-xs-12 center">
-                            <label class="col-xs-2 control-label" for="logNote">Log Note</label>
-                            <div class="col-xs-7">
-                                <input style="width: 100%" id="logNote" name="logNote" type="text" placeholder="Log note"
-                                       class="form-control input-md">
-                            </div>
-                            <div class="text-right" style="margin-top: -4px;">
-                                <button id="btnLogItem" name="btnLogItem" class="btn btn-primary btn-sm ">Add to Log
-                                </button>
-                            </div>
+                <form class="form-horizontal" method="post" action="{{ action | raw }}">
+                    <fieldset>
+                        <label class="col-xs-4 control-label col-xs-offset-1" for="logNote">Log Note</label>
+                        <div class="col-xs-7">
+                            <input style="width: 100%" id="logNote" name="logNote" type="text" placeholder="Log note"
+                                   class="form-control input-md">
+                        </div>
+                        <div class="text-right" style="margin-top: -4px;">
+                            <button id="btnLogItem" name="btnLogItem" class="btn btn-primary btn-sm ">Add to Log
+                            </button>
                         </div>
                         <div class="col-xs-12 text-right">
                             <button id="btnExportLog" name="btnExportLog" class="btn btn-primary btn-sm center">
@@ -145,7 +143,7 @@
     <!-- Button -->
     <div class="panel panel-default no-border">
         <div class="form-group">
-            <form class="form-horizontal user-update" method="post" action="{{ view.action | raw }}">
+            <form class="form-horizontal" method="post" action="{{ action | raw }}">
                 <fieldset>
                     <label class="col-xs-4 control-label" for="butUpdate"></label>
                     <div class="col-xs-8">

@@ -1,6 +1,6 @@
 {
     "type": "project",
-    "license": "Creative Commons BY-SA 3.0",
+    "license": "MIT",
     "require": {
         "php": "^7.4",
         "ext-ctype": "*",
@@ -47,13 +47,12 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/",
-            "Test\\": "tests/"
+            "App\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Tests\\": "tests/"
+            "Tests\\": "tests/"
         }
     },
     "replace": {

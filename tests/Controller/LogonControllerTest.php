@@ -4,38 +4,11 @@ namespace Tests\Controller;
 
 use App\Controller\LogonController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DomCrawler\Crawler;
+use Tests\Abstracts\WebTestCasePlus;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class LogonControllerTest extends WebTestCase
+class LogonControllerTest extends WebTestCasePlus
 {
-    private ContainerInterface $c;
-    private KernelBrowser $client;
-    private Crawler $crawler;
-    private string $user;
-    private string $pw;
-
-    protected function setUp(): void
-    {
-        global $kernel;
-
-        parent::setUp();
-
-        $this->client = static::createClient(
-            [
-                'environment' => 'test',
-                'debug' => true,
-            ]
-        );
-
-        $kernel = $this->client->getKernel();
-
-        $this->c = self::$container;
-
-    }
 
     public function testRoot()
     {
@@ -109,31 +82,6 @@ class LogonControllerTest extends WebTestCase
 
         $view = $this->client->getResponse()->getContent();
         $this->assertStringContainsString("<h3>Notes on these reports:</h3>", $view);
-
-    }
-
-    private function getNamePW($paramStr) {
-        $cred = self::$container->getParameter($paramStr);
-
-        $this->user = $cred['user'];
-        $this->pw = $cred['pw'];
-
-    }
-    private function login($user, $pwd)
-    {
-        $this->crawler = $this->client->request('GET', '/');
-
-        $this->formLogin($user, $pwd);
-
-    }
-
-    private function formLogin($user, $pwd)
-    {
-
-        $form = $this->crawler->selectButton("Submit")->form();
-        $form['user'] = $user;
-        $form['passwd'] = $pwd;
-        $this->client->submit($form);
 
     }
 

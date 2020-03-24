@@ -17,11 +17,11 @@ use PhpOffice\PhpSpreadsheet;
 
 abstract class AbstractExporter
 {
-    private $format;
-    private $objPHPExcel;
+    private string $format;
+    private object $objPHPExcel;
 
-    public $fileExtension;
-    public $contentType;
+    public string $fileExtension;
+    public string $contentType;
 
     public function __construct($format)
     {

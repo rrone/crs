@@ -18,9 +18,9 @@ class DataWarehouse
     /**
      * @var Connection $conn
      */
-    protected $conn;
+    protected Connection $conn;
 
-    protected $root;
+    protected string $root;
 
     /**
      * @const BIGINT
@@ -64,9 +64,7 @@ class DataWarehouse
     public function getAllUsers()
     {
 
-        $users = $this->conn->fetchAll('SELECT * FROM crs_users');
-
-        return $users;
+        return $this->conn->fetchAll('SELECT * FROM crs_users');
     }
 
     /**
@@ -106,42 +104,36 @@ class DataWarehouse
      * @param $user
      * @return null
      */
-//    public function setUser($user)
-//    {
-//        if (empty($user)) {
-//            return null;
-//        }
-//
-//        $u = $this->getUserByName($user['name']);
-//        if (empty($u)) {
-//            $newUser = array(
-//                'name' => $user['name'],
-//                'enabled' => $user['enabled'],
-//                'hash' => $user['hash'],
-//            );
-//
-//            $this->conn->fetchAll('users')
-//                ->insert([$newUser]);
-//
-//            $newUser = $this->getUserByName($newUser['name']);
-//
-//            return $newUser->id;
-//
-//        } else {
-//            $hash = $user['hash'];
-//
-//            $this->conn->fetchAll('users')
-//                ->where('id', $u->id)
-//                ->update(
-//                    [
-//                        'hash' => $hash,
-//                    ]
-//                );
-//
-//            return $u->id;
-//        }
-//
-//    }
+    public function setUser($user)
+    {
+        if (empty($user)) {
+            return null;
+        }
+
+        $u = $this->getUserByName($user['name']);
+        if (empty($u)) {
+            $newUser = (object) array(
+                'name' => $user['name'],
+                'enabled' => $user['enabled'],
+                'hash' => $user['hash'],
+            );
+
+            $this->conn->fetchAll("INSERT INTO crs_users (name, enabled, hash) VALUES (
+                $newUser->name, $newUser->enabled, $newUser->hash");
+
+            $newUser = $this->getUserByName($newUser->name);
+
+            return $newUser->id;
+
+        } else {
+            $hash = $user['hash'];
+
+            $this->conn->fetchAll("UPDATE crs_users SET `hash` = $hash WHERE `id` = $u->id");
+
+            return $u->id;
+        }
+
+    }
 
     /**
      * @param mixed $userKey
@@ -150,19 +142,17 @@ class DataWarehouse
      */
     public function getHighestRefCerts($userKey, $limit = self::BIGINT)
     {
-        $results = $this->conn->fetchAll(
+        return $this->conn->fetchAll(
             "
-            SELECT * from crs_rpt_hrc 
+            SELECT * from crs_rpt_hrc
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
             ORDER BY `Section`, `Area`, ABS(`Region`), FIELD(`CertificationDesc`, 'National Referee','National 2 Referee',
-            'Advanced Referee', 'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee', 
-                                'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official', 
+            'Advanced Referee', 'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee',
+                                'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official',
                                 'U-8 Official & Safe Haven Referee', '') , `Last Name` , `First Name` , `AYSOID`
-            LIMIT $limit 
+            LIMIT $limit
             "
         );
-
-        return $results;
     }
 
     /**
@@ -178,16 +168,14 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->conn->fetchAll(
+        return $this->conn->fetchAll(
             "
-            SELECT * FROM crs_rpt_ra 
+            SELECT * FROM crs_rpt_ra
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
             ORDER BY `Section`, `Area`, ABS(`Region`), FIELD(`CertificationDesc`, 'National Referee Assessor', 'Referee Assessor', '') , `Last Name` , `First Name` , `AYSOID`
             LIMIT $limit
         "
         );
-
-        return $results;
     }
 
     /**
@@ -201,16 +189,14 @@ class DataWarehouse
             $userKey = '';
         }
 
-        $results = $this->conn->fetchAll(
+        return $this->conn->fetchAll(
             "
-            SELECT * FROM crs_rpt_nra 
+            SELECT * FROM crs_rpt_nra
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
             ORDER BY `Section`, `Area`, ABS(`Region`), FIELD(`CertificationDesc`, 'National Referee Assessor', 'Referee Assessor', '') , `Last Name` , `First Name` , `AYSOID`
             LIMIT $limit
         "
         );
-
-        return $results;
     }
 
     /**
@@ -226,16 +212,14 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->conn->fetchAll(
+        return $this->conn->fetchAll(
             "
-            SELECT * FROM crs_rpt_ri 
+            SELECT * FROM crs_rpt_ri
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
             ORDER BY `Section`, `Area`, ABS(`Region`), FIELD(`CertificationDesc`, 'National Referee Instructor', 'Advanced Referee Instructor', 'Intermediate Referee Instructor', 'Regional Referee Instructor', '') , `Last Name` , `First Name` , `AYSOID`
             LIMIT $limit
         "
         );
-
-        return $results;
     }
 
     /**
@@ -251,17 +235,15 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->conn->fetchAll(
+        return $this->conn->fetchAll(
             "
-            SELECT * FROM crs_rpt_rie 
+            SELECT * FROM crs_rpt_rie
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
             ORDER BY `Section`, `Area`, ABS(`Region`), FIELD
                 (`RefereeInstructorCert`, 'National Referee Instructor', 'Advanced Referee Instructor', 'Intermediate Referee Instructor', 'Regional Referee Instructor', 'Referee Instructor') , `Last Name` , `First Name` , `AYSOID`
             LIMIT $limit
         "
         );
-
-        return $results;
     }
 
     /**
@@ -277,7 +259,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->conn->fetchAll(
+        return $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_ref_upgrades
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -285,8 +267,6 @@ class DataWarehouse
             LIMIT $limit
             "
         );
-
-        return $results;
     }
 
     /**
@@ -302,20 +282,18 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->conn->fetchAll(
+        return $this->conn->fetchAll(
             "
             SELECT * FROM `crs_rpt_unregistered_refs`
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
-            ORDER BY `Section`, `Area`, ABS(`Region`), 
-                    FIELD(`CertificationDesc`, 'National Referee','National 2 Referee', 'Advanced Referee', 
-                    'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee', 
-                    'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official', 
+            ORDER BY `Section`, `Area`, ABS(`Region`),
+                    FIELD(`CertificationDesc`, 'National Referee','National 2 Referee', 'Advanced Referee',
+                    'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee',
+                    'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official',
                     'U-8 Official & Safe Haven Referee', '') , `Last Name` , `First Name` , `AYSOID`
             LIMIT $limit
             "
         );
-
-        return $results;
     }
 
     /**
@@ -331,7 +309,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->conn->fetchAll(
+        return $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_ref_cdc
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -339,8 +317,6 @@ class DataWarehouse
             LIMIT $limit
         "
         );
-
-        return $results;
     }
 
     /**
@@ -356,7 +332,7 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->conn->fetchAll(
+        return $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_safehaven
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -364,8 +340,6 @@ class DataWarehouse
             LIMIT $limit
         "
         );
-
-        return $results;
     }
 
     /**
@@ -375,20 +349,18 @@ class DataWarehouse
      */
     public function getCompositeRefCerts($userKey, $limit = self::BIGINT)
     {
-        $results = $this->conn->fetchAll(
+        return $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_ref_certs
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
-            ORDER BY `Section`, `Area`, ABS(`Region`), 
-                FIELD(`CertificationDesc`, 'National Referee','National 2 Referee', 'Advanced Referee', 
-                'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee', 
-                'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official', 
+            ORDER BY `Section`, `Area`, ABS(`Region`),
+                FIELD(`CertificationDesc`, 'National Referee','National 2 Referee', 'Advanced Referee',
+                'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee',
+                'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official',
                 'U-8 Official & Safe Haven Referee', '') , `Last Name` , `First Name` , `AYSOID`
             LIMIT $limit
             "
         );
-
-        return $results;
     }
 
     /**
@@ -404,20 +376,18 @@ class DataWarehouse
             $userKey = "%$userKey%";
         }
 
-        $results = $this->conn->fetchAll(
+        return $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_nocerts
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
-            ORDER BY `Section`, `Area`, ABS(`Region`), 
-                    FIELD(`CertificationDesc`, 'National Referee','National 2 Referee', 'Advanced Referee', 
-                    'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee', 
-                    'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official', 
+            ORDER BY `Section`, `Area`, ABS(`Region`),
+                    FIELD(`CertificationDesc`, 'National Referee','National 2 Referee', 'Advanced Referee',
+                    'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee',
+                    'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official',
                     'U-8 Official & Safe Haven Referee', '') , `Last Name` , `First Name` , `AYSOID`
             LIMIT $limit
             "
         );
-
-        return $results;
     }
 
     /**
@@ -461,9 +431,7 @@ class DataWarehouse
             "
         );
 
-        $updated = $this->getZero($ts)->timestamp;
-
-        return $updated;
+        return $this->getZero($ts)->timestamp;
     }
 
 //    public function getTableHeaders($tableName)

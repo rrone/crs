@@ -2,25 +2,25 @@
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;@Route::class;
-
 use App\Services\LogExport;
-
 use App\Abstracts\AbstractController2;
 
 class LogExportController extends AbstractController2
 {
-    private $exporter;
+    private LogExport $exporter;
 
     /**
-     * LogExportController constructor.
+     * LogExportController constructor
      * @param LogExport $logExport
+     * @param RequestStack $requestStack
      */
-    public function __construct(LogExport $logExport)
+    public function __construct(LogExport $logExport, RequestStack $requestStack)
     {
-        parent::__construct();
+        parent::__construct($requestStack);
 
         $this->exporter = $logExport;
     }
@@ -28,14 +28,13 @@ class LogExportController extends AbstractController2
     /**
      * @Route("/log", name="log")
      * @param Request $request
-     * @param Response $response
      * @return RedirectResponse|Response
      */
-    public function index(Request $request, Response $response)
+    public function index(Request $request)
     {
         if(!$this->isAuthorized()) {
             return $this->redirectToRoute('/');
-        };
+        }
 
         if (!$this->user->admin) {
             return $this->redirectToRoute('reports');
@@ -43,10 +42,7 @@ class LogExportController extends AbstractController2
 
         $this->logStamp($request);
 
-        $request->query->set('user', $this->user);
-
-        $response = $this->exporter->handler($request, $response);
-
-        return $response;
+        return $this->exporter->handler();
     }
+
 }

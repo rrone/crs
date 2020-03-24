@@ -59,6 +59,7 @@ class LogonController extends AbstractController2
             $this->user = $user;
             $session = $this->request->getSession();
             $session->set('user', $user);
+            $session->set('superadmin', false);
 
             // try user pass
             $hash = isset($user) ? $user->hash : null;
@@ -69,13 +70,14 @@ class LogonController extends AbstractController2
                 $this->msg = null;
             } else {
                 //try master password
-                $user = $this->dw->getUserByName('Admin');
+                $user = $this->dw->getUserByName('Super Admin');
                 $hash = isset($user) ? $user->hash : null;
                 $authed = password_verify($pass, $hash);
 
                 if ($authed) {
                     $session->set('authed', true);
                     $session->set('admin', true);
+                    $session->set('superadmin', true);
                     $this->msg = null;
                 } else {
                     $session->set('authed', false);

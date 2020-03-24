@@ -32,14 +32,11 @@ class ExportController extends AbstractController2
 
     /**
      * @Route("/bshca", name="bshca")
-     * @Route("/hrc", name="hrc")
      * @Route("/ra", name="ra")
      * @Route("/ri", name="ri")
      * @Route("/rie", name="rie")
      * @Route("/ruc", name="ruc")
      * @Route("/urr", name="urr")
-     * @Route("/rcdc", name="rcdc")
-     * @Route("/rsh", name="rsh")
      * @Route("/nra", name="nra")
      * @param Request $request
      * @return RedirectResponse|Response
@@ -55,9 +52,7 @@ class ExportController extends AbstractController2
         $request->request->set('user', $this->user);
         $request->request->set('baseURL', $this->generateUrl('logon'));
 
-        $response = $this->exportXl->invoke($request);
-
-        return $response;
+        return $this->exportXl->invoke($request);
 
     }
 }

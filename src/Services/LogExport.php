@@ -1,19 +1,16 @@
 <?php
 namespace App\Services;
 
-use Symfony\Bridge\Twig;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use App\Repository\DataWarehouse;
 use App\Abstracts\AbstractExporter;
+use Symfony\Component\HttpFoundation\Response;
 
 class LogExport extends AbstractExporter
 {
     /* @var DataWarehouse */
-    private $dw;
+    private DataWarehouse $dw;
 
-    private $outFileName;
-    private $user;
+    private string $outFileName;
 
     public function __construct(DataWarehouse $dataWarehouse)
     {
@@ -24,20 +21,17 @@ class LogExport extends AbstractExporter
         $this->outFileName = 'Log_' . date('Ymd_His') . '.' . $this->getFileExtension();
     }
 
-    public function handler(Request $request, Response $response)
+    public function handler()
     {
-        $this->user = $request->get('user');
-
         // generate the response
-        $response = $response->headers->set('Content-Type', $this->contentType);
-        $response = $response->headers->set('Content-Disposition', 'attachment; filename=' . $this->outFileName);
+        $response = new Response();
+        $response->headers->set('Content-Type', $this->contentType);
+        $response->headers->set('Content-Disposition', 'attachment; filename=' . $this->outFileName);
+        $response->headers->set('Set-Cookie', 'fileDownload=true; path=/');
 
         $content = null;
-
         $this->generateAccessLogData($content);
-
-        $body = $response->query;
-        $body->write($this->export($content));
+        $response-> setContent($this->export($content));
 
         return $response;
     }
@@ -47,15 +41,18 @@ class LogExport extends AbstractExporter
         $log = $this->dw->getAccessLog();
 
         //set the header labels
-        $labels = array('Timestamp', 'Project Key', 'User', 'Note');
+        $labels = array('Timestamp (UTC)', 'Project Key', 'User', 'Note');
         $data = array($labels);
 
         //set the data : match in each row
         foreach ($log as $item) {
+            $item = (object) $item;
             $msg = explode(':', $item->note);
             if (isset($msg[1])) {
                 $user = $msg[0];
-                $note = $msg[1];
+                $p = strpos($item->note, ':') + 1;
+                $s = trim(substr($item->note, $p));
+                $note = $s;
             } else {
                 $user = '';
                 $note = $item->note;
@@ -76,5 +73,4 @@ class LogExport extends AbstractExporter
 
         return $content;
 
-    }
-}
+    } }

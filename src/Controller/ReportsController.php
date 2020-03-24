@@ -13,6 +13,7 @@ use App\Abstracts\AbstractController2;
 
 class ReportsController extends AbstractController2
 {
+    private bool $super;
     /**
      * ReportsController constructor.
      * @param RequestStack $requestStack
@@ -37,6 +38,7 @@ class ReportsController extends AbstractController2
         $this->logStamp($request);
         $session = $this->request->getSession();
         $this->user = $session->get('user');
+        $this->super = $session->get('superadmin');
 
         return $this->renderPage();
 
@@ -82,8 +84,14 @@ class ReportsController extends AbstractController2
 
         $html .= "</ul>\n";
         $html .= "<hr>\n";
-        $href = $this->generateUrl('end');
-        $html .= "<h3 class=\"center\"><a href=$href >Log Off</a></h3>\n";
+        $hrefAdmin = $this->generateUrl('admin');
+        $hrefEnd = $this->generateUrl('end');
+
+        $html .= "<h3 class=\"center\">";
+        if($this->super) {
+            $html .= "<a href=$hrefAdmin >Admin Functions - </a> ";
+        }
+        $html .= "<a href=$hrefEnd >Log Off</a></h3>\n";
 
         return $html;
 

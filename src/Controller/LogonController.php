@@ -67,7 +67,7 @@ class LogonController extends AbstractController2
 
             if ($authed) {
                 $session->set('authed', true);
-                $this->msg = null;
+                $this->msg[0] = '';
             } else {
                 //try master password
                 $user = $this->dw->getUserByName('Super Admin');
@@ -78,11 +78,11 @@ class LogonController extends AbstractController2
                     $session->set('authed', true);
                     $session->set('admin', true);
                     $session->set('superadmin', true);
-                    $this->msg = null;
+                    $this->msg[0] = '';
                 } else {
                     $session->set('authed', false);
                     $session->set('admin', false);
-                    $this->msg = 'Unrecognized password for '.$userName;
+                    $this->msg[0] = 'Unrecognized password for '.$userName;
                 }
             }
         }
@@ -96,8 +96,8 @@ class LogonController extends AbstractController2
         $content = array(
             'content' => $this->renderContent(),
             'users' => $this->url,
-            'message' => $this->msg,
-            'admin' => is_null($this->user) ? false : $this->user->admin,
+            'message' => $this->msg[0],
+            'admin' => isset($this->user->admin) ? $this->user->admin : false,
         );
 
         $content = array_merge($content, $this->getBaseContent());

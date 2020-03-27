@@ -7,82 +7,76 @@ use DateTimeZone;
 
 use App\Repository\DataWarehouse;
 
+use Doctrine\DBAL\Connection;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 abstract class AbstractController2 extends AbstractController
 {
-    //database connection
-    protected $conn;
+    /** @var Connection */
+    protected Connection $conn;
 
-    /* @var Request */
-    protected $request;
+    /** @var Request */
+    protected Request $request;
 
-    /* @var DataWarehouse */
-    protected $dw;
+    /** @var DataWarehouse */
+    protected DataWarehouse $dw;
 
-    /* @var bool */
-    protected $isTest;
+    /**
+     * @var SessionInterface
+     */
+    protected SessionInterface $session;
 
     //shared variables
-    protected $root;
-    protected $event;
-    protected $user;
+    protected stdClass $user;
 
     //view variables
-    protected $page_title;
-    protected $dates;
-    protected $location;
-    protected $msg;
-    protected $msgStyle;
-    protected $menu;
-    protected $server;
-
-    protected $uri;
+    protected string $page_title;
+    protected array $msg;
+    protected array $msgStyle;
 
     public function __construct(RequestStack $requestStack)
     {
         global $kernel;
 
         $conn = $kernel->getContainer()->get('doctrine.dbal.default_connection');
-        $this->dw = new DataWarehouse('', $conn);
+        $this->dw = new DataWarehouse($conn);
+
+        $r = $requestStack->getCurrentRequest();
+        if (!is_null($r)) {
+            $this->request = $r;
+            $this->session = $this->request->getSession();
+            $u = $this->session->get('user');
+            $this->user = is_null($u) ? new stdClass() : $u;
+        }
 
         $this->page_title = "Section 1: Certification Reporting System";
+        $this->msg = [0 => '', 'add' => '', 'update' => ''];
+        $this->msgStyle = [0 => '', 'add' => '', 'update' => ''];
 
-        $this->isTest = false;
-
-        $this->request = $requestStack->getCurrentRequest();
-
-    }
-
-    private function isTest()
-    {
-        return $this->getParameter('settings.test');
     }
 
     protected function isAuthorized()
     {
-        $session = $this->request->getSession();
-
-        if (!$session->get('authed')) {
+        if (!$this->session->get('authed')) {
             return null;
         }
 
-        if (is_null($session->get('user'))) {
+        if (is_null($this->session->get('user'))) {
             return null;
         }
 
-        $this->user = $session->get('user');
+        $this->user = $this->session->get('user');
 
         return true;
     }
 
     protected function logStamp(Request $request)
     {
-        $session = $this->request->getSession();
-
-        if (is_null($session->get('admin'))) {
+        if (is_null($this->session->get('admin'))) {
             return null;
         }
 
@@ -139,7 +133,7 @@ abstract class AbstractController2 extends AbstractController
             'email' => $this->getParameter('sra')['email'],
             'issueTracker' => $this->getParameter('issueTracker'),
             'version' => $this->getParameter('app.version'),
-            'updated' => $this->getUpdateTimestamp()
+            'updated' => $this->getUpdateTimestamp(),
         );
     }
 }

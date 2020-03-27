@@ -14,6 +14,9 @@ use DateTime;
 use DateTimeZone;
 use Exception;
 
+use Symfony\Component\Routing\Annotation\Route;
+@Route::class;
+
 define("xlsxFile", realpath(__DIR__.'/../../var/xlsx/CompositeRefCerts.xlsx'));
 
 class ExportXl extends AbstractExporter

@@ -29,14 +29,12 @@ class DataWarehouse
 
     /**
      * DataWarehouse constructor.
-     * @param string $projectDir
      * @param Connection $connection
      * @throws Exception
      */
-    public function __construct(string $projectDir, Connection $connection)
+    public function __construct(Connection $connection)
     {
         $this->conn  = $connection;
-        $this->root = $projectDir;
     }
 
     /**
@@ -83,18 +81,20 @@ class DataWarehouse
 
     }
 
-
     /**
      * @param $hash
      * @return null|object
+     * @throws DBALException
      */
-    public function getUserByPW($hash)
+    public function getUserByHash($hash)
     {
         if (empty($hash)) {
             return null;
         }
 
-        $user = $this->conn->fetchAll("SELECT * FROM crs_users WHERE `hash` LIKE $hash");
+        $stmt = $this->conn->prepare("SELECT * FROM crs_users WHERE `hash` LIKE ?");
+        $stmt->execute([$hash]);
+        $user = $stmt->fetchAll();
 
         return $this->getZero($user);
 
@@ -103,6 +103,7 @@ class DataWarehouse
     /**
      * @param $user
      * @return null
+     * @throws DBALException
      */
     public function setUser($user)
     {
@@ -118,21 +119,30 @@ class DataWarehouse
                 'hash' => $user['hash'],
             );
 
-            $this->conn->fetchAll("INSERT INTO crs_users (name, enabled, hash) VALUES (
-                $newUser->name, $newUser->enabled, $newUser->hash");
-
+            $stmt = $this->conn->prepare("INSERT INTO crs_users (`name`, `enabled`, `hash`) VALUES (?, ?, ?)");
+            $stmt->execute([$newUser->name, $newUser->enabled, $newUser->hash]);
             $newUser = $this->getUserByName($newUser->name);
 
             return $newUser->id;
 
         } else {
-            $hash = $user['hash'];
-
-            $this->conn->fetchAll("UPDATE crs_users SET `hash` = $hash WHERE `id` = $u->id");
+            $stmt = $this->conn->prepare("UPDATE crs_users SET `hash` = ? WHERE `id` = ?");
+            $stmt->execute([$user['hash'], (int)$u->id]);
 
             return $u->id;
         }
 
+    }
+
+    public function removeUser($user)
+    {
+        if (empty($user)) {
+            return null;
+        }
+        $stmt = $this->conn->prepare("DELETE FROM crs_users WHERE `name` = ?");
+        $stmt->execute([$user->name]);
+
+        return null;
     }
 
     /**

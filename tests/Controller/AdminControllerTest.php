@@ -1,24 +1,22 @@
 <?php
+
 namespace Tests\Controller;
 
-use App\Controller\AdminController;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RequestStack;
+use App\Repository\DataWarehouse;
 use Tests\Abstracts\WebTestCasePlus;
 
 class AdminControllerTest extends WebTestCasePlus
 {
-    protected $testUri;
-    protected $_object;
 
     /**
      * @dataProvider provideAdminUrls
+     * @param $url
      */
     public function testAdminSuccessful($url)
     {
         $this->getNamePW('admin_test');
 
-        $this->login($this->user, $this->pw);
+        $this->submitLoginForm($this->userName, $this->pw);
 
         $this->client->request('GET', $url);
 
@@ -30,148 +28,144 @@ class AdminControllerTest extends WebTestCasePlus
         yield ['/admin'];
     }
 
+    public function testAdminAsAnonymous()
+    {
+        // instantiate the view and test it
+        $this->client->request('GET', '/admin');
+        $this->assertTrue($this->client->getResponse()->isRedirection());
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
 
-//    public function testAdminAsAnonymous()
-//    {
-//        // instantiate the controller
-//        $rs = new RequestStack();
-//        $controller = new AdminController($rs);
-//        $this->assertTrue($controller instanceof AbstractController);
-//
-//        $this->assertEquals('/reports', $url);
-//    }
-//
-//    public function testAdminAsUser()
-//    {
-//        // instantiate the view and test it
-//
-//        $view = new AdminView($this->c, $this->dw);
-//        $this->assertTrue($view instanceof AbstractView);
-//
-//        // instantiate the controller
-//
-//        $controller = new AdminController($this->c, $view);
-//        $this->assertTrue($controller instanceof AbstractController);
-//
-//        // invoke the controller action and test it
-//
-//        $user = $this->config['user_test']['user'];
-//
-//        $this->client->app->getContainer()['session'] = [
-//            'authed' => true,
-//            'user' => $this->dw->getUserByName($user),
-//        ];
-//
-//        $this->client->returnAsResponseObject(true);
-//        $response = (object)$this->client->get($this->testUri);
-//        $url = implode($response->getHeader('Location'));
-//
-//        $this->assertEquals('/reports', $url);
-//    }
-//
-//    public function testAdminAsAdmin()
-//    {
-//        // instantiate the view and test it
-//
-//        $view = new AdminView($this->c, $this->dw);
-//        $this->assertTrue($view instanceof AbstractView);
-//
-//        // instantiate the controller
-//
-//        $controller = new AdminController($this->c, $view);
-//        $this->assertTrue($controller instanceof AbstractController);
-//
-//        // invoke the controller action and test it
-//
-//        $user = $this->config['admin_test']['user'];
-//
-//        $this->client->app->getContainer()['session'] = [
-//            'authed' => true,
-//            'user' => $this->dw->getUserByName($user),
-//        ];
-//
-//        $this->client->returnAsResponseObject(true);
-//        $response = (object)$this->client->get($this->testUri);
-//        $view = (string)$response->getBody();
-//
-//        $this->assertContains("<h1>Administrative Functions</h1>", $view);
-//    }
-//
-//    public function testLogExportAsUser()
-//    {
-//        // instantiate the view and test it
-//
-//        $view = new LogExport($this->c, $this->dw);
-//        $this->assertTrue($view instanceof AbstractExporter);
-//
-//        // instantiate the controller
-//
-//        $controller = new LogExportController($this->c, $view);
-//        $this->assertTrue($controller instanceof AbstractController);
-//
-//        // invoke the controller action and test it
-//
-//        $user = $this->config['user_test']['user'];
-//
-//        $this->client->app->getContainer()['session'] = [
-//            'authed' => true,
-//            'user' => $this->dw->getUserByName($user),
-//        ];
-//
-//        $this->client->returnAsResponseObject(true);
-//        $response = (object)$this->client->get('/adm');
-//
-//        $url = implode($response->getHeader('Location'));
-//
-//        $this->assertEquals('/reports', $url);
-//    }
-//
-//    public function testLogExportAsAdmin()
-//    {
-//        // instantiate the view and test it
-//
-//        $view = new LogExport($this->c, $this->dw);
-//        $this->assertTrue($view instanceof AbstractExporter);
-//
-//        // instantiate the controller
-//
-//        $controller = new LogExportController($this->c, $view);
-//        $this->assertTrue($controller instanceof AbstractController);
-//
-//        // invoke the controller action and test it
-//
-//        $user = $this->config['admin_test']['user'];
-//
-//        $this->client->app->getContainer()['session'] = [
-//            'authed' => true,
-//            'user' => $this->dw->getUserByName($user),
-//        ];
-//
-//        $this->client->returnAsResponseObject(true);
-//        $response = (object)$this->client->get('/log');
-//
-//        $contentType = $response->getHeader('Content-Type')[0];
-//        $cType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-//        $this->assertEquals($cType, $contentType);
-//
-//        $contentDisposition = $response->getHeader('Content-Disposition')[0];
-//        $this->assertContains('attachment; filename=Log', $contentDisposition);
-//        $this->assertContains('.xlsx', $contentDisposition);
-//    }
+        $this->crawler = $this->client->followRedirect();
+        $this->assertEquals('/reports', $this->client->getRequest()->getPathInfo());
 
-//    public function testPOSTPWChange()
-//    {
-//        /* TODO: Add POST Test for PW change */
-//    }
-//
-//    public function testPOSTLogMemo()
-//    {
-//        /* TODO: Add POST Test for Log memo */
-//    }
-//
-//    public function testDoneButton()
-//    {
-//        /* TODO: Add POST Test for Done button */
-//    }
+        $this->crawler = $this->client->followRedirect();
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals('/', $this->client->getRequest()->getPathInfo());
+    }
+
+    public function testAdminAsUser()
+    {
+        // invoke the controller action and test it
+        $this->getNamePW('user_test');
+
+        $this->submitLoginForm($this->userName, $this->pw);
+        $this->assertTrue($this->client->getResponse()->isRedirection());
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+
+        $this->crawler = $this->client->followRedirect();
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals('/reports', $this->client->getRequest()->getPathInfo());
+    }
+
+    public function testAdminAsAdmin()
+    {
+        // invoke the controller action and test it
+        $this->getNamePW('admin_test');
+        $this->submitLoginForm($this->userName, $this->pw);
+
+        $this->crawler = $this->client->followRedirect();
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals('/reports', $this->client->getRequest()->getPathInfo());
+
+        // verify view
+        $this->client->request('GET', '/admin');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals('/admin', $this->client->getRequest()->getPathInfo());
+        $view = $this->client->getResponse()->getContent();
+        $this->assertStringContainsString("<h1>Administrative Functions</h1>", $view);
+    }
+
+    public function testNewPW()
+    {
+        global $kernel;
+
+        $conn = $kernel->getContainer()->get('doctrine.dbal.default_connection');
+        $dw = new DataWarehouse($conn);
+
+        $userName = 'userName';
+        $pwd = 'password';
+
+        $this->submitAdminForm("Add User", $pwd, $userName);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals('/admin', $this->client->getRequest()->getPathInfo());
+
+        $u = $dw->getUserByName($userName);
+        $this->assertNotEmpty($u);
+        if(!empty($u)) {
+            $this->assertEquals($u->name, $userName);
+            $this->assertTrue(password_verify($pwd, $u->hash));
+        }
+        $dw->removeUser($u);
+
+        $conn->close();
+
+    }
+
+    public function xtestPWChange()
+    {
+        $this->getNamePW('user_test');
+        $this->pw = 'Area--';
+
+        $this->submitAdminForm("Update", $this->pw, $this->user);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals('/admin', $this->client->getRequest()->getPathInfo());
+
+        $this->submitLoginForm($this->userName, $this->pw);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals('/', $this->client->getRequest()->getPathInfo());
+
+        $this->getNamePW('user_test');
+        $this->submitAdminForm("Update", $this->pw, $this->user);
+
+    }
+
+    public function testLogNote()
+    {
+        $this->submitAdminForm("Add to Log", 'TEST: testLogNote: add to log');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals('/admin', $this->client->getRequest()->getPathInfo());
+    }
+
+    public function testDoneButton()
+    {
+        // invoke the controller action and test it
+        $this->submitAdminForm('Done');
+
+        $this->assertTrue($this->client->getResponse()->isRedirection());
+        $this->client->followRedirect();
+
+        $view = $this->client->getResponse()->getContent();
+        $this->assertStringContainsString("<h3>Notes on these reports:</h3>", $view);
+
+    }
+
+    public function testLogExportAsUser()
+    {
+        // invoke the controller action and test it
+        $this->getNamePW('user_test');
+
+        $this->submitLoginForm($this->userName, $this->pw);
+
+        $this->client->request('GET', '/log');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $this->client->followRedirect();
+        $this->assertEquals('/reports', $this->client->getRequest()->getPathInfo());
+
+    }
+
+    public function testLogExportAsAdmin()
+    {
+        // invoke the controller action and test it
+        $this->getNamePW('admin_test');
+
+        $this->submitLoginForm($this->userName, $this->pw);
+
+        $this->client->request('GET', '/log');
+
+        $rpt = $this->client->getResponse()->headers->get('content-type');
+        $this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', $rpt);
+    }
+
 
 }

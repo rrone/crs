@@ -6,13 +6,15 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class WebTestCasePlus extends WebTestCase
 {
     protected ContainerInterface $c;
     protected KernelBrowser $client;
     protected Crawler $crawler;
-    protected string $user;
+    protected string $userName;
     protected string $pw;
 
     protected function setUp(): void
@@ -36,45 +38,71 @@ class WebTestCasePlus extends WebTestCase
 
     }
 
-    protected function getNamePW($paramStr)
+    protected function getNamePW($paramStr = null)
     {
+        if (empty($paramStr)) {
+            $this->userName = '';
+            $this->pw = '';
+        }
+
         $cred = self::$container->getParameter($paramStr);
 
-        $this->user = $cred['user'];
+        $this->userName = $cred['user'];
         $this->pw = $cred['pw'];
 
     }
 
-    protected function login($user, $pwd)
+    protected function submitLoginForm($userName, $pwd)
     {
-        $this->crawler = $this->client->request('GET', '/');
+        $this->client->request('GET', '/end');
+        $this->crawler = $this->client->followRedirect();
 
-        $this->formLogin($user, $pwd);
+        $form = $this->crawler->selectButton("Logon")->form([
+            'user' => $userName,
+            'passwd' => $pwd
+        ]);
 
-    }
-
-    protected function formLogin($user, $pwd)
-    {
-
-        $form = $this->crawler->selectButton("Submit")->form();
-        $form['user'] = $user;
-        $form['passwd'] = $pwd;
         $this->client->submit($form);
 
     }
 
-    protected function linkYieldsReport($name, $page)
+    protected function submitAdminForm($btn = null, $txt = '', $userName = '')
     {
-        $c = $this->client;
-        $link = $this->crawler->selectLink($name)->link();
-        $uri = $c->click($link)->getUri();
-        $this->assertEquals("http://localhost/$page", $uri);
+        $this->getNamePW('admin_test');
+        $this->submitLoginForm($this->userName, $this->pw);
+        $this->crawler = $this->client->request('GET', '/admin');
 
-        $c->request('GET', $uri);
-        $rpt = $c->getResponse()->headers->get('content-type');
-        $this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', $rpt);
+        $form = $this->crawler->selectButton($btn)->form();
+
+        switch ($btn) {
+            case 'Add User':
+                $form['userName'] = $userName;
+                $form['newPassword'] = $txt;
+                break;
+            case 'Update':
+                $form['selectAssignor']->select($userName);
+                $form['passwordInput'] = $txt;
+                $btn = null;
+                break;
+            case 'Add to Log':
+                $form['logNote'] = $txt;
+                break;
+            case 'Done':
+                break;
+        }
+
+        if(!empty($btn)) {
+            $this->client->submit($form);
+        }
 
     }
 
+    protected function verifyLink($name, $page)
+    {
+        $link = $this->crawler->selectLink($name)->link();
+        $uri = $this->client->click($link)->getUri();
+        $this->assertEquals("http://localhost/$page", $uri);
+
+    }
 
 }

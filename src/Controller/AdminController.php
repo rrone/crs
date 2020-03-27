@@ -25,8 +25,8 @@ class AdminController extends AbstractController2
     {
         parent::__construct($requestStack);
 
-        $session = $this->request->getSession();
-        $this->super = $session->get('superadmin');
+        $sa = $this->session->get('superadmin');
+        $this->super = is_bool($sa) ? $sa : false;
     }
 
     /**
@@ -91,7 +91,7 @@ class AdminController extends AbstractController2
                         $userData['hash'] = password_hash($pw, PASSWORD_BCRYPT);
 
                         $this->dw->setUser($userData);
-
+                        $this->dw->logInfo('CRS', $this->user->name . ": New user " . $userData['name'] . " added" );
                         $this->msg['add'] = "$userName has been enabled.";
                         $this->msgStyle['add'] = "color:#000000";
                     } else {
@@ -112,7 +112,7 @@ class AdminController extends AbstractController2
                 return 'AddUser';
 
             } elseif (in_array('btnUpdate', array_keys($_POST))) {
-                $userName = $_POST['selectUser'];
+                $userName = $_POST['selectAssignor'];
                 $pw = $_POST['passwordInput'];
 
                 if (!empty($pw)) {
@@ -136,6 +136,8 @@ class AdminController extends AbstractController2
                     $this->dw->setUser($userData);
 
                     $this->msg['update'] = "$userName password has been updated.";
+                    $this->dw->logInfo('CRS', $this->user->name . ": " . $this->msg['update']);
+
                     $this->msgStyle['update'] = "color:#000000";
                 } else {
                     $this->msg['update'] = "Password may not be blank.";
@@ -150,7 +152,7 @@ class AdminController extends AbstractController2
 
             } elseif (in_array('btnExportLog', array_keys($_POST))) {
 
-                $this->msg = null;
+                $this->msg[] = '';
 
                 return 'ExportLog';
 
@@ -165,7 +167,7 @@ class AdminController extends AbstractController2
 
             } else {
 
-                $this->msg = null;
+                $this->msg[] = '';
             }
 
         }

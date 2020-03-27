@@ -17,26 +17,26 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 abstract class AbstractController2 extends AbstractController
 {
     /** @var Connection */
-    protected Connection $conn;
+    protected $conn;
 
     /** @var Request */
-    protected Request $request;
+    protected $request;
 
     /** @var DataWarehouse */
-    protected DataWarehouse $dw;
+    protected $dw;
 
     /**
      * @var SessionInterface
      */
-    protected SessionInterface $session;
+    protected $session;
 
     //shared variables
-    protected stdClass $user;
+    protected $user;
 
     //view variables
-    protected string $page_title;
-    protected array $msg;
-    protected array $msgStyle;
+    protected $page_title;
+    protected $msg;
+    protected $msgStyle;
 
     public function __construct(RequestStack $requestStack)
     {

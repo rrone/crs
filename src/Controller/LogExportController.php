@@ -1,17 +1,21 @@
 <?php
+
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Annotation\Route;@Route::class;
+use Symfony\Component\Routing\Annotation\Route;
+
+@Route::class;
+
 use App\Services\LogExport;
 use App\Abstracts\AbstractController2;
 
 class LogExportController extends AbstractController2
 {
-    private LogExport $exporter;
+    private $exporter;
 
     /**
      * LogExportController constructor
@@ -32,7 +36,7 @@ class LogExportController extends AbstractController2
      */
     public function index(Request $request)
     {
-        if(!$this->isAuthorized()) {
+        if (!$this->isAuthorized()) {
             return $this->redirectToRoute('/');
         }
 

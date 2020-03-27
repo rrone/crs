@@ -22,11 +22,11 @@ define("xlsxFile", realpath(__DIR__.'/../../var/xlsx/CompositeRefCerts.xlsx'));
 class ExportXl extends AbstractExporter
 {
     /* @var DataWarehouse */
-    private DataWarehouse $dw;
+    private $dw;
 
-    private string $outFileName;
-    private object $user;
-    private string $baseURL;
+    private $outFileName;
+    private $user;
+    private $baseURL;
 
     /**
      * ExportXl constructor.

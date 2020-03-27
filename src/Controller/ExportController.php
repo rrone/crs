@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use stdClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +16,7 @@ use App\Services\ExportXl;
 
 class ExportController extends AbstractController2
 {
-    private ExportXl $exportXl;
+    private $exportXl;
 
     /**
      * ExportController constructor.

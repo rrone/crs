@@ -11,11 +11,11 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class WebTestCasePlus extends WebTestCase
 {
-    protected ContainerInterface $c;
-    protected KernelBrowser $client;
-    protected Crawler $crawler;
-    protected string $userName;
-    protected string $pw;
+    protected $c;
+    protected $client;
+    protected $crawler;
+    protected $userName;
+    protected $pw;
 
     protected function setUp(): void
     {
@@ -57,10 +57,12 @@ class WebTestCasePlus extends WebTestCase
         $this->client->request('GET', '/end');
         $this->crawler = $this->client->followRedirect();
 
-        $form = $this->crawler->selectButton("Logon")->form([
-            'user' => $userName,
-            'passwd' => $pwd
-        ]);
+        $form = $this->crawler->selectButton("Logon")->form(
+            [
+                'user' => $userName,
+                'passwd' => $pwd,
+            ]
+        );
 
         $this->client->submit($form);
 
@@ -91,7 +93,7 @@ class WebTestCasePlus extends WebTestCase
                 break;
         }
 
-        if(!empty($btn)) {
+        if (!empty($btn)) {
             $this->client->submit($form);
         }
 

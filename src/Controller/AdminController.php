@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends AbstractController2
 {
-    private bool $super;
+    private $super;
 
     /**
      * AdminController constructor
@@ -91,7 +91,7 @@ class AdminController extends AbstractController2
                         $userData['hash'] = password_hash($pw, PASSWORD_BCRYPT);
 
                         $this->dw->setUser($userData);
-                        $this->dw->logInfo('CRS', $this->user->name . ": New user " . $userData['name'] . " added" );
+                        $this->dw->logInfo('CRS', $this->user->name.": New user ".$userData['name']." added");
                         $this->msg['add'] = "$userName has been enabled.";
                         $this->msgStyle['add'] = "color:#000000";
                     } else {
@@ -136,7 +136,7 @@ class AdminController extends AbstractController2
                     $this->dw->setUser($userData);
 
                     $this->msg['update'] = "$userName password has been updated.";
-                    $this->dw->logInfo('CRS', $this->user->name . ": " . $this->msg['update']);
+                    $this->dw->logInfo('CRS', $this->user->name.": ".$this->msg['update']);
 
                     $this->msgStyle['update'] = "color:#000000";
                 } else {

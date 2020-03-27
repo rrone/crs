@@ -11,17 +11,17 @@ class DataWarehouseTest extends WebTestCasePlus
     /**
      * @var Connection
      */
-    private Connection $conn;
+    private $conn;
 
     /**
      * @var DataWarehouse
      */
-    private DataWarehouse $dw;
+    private $dw;
 
-    protected string $userName;
-    private object $user;
+    protected $userName;
+    private $user;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -33,7 +33,7 @@ class DataWarehouseTest extends WebTestCasePlus
 
     }
 
-    protected function tearDown() : void
+    protected function tearDown(): void
     {
         $this->conn->close();
 

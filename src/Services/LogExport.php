@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Repository\DataWarehouse;
@@ -8,9 +9,9 @@ use Symfony\Component\HttpFoundation\Response;
 class LogExport extends AbstractExporter
 {
     /* @var DataWarehouse */
-    private DataWarehouse $dw;
+    private $dw;
 
-    private string $outFileName;
+    private $outFileName;
 
     public function __construct(DataWarehouse $dataWarehouse)
     {
@@ -18,7 +19,7 @@ class LogExport extends AbstractExporter
 
         $this->dw = $dataWarehouse;
 
-        $this->outFileName = 'Log_' . date('Ymd_His') . '.' . $this->getFileExtension();
+        $this->outFileName = 'Log_'.date('Ymd_His').'.'.$this->getFileExtension();
     }
 
     public function handler()
@@ -26,12 +27,12 @@ class LogExport extends AbstractExporter
         // generate the response
         $response = new Response();
         $response->headers->set('Content-Type', $this->contentType);
-        $response->headers->set('Content-Disposition', 'attachment; filename=' . $this->outFileName);
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$this->outFileName);
         $response->headers->set('Set-Cookie', 'fileDownload=true; path=/');
 
         $content = null;
         $this->generateAccessLogData($content);
-        $response-> setContent($this->export($content));
+        $response->setContent($this->export($content));
 
         return $response;
     }
@@ -46,7 +47,7 @@ class LogExport extends AbstractExporter
 
         //set the data : match in each row
         foreach ($log as $item) {
-            $item = (object) $item;
+            $item = (object)$item;
             $msg = explode(':', $item->note);
             if (isset($msg[1])) {
                 $user = $msg[0];
@@ -62,7 +63,7 @@ class LogExport extends AbstractExporter
                 $item->timestamp,
                 $item->projectKey,
                 $user,
-                $note
+                $note,
             );
 
             $data[] = $row;
@@ -73,4 +74,5 @@ class LogExport extends AbstractExporter
 
         return $content;
 
-    } }
+    }
+}

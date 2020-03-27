@@ -1,19 +1,26 @@
 <?php
+
 namespace App\Controller;
 
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 use Symfony\Component\Routing\Annotation\Route;
+
 @Route::class;
 
 use App\Abstracts\AbstractController2;
 
 class ReportsController extends AbstractController2
 {
-    private bool $super;
+    /**
+     * @var
+     */
+    private $super;
+
     /**
      * ReportsController constructor.
      * @param RequestStack $requestStack
@@ -31,9 +38,9 @@ class ReportsController extends AbstractController2
      */
     public function index(Request $request)
     {
-        if(!$this->isAuthorized()) {
+        if (!$this->isAuthorized()) {
             return $this->redirectToRoute('logon');
-        };
+        }
 
         $this->logStamp($request);
         $session = $this->request->getSession();
@@ -44,14 +51,17 @@ class ReportsController extends AbstractController2
 
     }
 
+    /**
+     * @return Response
+     */
     public function renderPage()
     {
         $content = array(
             'admin' => $this->user->admin,
             'user' => $this->user->name,
-            'notes' =>  $this->dw->getReportNotes(),
+            'notes' => $this->dw->getReportNotes(),
             'content' => $this->renderContent(),
-            'message' => null
+            'message' => null,
         );
 
         $content = array_merge($content, $this->getBaseContent());
@@ -59,6 +69,9 @@ class ReportsController extends AbstractController2
         return $this->render('reports.html.twig', $content);
     }
 
+    /**
+     * @return string|null
+     */
     protected function renderContent()
     {
         $html = null;
@@ -69,15 +82,15 @@ class ReportsController extends AbstractController2
         $html .= "<ul class=\"indent\">\n";
 
         $reports = $this->dw->getReports();
-        foreach($reports as $report) {
-            $report = (object) $report;
-            if(!$report->admin || ($report->admin && $this->user->admin)) {
+        foreach ($reports as $report) {
+            $report = (object)$report;
+            if (!$report->admin || ($report->admin && $this->user->admin)) {
                 try { // handle possible exception if database table report differs from defined routes
                     $href = $this->generateUrl($report->key);
                     $notes = empty($report->notes) ? null : "<span style='font-weight:normal'> ($report->notes)</span>";
 
                     $html .= "<li><h3><a  href=\"$href\" class=\"reportDownload\" >$report->text</a>$notes</h3></li>\n";
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                 }
             }
         }
@@ -88,7 +101,7 @@ class ReportsController extends AbstractController2
         $hrefEnd = $this->generateUrl('end');
 
         $html .= "<h3 class=\"center\">";
-        if($this->super) {
+        if ($this->super) {
             $html .= "<a href=$hrefAdmin >Admin Functions - </a> ";
         }
         $html .= "<a href=$hrefEnd >Log Off</a></h3>\n";

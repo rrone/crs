@@ -17,11 +17,11 @@ use PhpOffice\PhpSpreadsheet;
 
 abstract class AbstractExporter
 {
-    private string $format;
-    private object $objPHPExcel;
+    private $format;
+    private $objPHPExcel;
 
-    public string $fileExtension;
-    public string $contentType;
+    public $fileExtension;
+    public $contentType;
 
     public function __construct($format)
     {
@@ -92,8 +92,11 @@ abstract class AbstractExporter
 
     public function is_asso($a)
     {
-        foreach (array_keys($a) as $key)
-            if (!is_int($key)) return true;
+        foreach (array_keys($a) as $key) {
+            if (!is_int($key)) {
+                return true;
+            }
+        }
 
         return false;
     }
@@ -140,7 +143,9 @@ abstract class AbstractExporter
     public function writeWorksheet($content, $shName = "Sheet")
     {
         //check for data
-        if (!isset($content['data'])) return null;
+        if (!isset($content['data'])) {
+            return null;
+        }
 
         //get data
         $data = $content['data'];
@@ -151,7 +156,7 @@ abstract class AbstractExporter
         $ws = $this->objPHPExcel->getActiveSheet();
 
         //load data into sheet
-        $ws->fromArray($data, NULL, 'A1');
+        $ws->fromArray($data, null, 'A1');
 
         //auto-size columns
         foreach (range('A', $ws->getHighestDataColumn()) as $col) {
@@ -163,7 +168,7 @@ abstract class AbstractExporter
             // Hide sheet columns.
             $cols = $options['hideCols'];
             foreach ($cols as $col) {
-                $ws->getColumnDimension($col)->setVisible(FALSE);
+                $ws->getColumnDimension($col)->setVisible(false);
             }
         }
 
@@ -205,19 +210,29 @@ abstract class AbstractExporter
 
                 switch ($format) {
                     case 'center':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(
+                            PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER
+                        );
                         break;
                     case 'general':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PhpSpreadsheet\Style\Alignment::HORIZONTAL_GENERAL);
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(
+                            PhpSpreadsheet\Style\Alignment::HORIZONTAL_GENERAL
+                        );
                         break;
                     case 'justify':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PhpSpreadsheet\Style\Alignment::HORIZONTAL_JUSTIFY);
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(
+                            PhpSpreadsheet\Style\Alignment::HORIZONTAL_JUSTIFY
+                        );
                         break;
                     case 'left':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(
+                            PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT
+                        );
                         break;
                     case 'right':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                        $ws->getStyle($rng)->getAlignment()->setHorizontal(
+                            PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT
+                        );
                         break;
                 }
             }
@@ -237,7 +252,9 @@ abstract class AbstractExporter
 
             //now unprotect requested range
             foreach ($range as $cells) {
-                $ws->getStyle($cells)->getProtection()->setLocked(PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+                $ws->getStyle($cells)->getProtection()->setLocked(
+                    PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED
+                );
             }
         }
 
@@ -245,7 +262,7 @@ abstract class AbstractExporter
         $inc = 1;
         $name = $shName;
         while (!is_null($this->objPHPExcel->getSheetByName($name))) {
-            $name = $shName . $inc;
+            $name = $shName.$inc;
             $inc += 1;
         }
 

@@ -18,9 +18,9 @@ class DataWarehouse
     /**
      * @var Connection $conn
      */
-    protected Connection $conn;
+    protected $conn;
 
-    protected string $root;
+    protected $root;
 
     /**
      * @const BIGINT
@@ -34,7 +34,7 @@ class DataWarehouse
      */
     public function __construct(Connection $connection)
     {
-        $this->conn  = $connection;
+        $this->conn = $connection;
     }
 
     /**
@@ -113,7 +113,7 @@ class DataWarehouse
 
         $u = $this->getUserByName($user['name']);
         if (empty($u)) {
-            $newUser = (object) array(
+            $newUser = (object)array(
                 'name' => $user['name'],
                 'enabled' => $user['enabled'],
                 'hash' => $user['hash'],

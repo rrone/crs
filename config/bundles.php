@@ -1,6 +1,6 @@
 <?php
 
-$bundles = [
+return [
     Symfony\Bundle\FrameworkBundle\FrameworkBundle::class => ['all' => true],
     Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class => ['all' => true],
     Doctrine\Bundle\DoctrineBundle\DoctrineBundle::class => ['all' => true],
@@ -11,15 +11,8 @@ $bundles = [
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
     DAMA\DoctrineTestBundle\DAMADoctrineTestBundle::class => ['test' => true],
+    Symfony\Bundle\DebugBundle\DebugBundle::class => ['dev' => true, 'test' => true],
+    Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
+    Symfony\Bundle\WebServerBundle\WebServerBundle::class => ['dev' => true],
 ];
-if (in_array($this->getEnvironment(), ['dev', 'test'])) {
-    $moreBundles = [
-        Symfony\Bundle\DebugBundle\DebugBundle::class => ['dev' => true, 'test' => true],
-        Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
-        Symfony\Bundle\WebServerBundle\WebServerBundle::class => ['dev' => true]
-    ];
 
-    $bundles = array_merge($bundles, $moreBundles);
-}
-
-return $bundles;

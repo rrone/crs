@@ -18,3 +18,8 @@ sql
 pw_hash.php
 .*
 bin
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###

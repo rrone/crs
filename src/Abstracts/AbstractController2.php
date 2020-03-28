@@ -86,8 +86,10 @@ abstract class AbstractController2 extends AbstractController
         $post = $request->isMethod('post') ? 'with updated ref assignments' : '';
 
         switch ($uri) {
+            case $this->generateUrl('/'):
             case $this->generateUrl('logon'):
             case '/':
+            case '/logon':
                 //TODO: Why is $uri == '/adm' passing this case?
                 $logMsg = $uri != $this->generateUrl('admin') ? "$user: CRS logon" : null;
                 break;

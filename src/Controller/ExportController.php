@@ -57,30 +57,4 @@ class ExportController extends AbstractController2
 
     }
 
-    /**
-     * @Route("/hrc", name="hrc")
-     * @Route("/nocerts", name="nocerts")
-     * @Route("/rcdc", name="rcdc")
-     * @Route("/rsh", name="rsh")
-     * @Route("/xxx", name="xxx")
-     * @param Request $request
-     * @return RedirectResponse|Response
-     */
-    // provided for testing unused code in ExportXl
-    public function index(Request $request)
-    {
-        $user = (object) [
-            'name' => 'test',
-            'enabled' => '0',
-            'admin' => false,
-            'section' => 1,
-        ];
-
-        $request->request->set('user', $user);
-        $request->request->set('baseURL', $this->generateUrl('logon'));
-
-        return $this->redirectToRoute('reports');
-
-    }
-
 }

@@ -92,11 +92,11 @@ class ReportsControllerTest extends WebTestCasePlus
         yield ['/urr'];
         yield ['/nra'];
 
-        //unused reports defined in ExportXl
-        yield ['/hrc'];
-        yield ['/nocerts'];
-        yield ['/rcdc'];
-        yield ['/rsh'];
+//        //unused reports defined in ExportXl
+//        yield ['/hrc'];
+//        yield ['/nocerts'];
+//        yield ['/rcdc'];
+//        yield ['/rsh'];
 
         //bad link
         yield ['/xyz'];

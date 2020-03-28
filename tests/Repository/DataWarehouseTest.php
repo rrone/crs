@@ -55,4 +55,36 @@ class DataWarehouseTest extends WebTestCasePlus
         $this->assertEquals($this->user, $result);
     }
 
+    public function testUnusedDBMethods()
+    {
+        $result = $this->dw->getHighestRefCerts('1', 10);
+        $this->assertEquals(10, sizeof($result));
+
+        $result = $this->dw->getRefAssessors('1', 10);
+        $this->assertEquals(10, sizeof($result));
+
+        $result = $this->dw->getRefNationalAssessors('1', 10);
+        $this->assertEquals(10, sizeof($result));
+
+        $result = $this->dw->getRefInstructors('1', 10);
+        $this->assertEquals(10, sizeof($result));
+
+        $result = $this->dw->getRefInstructorEvaluators('1', 10);
+        $this->assertEquals(10, sizeof($result));
+
+        $result = $this->dw->getRefUpgradeCandidates('1', 10);
+        $this->assertEquals(10, sizeof($result));
+
+        $result = $this->dw->getUnregisteredRefs('1', 10);
+        $this->assertEquals(10, sizeof($result));
+
+        $result = $this->dw->getSafeHavenRefs('1', 10);
+        $this->assertEquals(10, sizeof($result));
+
+        $result = $this->dw->getRefsConcussion('1', 10);
+        $this->assertEquals(10, sizeof($result));
+
+        $result = $this->dw->getRefsWithNoBSCerts('1', 10);
+        $this->assertEquals(0, sizeof($result));
+    }
 }

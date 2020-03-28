@@ -107,7 +107,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->getNamePW('user_test');
         $this->pw = 'Area--';
 
-        $this->submitAdminForm("Update", $this->pw, $this->user);
+        $this->submitAdminForm("Update", $this->pw, $this->userName);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('/admin', $this->client->getRequest()->getPathInfo());
 
@@ -116,7 +116,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertEquals('/', $this->client->getRequest()->getPathInfo());
 
         $this->getNamePW('user_test');
-        $this->submitAdminForm("Update", $this->pw, $this->user);
+        $this->submitAdminForm("Update", $this->pw, $this->userName);
 
     }
 

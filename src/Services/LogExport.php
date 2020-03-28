@@ -54,9 +54,11 @@ class LogExport extends AbstractExporter
                 $p = strpos($item->note, ':') + 1;
                 $s = trim(substr($item->note, $p));
                 $note = $s;
+                // @codeCoverageIgnoreStart
             } else {
                 $user = '';
                 $note = $item->note;
+                // @codeCoverageIgnoreEnd
             }
 
             $row = array(

@@ -73,10 +73,12 @@ class ExportXl extends AbstractExporter
         $u = strtoupper(str_replace('/', '', end($user)));
 
         switch ($uri) {
+            // @codeCoverageIgnoreStart
             case 'hrc':
                 $this->outFileName = "HighestRefCerts.$u.$this->outFileName";
                 $results = $this->dw->getHighestRefCerts($userKey, $limit);
                 break;
+            // @codeCoverageIgnoreEnd
             case 'ra':
                 $this->outFileName = "RefAssessors.$u.$this->outFileName";
                 $results = $this->dw->getRefAssessors($userKey, $limit);
@@ -89,10 +91,12 @@ class ExportXl extends AbstractExporter
                 $this->outFileName = "RefInstructorEvaluators.$u.$this->outFileName";
                 $results = $this->dw->getRefInstructorEvaluators($userKey, $limit);
                 break;
+            // @codeCoverageIgnoreStart
             case 'nocerts':
                 $this->outFileName = "RefsWithNoBSCerts.$u.$this->outFileName";
                 $results = $this->dw->getRefsWithNoBSCerts($userKey, $limit);
                 break;
+            // @codeCoverageIgnoreEnd
             case 'ruc':
                 $this->outFileName = "RefUpgradeCandidates.$u.$this->outFileName";
                 $results = $this->dw->getRefUpgradeCandidates($userKey, $limit);
@@ -101,6 +105,7 @@ class ExportXl extends AbstractExporter
                 $this->outFileName = "UnregisteredRefs.$u.$this->outFileName";
                 $results = $this->dw->getUnregisteredRefs($userKey, $limit);
                 break;
+            // @codeCoverageIgnoreStart
             case 'rcdc':
                 $this->outFileName = "ConcussionRefs.$u.$this->outFileName";
                 $results = $this->dw->getRefsConcussion($userKey, $limit);
@@ -109,6 +114,7 @@ class ExportXl extends AbstractExporter
                 $this->outFileName = "SafeHavenRefs.$u.$this->outFileName";
                 $results = $this->dw->getSafeHavenRefs($userKey, $limit);
                 break;
+            // @codeCoverageIgnoreEnd
             case 'nra':
                 if ($this->user->admin) {
                     $this->outFileName = "NationalRefAssessors.$u.$this->outFileName";
@@ -121,8 +127,10 @@ class ExportXl extends AbstractExporter
                 $this->outFileName = "CompositeRefCerts.$u.$this->outFileName";
                 $results = $this->dw->getCompositeRefCerts($userKey, $limit);
                 break;
+            // @codeCoverageIgnoreStart
             default:
                 $results = null;
+            // @codeCoverageIgnoreEnd
         }
 
         // generate the response
@@ -131,13 +139,16 @@ class ExportXl extends AbstractExporter
         } else {
             $content = null;
             if ((bool) $this->user->section && $uri == 'bshca') {
+                // @codeCoverageIgnoreStart
                 if ($_SERVER['APP_ENV'] === 'dev') {
                     $this->generateExport($content, $results);
                     file_put_contents(realpath(xlsxFile), $this->export($content));
                 }
+                // @codeCoverageIgnoreEnd
 
                 try{
                     $response = new BinaryFileResponse(realpath(xlsxFile));
+                    // @codeCoverageIgnoreStart
                 } catch (Exception $e) {
                     $response = new Response();
 
@@ -145,6 +156,7 @@ class ExportXl extends AbstractExporter
                     $response->setContent($this->export($content));
 
                 }
+                // @codeCoverageIgnoreEnd
             } else {
                 $response = new Response();
                 $this->generateExport($content, $results);
@@ -165,10 +177,12 @@ class ExportXl extends AbstractExporter
      */
     private function generateExport(&$content, array $certs)
     {
+        // @codeCoverageIgnoreStart
         if (is_null($certs) or empty($certs)) {
             $content['report']['data'] = array('There was an error generating your report.');
             return null;
         }
+        // @codeCoverageIgnoreEnd
 
         $data = [];
 

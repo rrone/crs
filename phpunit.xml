@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- https://phpunit.readthedocs.io/en/latest/configuration.html -->
+
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-         backupGlobals               = "false"
-         backupStaticAttributes      = "false"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/8.3/phpunit.xsd"
          colors                      = "true"
          convertErrorsToExceptions   = "false"
          convertNoticesToExceptions  = "false"
          convertWarningsToExceptions = "false"
-         processIsolation            = "false"
-         stopOnFailure               = "false"
+         verbose                     = "true"
          bootstrap                   = "tests/bootstrap.php"
-
+         cacheResult                 = "true"
 >
 
     <php>

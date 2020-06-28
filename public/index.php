@@ -1,15 +1,12 @@
 <?php
 
 use App\Kernel;
-use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
 require dirname(__DIR__).'/config/bootstrap.php';
 
 if ($_SERVER['APP_ENV'] === 'dev') {
     umask(0000);
-
-    Debug::enable();
 
     ini_set('xdebug.var_display_max_depth', -1);
     ini_set('xdebug.var_display_max_children', -1);

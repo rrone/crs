@@ -213,8 +213,6 @@ class ExportXl extends AbstractExporter
                             case 'Email':
                                 $value = strtolower($value);
                                 break;
-                            case 'CertDate':
-                                $value = date_format(date_create($value), 'm/d/Y');
                         }
 
                         $row[] = $value;

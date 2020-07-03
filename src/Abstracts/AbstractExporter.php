@@ -258,6 +258,12 @@ abstract class AbstractExporter
             }
         }
 
+        //select Range
+        //$options['selectRange'] = 'A2:A2';
+        if (isset($options['selectRange'])) {
+            $ws->setSelectedCells($options['selectRange']);
+        }
+
         //ensure sheet name is unique
         $inc = 1;
         $name = $shName;

@@ -227,6 +227,7 @@ class ExportXl extends AbstractExporter
             $content['report']['data'] = $data;
             $content['report']['options']['freezePane'] = 'A2';
             $content['report']['options']['horizontalAlignment'] = ['B1:Z' => 'left'];
+            $content['report']['options']['selectRange'] = 'A2';
         } else {
             return null;
         }

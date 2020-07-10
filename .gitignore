@@ -4,8 +4,6 @@
 /tests/.gitignore
 /tests--old/
 README.md
-/var/
-/vendor/
 *.base
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
@@ -16,7 +14,6 @@ yarn-error.log
 bin/.phpunit
 sql
 pw_hash.php
-.*
 bin
 
 ###> phpunit/phpunit ###
@@ -36,8 +33,6 @@ bin
 
 ###> symfony/phpunit-bridge ###
 .phpunit
-.phpunit.result.cache
-/phpunit.xml
 ###< symfony/phpunit-bridge ###
 
 ###> symfony/web-server-bundle ###

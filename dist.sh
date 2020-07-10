@@ -58,9 +58,9 @@ find "${dist}"/src -type f -name '*Test.php' -delete
 echo
 
 cd "${dist}"
-    cp -f -r "${src}"/assets .
-
-    rm -f -r ./assets
+#    cp -f -r "${src}"/assets .
+#
+#    rm -f -r ./assets
     rm -f -r ./bin/doctrine*
 
     yarn install --prod=true

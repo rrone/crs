@@ -1,9 +1,13 @@
 <?php
 
 use App\Kernel;
+use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
 require dirname(__DIR__).'/config/bootstrap.php';
+
+(new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
 
 if ($_SERVER['APP_ENV'] === 'dev') {
     umask(0000);
@@ -14,6 +18,8 @@ if ($_SERVER['APP_ENV'] === 'dev') {
 
     ini_set('max_execution_time', 600);
     ini_set('max_input_time', 600);
+
+    Debug::enable();
 
 }
 

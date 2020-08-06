@@ -28,12 +28,21 @@ class AdminControllerTest extends WebTestCasePlus
         yield ['/admin'];
     }
 
+    public function testInvalidLogin()
+    {
+        // invoke the controller action and test it
+        $this->getNamePW('user_test');
+
+        $this->submitLoginForm('Area 1/B', '');
+        $view = $this->client->getResponse()->getContent();
+        $this->assertStringNotContainsString("Password may not be blank", $view);
+    }
+
     public function testAdminAsAnonymous()
     {
         // instantiate the view and test it
         $this->client->request('GET', '/admin');
         $this->assertTrue($this->client->getResponse()->isRedirection());
-        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
 
         $this->crawler = $this->client->followRedirect();

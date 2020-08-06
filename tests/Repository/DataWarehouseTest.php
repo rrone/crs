@@ -4,29 +4,35 @@ namespace Tests\Repository;
 
 use App\Repository\DataWarehouse;
 use Doctrine\DBAL\Connection;
-use Tests\Abstracts\WebTestCasePlus;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class DataWarehouseTest extends WebTestCasePlus
+class DataWarehouseTest extends KernelTestCase
 {
+    protected static $container;
+
     /**
-     * @var Connection
+     * @var Connection|object|null
      */
-    private $conn;
+    protected static $conn;
 
     /**
      * @var DataWarehouse
      */
-    private $dw;
+    protected $dw;
 
     protected $userName;
-    private $user;
+    protected $user;
+    protected $c;
+    protected $pw;
 
     protected function setUp(): void
     {
-        parent::setUp();
+        self::bootKernel();
 
-        $this->conn = $this->c->get('doctrine.dbal.default_connection');
-        $this->dw = new DataWarehouse($this->conn);
+        $this->c = self::$kernel->getContainer();
+
+        self::$conn = $this->c->get('doctrine.dbal.default_connection');
+        $this->dw = new DataWarehouse(self::$conn);
 
         $this->getNamePW('admin_test');
         $this->user = $this->dw->getUserByName($this->userName);
@@ -35,24 +41,53 @@ class DataWarehouseTest extends WebTestCasePlus
 
     protected function tearDown(): void
     {
-        $this->conn->close();
+        self::$conn->close();
 
     }
 
-    public function testGetUserbyName()
+    protected function getNamePW($paramStr = null)
+    {
+        if (empty($paramStr)) {
+            $this->userName = '';
+            $this->pw = '';
+        }
+
+        $cred = self::$container->getParameter($paramStr);
+
+        $this->userName = $cred['user'];
+        $this->pw = $cred['pw'];
+
+    }
+    public function testGetUserByName()
     {
         $result = $this->dw->getUserByName('');
 
         $this->assertNull($result);
     }
 
-    public function testGetUserbyPW()
+    public function testGetUserByPW()
     {
         $result = $this->dw->getUserByHash('');
         $this->assertNull($result);
 
         $result = $this->dw->getUserByHash($this->user->hash);
         $this->assertEquals($this->user, $result);
+    }
+
+    public function testSetUser()
+    {
+        $result = $this->dw->setUser('');
+        $this->assertNull($result);
+
+        $result = $this->dw->SetUser(json_decode(json_encode($this->user), true));
+        $this->assertIsInt((int) $result);
+    }
+
+    public function testRemoveUser()
+    {
+        $result = $this->dw->removeUser('');
+        $this->assertNull($result);
+
     }
 
     public function testUnusedDBMethods()

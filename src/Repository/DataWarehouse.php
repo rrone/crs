@@ -170,14 +170,8 @@ class DataWarehouse
      * @param integer $limit
      * @return mixed
      */
-    public function getRefAssessors($userKey = null, $limit = self::BIGINT)
+    public function getRefAssessors($userKey = '', $limit = self::BIGINT)
     {
-        if (is_null($userKey)) {
-            $userKey = '%%';
-        } else {
-            $userKey = "%$userKey%";
-        }
-
         return $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_ra
@@ -193,12 +187,8 @@ class DataWarehouse
      * @param integer $limit
      * @return mixed
      */
-    public function getRefNationalAssessors($userKey = null, $limit = self::BIGINT)
+    public function getRefNationalAssessors($userKey = '', $limit = self::BIGINT)
     {
-        if (is_null($userKey)) {
-            $userKey = '';
-        }
-
         return $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_nra
@@ -214,14 +204,8 @@ class DataWarehouse
      * @param integer $limit
      * @return mixed
      */
-    public function getRefInstructors($userKey = null, $limit = self::BIGINT)
+    public function getRefInstructors($userKey = '', $limit = self::BIGINT)
     {
-        if (is_null($userKey)) {
-            $userKey = '%%';
-        } else {
-            $userKey = "%$userKey%";
-        }
-
         return $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_ri
@@ -237,14 +221,8 @@ class DataWarehouse
      * @param integer $limit
      * @return mixed
      */
-    public function getRefInstructorEvaluators($userKey = null, $limit = self::BIGINT)
+    public function getRefInstructorEvaluators($userKey = '', $limit = self::BIGINT)
     {
-        if (is_null($userKey)) {
-            $userKey = '%%';
-        } else {
-            $userKey = "%$userKey%";
-        }
-
         return $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_rie
@@ -261,14 +239,8 @@ class DataWarehouse
      * @param integer $limit
      * @return mixed
      */
-    public function getRefUpgradeCandidates($userKey = null, $limit = self::BIGINT)
+    public function getRefUpgradeCandidates($userKey = '', $limit = self::BIGINT)
     {
-        if (is_null($userKey)) {
-            $userKey = '%%';
-        } else {
-            $userKey = "%$userKey%";
-        }
-
         return $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_ref_upgrades
@@ -284,14 +256,8 @@ class DataWarehouse
      * @param integer $limit
      * @return mixed
      */
-    public function getUnregisteredRefs($userKey = null, $limit = self::BIGINT)
+    public function getUnregisteredRefs($userKey = '', $limit = self::BIGINT)
     {
-        if (is_null($userKey)) {
-            $userKey = '%%';
-        } else {
-            $userKey = "%$userKey%";
-        }
-
         return $this->conn->fetchAll(
             "
             SELECT * FROM `crs_rpt_unregistered_refs`
@@ -311,14 +277,8 @@ class DataWarehouse
      * @param integer $limit
      * @return mixed
      */
-    public function getRefsConcussion($userKey = null, $limit = self::BIGINT)
+    public function getRefsConcussion($userKey = '', $limit = self::BIGINT)
     {
-        if (is_null($userKey)) {
-            $userKey = '%%';
-        } else {
-            $userKey = "%$userKey%";
-        }
-
         return $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_ref_cdc
@@ -334,14 +294,8 @@ class DataWarehouse
      * @param integer $limit
      * @return mixed
      */
-    public function getSafeHavenRefs($userKey = null, $limit = self::BIGINT)
+    public function getSafeHavenRefs($userKey = '', $limit = self::BIGINT)
     {
-        if (is_null($userKey)) {
-            $userKey = '%%';
-        } else {
-            $userKey = "%$userKey%";
-        }
-
         return $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_safehaven
@@ -357,7 +311,7 @@ class DataWarehouse
      * @param integer $limit
      * @return mixed
      */
-    public function getCompositeRefCerts($userKey, $limit = self::BIGINT)
+    public function getCompositeRefCerts($userKey = '', $limit = self::BIGINT)
     {
         return $this->conn->fetchAll(
             "
@@ -378,14 +332,8 @@ class DataWarehouse
      * @param integer $limit
      * @return mixed
      */
-    public function getRefsWithNoBSCerts($userKey = null, $limit = self::BIGINT)
+    public function getRefsWithNoBSCerts($userKey = '', $limit = self::BIGINT)
     {
-        if (is_null($userKey)) {
-            $userKey = '%%';
-        } else {
-            $userKey = "%$userKey%";
-        }
-
         return $this->conn->fetchAll(
             "
             SELECT * FROM crs_rpt_nocerts

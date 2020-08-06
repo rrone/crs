@@ -26,6 +26,27 @@ class LogonControllerTest extends WebTestCasePlus
         yield ['/logon'];
     }
 
+    /**
+     * @dataProvider provideUnauthUrls
+     * @param $url
+     */
+    public function testLogonUnsuccessful($url)
+    {
+        $this->client->request('GET', $url);
+        $this->assertTrue($this->client->getResponse()->isRedirection());
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+
+        $this->crawler = $this->client->followRedirect();
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals('/logon', $this->client->getRequest()->getPathInfo());
+    }
+
+    public function provideUnauthUrls()
+    {
+        yield ['/log'];
+    }
+
+
     public function testController()
     {
         // instantiate the controller

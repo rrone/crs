@@ -35,9 +35,9 @@ $kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 $request = Request::createFromGlobals();
 try {
     $response = $kernel->handle($request);
+    $response->send();
+    $kernel->terminate($request, $response);
 } catch (Exception $e) {
     echo $e->getMessage();
     die();
 }
-$response->send();
-$kernel->terminate($request, $response);

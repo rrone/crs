@@ -34,3 +34,4 @@ bin
 ###> symfony/phpunit-bridge ###
 .phpunit
 ###< symfony/phpunit-bridge ###
+*.bak

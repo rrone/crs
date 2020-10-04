@@ -5,26 +5,25 @@
     "dev-server": "encore dev-server",
     "dev": "encore dev",
     "watch": "encore dev --watch",
-    "prod": "encore production --progress",
-    "deploy": "./dist.sh"
+    "prod": "encore production --progress"
   },
   "dependencies": {
-    "@symfony/webpack-encore": "^0.28.2",
-    "acorn": "^7.1.1",
-    "bootstrap": "^4.3.1",
+    "acorn": "^8.0.1",
+    "bootstrap": "^4.5.2",
     "browsers": "^1.0.2",
-    "datatables.net": "^1.10.19",
-    "datatables.net-dt": "^1.10.19",
+    "chokidar": "^3.4.2",
+    "datatables.net": "^1.10.21",
+    "datatables.net-dt": "^1.10.21",
     "jquery": "^3.5.0",
     "minimist": "^1.2.5",
-    "popper.js": "^1.15.0",
+    "popper.js": "^1.16.1",
     "require": "^2.4.20",
-    "require.js": "^1.0.0",
-    "uglify-js": "^3.8.0",
-    "webpack-notifier": "^1.6.0"
+    "uglify-js": "^3.10.4"
   },
   "devDependencies": {
-    "core-js": "^3.0.0",
-    "regenerator-runtime": "^0.13.2"
+    "@symfony/webpack-encore": "^0.31.0",
+    "core-js": "^3.6.5",
+    "regenerator-runtime": "^0.13.7",
+    "webpack-notifier": "^1.8.0"
   }
 }

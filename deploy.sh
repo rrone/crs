@@ -2,16 +2,20 @@
 ## Exit immediately if a command exits with a non-zero status.
 set -e
 #set distribution folder alias
-src="$HOME"/Sites/AYSO/_dev/crs
-dist="$HOME"/Sites/AYSO/_services/crs
+dev="$HOME"/Sites/AYSO/_dev/crs
+prod="$HOME"/Sites/AYSO/_services/crs
 config="$HOME"/Sites/AYSO/_dev/crs/config
-PHP=/usr/local/etc/php/7.3/conf.d
+PHP=/usr/local/etc/php/7.4/conf.d
 
 ## clear the screen
 printf "\033c"
 
 echo ">>> Checkout master branch from Git repository..."
 #git checkout master
+echo
+
+echo ">>> Build production assets..."
+encore production --progress
 echo
 
 echo ">>> Purge development items..."
@@ -22,55 +26,54 @@ then
 fi
 
 echo ">>> Clear distribution folder..."
-rm -rf "${dist:?}"
-mkdir "${dist}"
+rm -rf "${prod:?}"
+mkdir "${prod}"
 echo
 
 echo ">>> Copying app to distribution..."
-cp ./.env.dist "${dist}"/.env
-cp -f ./*.json "${dist}"
-cp -f ./*.lock "${dist}"
+cp ./.env.dist "${prod}"/.env
+cp -f ./*.json "${prod}"
+cp -f ./*.lock "${prod}"
 
-mkdir "${dist}"/bin
-cp bin/console "${dist}"/bin
+mkdir "${prod}"/bin
+cp bin/console "${prod}"/bin
 
 echo ">>> Copying config to distribution..."
-cp -rf "${config}" "${dist}"
+cp -rf "${config}" "${prod}"
 
 echo ">>> Clear distribution config..."
-rm -rf "${dist}"/config/packages/dev
-rm -rf "${dist}"/config/packages/test
-rm -rf "${dist}"/config/routes/dev
+rm -rf "${prod}"/config/packages/dev
+rm -rf "${prod}"/config/packages/test
+rm -rf "${prod}"/config/routes/dev
 
-cp -rf public "${dist}"
-cp -rf src "${dist}"
-mkdir  "${dist}"/var
-cp -rf var/xlsx/ "${dist}"/var/xlsx/
-cp -rf templates "${dist}"
+cp -rf public "${prod}"
+cp -rf src "${prod}"
+mkdir  "${prod}"/var
+cp -rf var/xlsx/ "${prod}"/var/xlsx/
+cp -rf templates "${prod}"
 echo
 
 echo ">>> Removing OSX jetsam..."
-find "${dist}" -type f -name '.DS_Store' -delete
+find "${prod}" -type f -name '.DS_Store' -delete
 echo
 
 echo ">>> Removing development jetsam..."
-find "${dist}"/src -type f -name '*Test.php' -delete
+find "${prod}"/src -type f -name '*Test.php' -delete
 echo
 
-cd "${dist}"
-#    cp -f -r "${src}"/assets .
-#
-#    rm -f -r ./assets
-    rm -f -r ./bin/doctrine*
-
+cd "${prod}"
     yarn install --prod=true
     composer install --no-dev
 
+    rm -f -r ./assets
+    rm -f -r ./migrations
+    rm -f -r ./webpack.config.js
+
     bin/console cache:clear
 
-cd "${src}"
+cd "${dev}"
 
-echo ">>> Restore development items..."
+echo ">>> Re-enable xdebug..."
 ## Restore xdebug
 if [[ -e ${PHP}"/ext-xdebug.~ini" ]]
 then

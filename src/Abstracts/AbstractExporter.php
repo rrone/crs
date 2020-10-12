@@ -3,6 +3,8 @@
 namespace App\Abstracts;
 
 use PhpOffice\PhpSpreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Protection;
 
 /*
     // Sample array of data to publish
@@ -22,6 +24,8 @@ abstract class AbstractExporter
 
     public $fileExtension;
     public $contentType;
+
+    protected $ws;
 
     public function __construct($format)
     {
@@ -153,116 +157,41 @@ abstract class AbstractExporter
         $options = isset($content['options']) ? $content['options'] : null;
 
         //select active sheet
-        $ws = $this->objPHPExcel->getActiveSheet();
+        $this->ws = $this->objPHPExcel->getActiveSheet();
 
         //load data into sheet
-        $ws->fromArray($data, null, 'A1');
+        $this->ws->fromArray($data, null, 'A1');
 
         //auto-size columns
-        foreach (range('A', $ws->getHighestDataColumn()) as $col) {
-            $ws->getColumnDimension($col)->setAutoSize(true);
+        foreach (range('A', $this->ws->getHighestDataColumn()) as $col) {
+            $this->ws->getColumnDimension($col)->setAutoSize(true);
         }
 
         //apply options
-        if (isset($options['hideCols'])) {
-            // Hide sheet columns.
-            $cols = $options['hideCols'];
-            foreach ($cols as $col) {
-                $ws->getColumnDimension($col)->setVisible(false);
-            }
-        }
+
+        // Hide sheet columns.
+        $this->hideCols($options);
 
         //freeze pane
-        //$options['freezePane'] = 'A2';
-        if (isset($options['freezePane'])) {
-            $ws->freezePane($options['freezePane']);
-        }
+        $this->freezePane($options);
 
         // date format
-        // ['options']['style'] = array('M:M'=>'yyyy-mm-dd');
-        if (isset($options['style'])) {
-            foreach ($options['style'] as $rng => $format) {
-                if ($rng == 'WS') {
-                    $rng = $ws->calculateWorksheetDimension();
-                } else {
-                    $rowCount = $ws->getHighestRow();
-                    $rng = $this->pregMatch($rng);
-                    $rng .= $rowCount;
-                }
 
-                $ws->getStyle($rng)
-                    ->getNumberFormat()
-                    ->setFormatCode($format);
-            }
-        }
+        // ['options']['style'] = array('M:M'=>'yyyy-mm-dd');
+        $this->setStyle($options);
 
         //horizontal alignment
         //$options['horizontalAlignment'] = ['WS'=>'left'];
-        if (isset($options['horizontalAlignment'])) {
-            foreach ($options['horizontalAlignment'] as $rng => $format) {
-                if ($rng == 'WS') {
-                    $rng = $ws->calculateWorksheetDimension();
-                } else {
-                    $rowCount = $ws->getHighestRow();
-                    $rng = $this->pregMatch($rng);
-                    $rng .= $rowCount;
-                }
-
-                switch ($format) {
-                    case 'center':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(
-                            PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER
-                        );
-                        break;
-                    case 'general':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(
-                            PhpSpreadsheet\Style\Alignment::HORIZONTAL_GENERAL
-                        );
-                        break;
-                    case 'justify':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(
-                            PhpSpreadsheet\Style\Alignment::HORIZONTAL_JUSTIFY
-                        );
-                        break;
-                    case 'left':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(
-                            PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT
-                        );
-                        break;
-                    case 'right':
-                        $ws->getStyle($rng)->getAlignment()->setHorizontal(
-                            PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT
-                        );
-                        break;
-                }
-            }
-        }
-
+        $this->setAlignment($options);
 
         //protect cells
-        //$options['protect'] = array('pw' => '2016NG', 'range' => array('A:D'));
         //reference: http://stackoverflow.com/questions/20543937/disable-few-cells-in-phpexcel
-
-        if (isset($options['protection']['pw']) and isset($options['protection']['unlocked'])) {
-//            $pw = $options['protection']['pw'];
-            $range = $options['protection']['unlocked'];
-
-            //turn protection on
-            $ws->getProtection()->setSheet(true);
-
-            //now unprotect requested range
-            foreach ($range as $cells) {
-                $ws->getStyle($cells)->getProtection()->setLocked(
-                    PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED
-                );
-            }
-        }
+        //$options['protect'] = array('pw' => '2016NG', 'range' => array('A:D'));
+        $this->protectCells($options);
 
         //select Range
         //$options['selectRange'] = 'A2:A2';
-        if (isset($options['selectRange'])) {
-            $ws->setSelectedCells($options['selectRange']);
-        }
+        $this->selectRange($options);
 
         //ensure sheet name is unique
         $inc = 1;
@@ -280,10 +209,107 @@ abstract class AbstractExporter
         }
 
         //name the sheet
-        $ws->setTitle($shName);
+        $this->ws->setTitle($shName);
 
         return;
 
+    }
+
+    protected function hideCols(array $hideCols)
+    {
+        //$options['hideCols'] = true | false;
+        if (isset($hideCols['hideCols'])) {
+            $cols = $$hideCols['hideCols'];
+            foreach ($cols as $col) {
+                $this->ws->getColumnDimension($col)->setVisible(false);
+            }
+        }
+    }
+
+    protected function freezePane(array $freezePane)
+    {
+        //$options['freezePane'] = 'A2';
+        if (isset($freezePane['freezePane'])) {
+            $this->ws->freezePane($freezePane['freezePane']);
+        }
+    }
+
+    protected function setStyle(array $style)
+    {
+        if (isset($style['style'])) {
+            foreach ($style['style'] as $rng => $format) {
+                if ($rng == 'WS') {
+                    $rng = $this->ws->calculateWorksheetDimension();
+                } else {
+                    $rowCount = $this->ws->getHighestRow();
+                    $rng = $this->pregMatch($rng);
+                    $rng .= $rowCount;
+                }
+
+                $this->ws->getStyle($rng)
+                    ->getNumberFormat()
+                    ->setFormatCode($format);
+            }
+        }
+    }
+
+    protected function setAlignment(array $align)
+    {
+        if (isset($align['horizontalAlignment'])) {
+            foreach ($align['horizontalAlignment'] as $rng => $format) {
+                if ($rng == 'WS') {
+                    $rng = $this->ws->calculateWorksheetDimension();
+                } else {
+                    $rowCount = $this->ws->getHighestRow();
+                    $rng = $this->pregMatch($rng);
+                    $rng .= $rowCount;
+                }
+
+                switch ($format) {
+                    case 'center':
+                        $ha = Alignment::HORIZONTAL_CENTER;
+                        break;
+                    case 'justify':
+                        $ha = Alignment::HORIZONTAL_JUSTIFY;
+                        break;
+                    case 'left':
+                        $ha = Alignment::HORIZONTAL_LEFT;
+                        break;
+                    case 'right':
+                        $ha = Alignment::HORIZONTAL_RIGHT;
+                        break;
+                    default:
+                        $ha = Alignment::HORIZONTAL_GENERAL;
+                }
+                $this->ws->getStyle($rng)->getAlignment()->setHorizontal($ha);
+
+            }
+        }
+    }
+
+    protected function protectCells(array $protect)
+    {
+        if (isset($protect['protection']['pw']) and isset($protect['protection']['unlocked'])) {
+//            $pw = $options['protection']['pw'];
+            $range = $protect['protection']['unlocked'];
+
+            //turn protection on
+            $this->ws->getProtection()->setSheet(true);
+
+            //now unprotect requested range
+            foreach ($range as $cells) {
+                $this->ws->getStyle($cells)->getProtection()->setLocked(
+                    Protection::PROTECTION_UNPROTECTED
+                );
+            }
+        }
+    }
+
+    protected function selectRange(array $range)
+    {
+        if (isset($range['selectRange'])) {
+            $this->ws->setSelectedCells($range['selectRange']);
+        }
     }
 }
 

@@ -3,9 +3,7 @@
 namespace App\Repository;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
 use Doctrine;
-
 use Exception;
 
 /**
@@ -54,20 +52,22 @@ class DataWarehouse
         return isset($elem[0]) ? (object)$elem[0] : null;
     }
 
-    //User fetchAll functions
+    //User fetchAllAssociative functions
 
     /**
-     * @return object
+     * @return array
+     * @throws Doctrine\DBAL\Exception
      */
     public function getAllUsers()
     {
 
-        return $this->conn->fetchAll('SELECT * FROM crs_users');
+        return $this->conn->fetchAllAssociative('SELECT * FROM crs_users');
     }
 
     /**
      * @param $name
      * @return null|object
+     * @throws Doctrine\DBAL\Exception
      */
     public function getUserByName($name)
     {
@@ -75,7 +75,7 @@ class DataWarehouse
             return null;
         }
 
-        $user = $this->conn->fetchAll("SELECT * FROM crs_users WHERE `name` LIKE '$name'");
+        $user = $this->conn->fetchAllAssociative("SELECT * FROM crs_users WHERE `name` LIKE '$name'");
 
         return $this->getZero($user);
 
@@ -84,7 +84,7 @@ class DataWarehouse
     /**
      * @param $hash
      * @return null|object
-     * @throws DBALException
+     * @throws Doctrine\DBAL\Driver\Exception|Doctrine\DBAL\Exception
      */
     public function getUserByHash($hash)
     {
@@ -94,7 +94,7 @@ class DataWarehouse
 
         $stmt = $this->conn->prepare("SELECT * FROM crs_users WHERE `hash` LIKE ?");
         $stmt->execute([$hash]);
-        $user = $stmt->fetchAll();
+        $user = $stmt->fetchAllAssociative();
 
         return $this->getZero($user);
 
@@ -103,7 +103,7 @@ class DataWarehouse
     /**
      * @param $user
      * @return null
-     * @throws DBALException
+     * @throws Doctrine\DBAL\Driver\Exception|Doctrine\DBAL\Exception
      */
     public function setUser($user)
     {
@@ -134,6 +134,12 @@ class DataWarehouse
 
     }
 
+    /**
+     * @param $user
+     * @return null
+     * @throws Doctrine\DBAL\Driver\Exception
+     * @throws Doctrine\DBAL\Exception
+     */
     public function removeUser($user)
     {
         if (empty($user)) {
@@ -149,10 +155,11 @@ class DataWarehouse
      * @param mixed $userKey
      * @param integer $limit
      * @return mixed
+     * @throws Doctrine\DBAL\Exception
      */
     public function getHighestRefCerts($userKey, $limit = self::BIGINT)
     {
-        return $this->conn->fetchAll(
+        return $this->conn->fetchAllAssociative(
             "
             SELECT * from crs_rpt_hrc
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -169,10 +176,11 @@ class DataWarehouse
      * @param mixed $userKey
      * @param integer $limit
      * @return mixed
+     * @throws Doctrine\DBAL\Exception
      */
     public function getRefAssessors($userKey = '', $limit = self::BIGINT)
     {
-        return $this->conn->fetchAll(
+        return $this->conn->fetchAllAssociative(
             "
             SELECT * FROM crs_rpt_ra
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -186,10 +194,11 @@ class DataWarehouse
      * @param mixed $userKey
      * @param integer $limit
      * @return mixed
+     * @throws Doctrine\DBAL\Exception
      */
     public function getRefNationalAssessors($userKey = '', $limit = self::BIGINT)
     {
-        return $this->conn->fetchAll(
+        return $this->conn->fetchAllAssociative(
             "
             SELECT * FROM crs_rpt_nra
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -203,10 +212,11 @@ class DataWarehouse
      * @param mixed $userKey
      * @param integer $limit
      * @return mixed
+     * @throws Doctrine\DBAL\Exception
      */
     public function getRefInstructors($userKey = '', $limit = self::BIGINT)
     {
-        return $this->conn->fetchAll(
+        return $this->conn->fetchAllAssociative(
             "
             SELECT * FROM crs_rpt_ri
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -220,10 +230,11 @@ class DataWarehouse
      * @param mixed $userKey
      * @param integer $limit
      * @return mixed
+     * @throws Doctrine\DBAL\Exception
      */
     public function getRefInstructorEvaluators($userKey = '', $limit = self::BIGINT)
     {
-        return $this->conn->fetchAll(
+        return $this->conn->fetchAllAssociative(
             "
             SELECT * FROM crs_rpt_rie
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -238,10 +249,11 @@ class DataWarehouse
      * @param mixed $userKey
      * @param integer $limit
      * @return mixed
+     * @throws Doctrine\DBAL\Exception
      */
     public function getRefUpgradeCandidates($userKey = '', $limit = self::BIGINT)
     {
-        return $this->conn->fetchAll(
+        return $this->conn->fetchAllAssociative(
             "
             SELECT * FROM crs_rpt_ref_upgrades
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -255,10 +267,11 @@ class DataWarehouse
      * @param mixed $userKey
      * @param integer $limit
      * @return mixed
+     * @throws Doctrine\DBAL\Exception
      */
     public function getUnregisteredRefs($userKey = '', $limit = self::BIGINT)
     {
-        return $this->conn->fetchAll(
+        return $this->conn->fetchAllAssociative(
             "
             SELECT * FROM `crs_rpt_unregistered_refs`
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -276,10 +289,11 @@ class DataWarehouse
      * @param mixed $userKey
      * @param integer $limit
      * @return mixed
+     * @throws Doctrine\DBAL\Exception
      */
     public function getRefsConcussion($userKey = '', $limit = self::BIGINT)
     {
-        return $this->conn->fetchAll(
+        return $this->conn->fetchAllAssociative(
             "
             SELECT * FROM crs_rpt_ref_cdc
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -293,10 +307,11 @@ class DataWarehouse
      * @param mixed $userKey
      * @param integer $limit
      * @return mixed
+     * @throws Doctrine\DBAL\Exception
      */
     public function getSafeHavenRefs($userKey = '', $limit = self::BIGINT)
     {
-        return $this->conn->fetchAll(
+        return $this->conn->fetchAllAssociative(
             "
             SELECT * FROM crs_rpt_safehaven
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -310,10 +325,11 @@ class DataWarehouse
      * @param mixed $userKey
      * @param integer $limit
      * @return mixed
+     * @throws Doctrine\DBAL\Exception
      */
     public function getCompositeRefCerts($userKey = '', $limit = self::BIGINT)
     {
-        return $this->conn->fetchAll(
+        return $this->conn->fetchAllAssociative(
             "
             SELECT * FROM crs_rpt_ref_certs
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -331,10 +347,11 @@ class DataWarehouse
      * @param mixed $userKey
      * @param integer $limit
      * @return mixed
+     * @throws Doctrine\DBAL\Exception
      */
     public function getRefsWithNoBSCerts($userKey = '', $limit = self::BIGINT)
     {
-        return $this->conn->fetchAll(
+        return $this->conn->fetchAllAssociative(
             "
             SELECT * FROM crs_rpt_nocerts
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
@@ -350,10 +367,11 @@ class DataWarehouse
 
     /**
      * @return mixed
+     * @throws Doctrine\DBAL\Exception
      */
     public function getReports()
     {
-        return $this->conn->fetchAll(
+        return $this->conn->fetchAllAssociative(
             "
             SELECT * FROM crs_reports
             WHERE `show` = 1
@@ -364,10 +382,11 @@ class DataWarehouse
 
     /**
      * @return mixed
+     * @throws Doctrine\DBAL\Exception
      */
     public function getReportNotes()
     {
-        return $this->conn->fetchAll(
+        return $this->conn->fetchAllAssociative(
             "
             SELECT * FROM crs_report_notes
             ORDER BY `seq`
@@ -378,10 +397,11 @@ class DataWarehouse
 
     /**
      * @return mixed
+     * @throws Doctrine\DBAL\Exception
      */
     public function getUpdateTimestamp()
     {
-        $ts = $this->conn->fetchAll(
+        $ts = $this->conn->fetchAllAssociative(
             "
             SELECT * FROM crs_rpt_lastUpdate
             ORDER BY `timestamp`
@@ -409,7 +429,7 @@ class DataWarehouse
      * @param $key
      * @param $msg
      * @return null
-     * @throws DBALException
+     * @throws Exception
      */
     public function logInfo($key, $msg)
     {
@@ -426,10 +446,11 @@ class DataWarehouse
 
     /**
      * @return mixed[]
+     * @throws Doctrine\DBAL\Exception
      */
     public function getAccessLog()
     {
-        return $this->conn->fetchAll("SELECT * FROM crs_log");
+        return $this->conn->fetchAllAssociative("SELECT * FROM crs_log");
     }
 
     /**
@@ -452,7 +473,7 @@ class DataWarehouse
 //    {
 //        $timestamp = null;
 //
-//        $ts = $this->conn->fetchAll('log')
+//        $ts = $this->conn->fetchAllAssociative('log')
 //            ->where(
 //                [
 //                    ['projectKey', 'like', $key],

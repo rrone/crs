@@ -16,6 +16,7 @@
     "datatables.net-dt": "^1.10.21",
     "jquery": "^3.5.0",
     "minimist": "^1.2.5",
+    "object-path": "^0.11.5",
     "popper.js": "^1.16.1",
     "require": "^2.4.20",
     "uglify-js": "^3.10.4"

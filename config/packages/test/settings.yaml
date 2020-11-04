@@ -12,4 +12,4 @@ parameters:
 
     dev_test:
         user: 'Admin Section 1'
-        pw: 'Admin'
+        pw: 'Super Admin'

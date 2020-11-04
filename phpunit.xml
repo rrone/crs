@@ -9,30 +9,30 @@
         convertWarningsToExceptions="false"
         verbose="true"
         bootstrap="tests/bootstrap.php">
-  <coverage>
-    <include>
-      <directory>src</directory>
-    </include>
-    <report>
-      <html outputDirectory="var/coverage/"/>
-    </report>
-  </coverage>
-  <php>
-    <ini name="error_reporting" value="-1"/>
-    <env name="KERNEL_CLASS" value="App\Kernel"/>
-    <env name="APP_ENV" value="test"/>
-    <env name="APP_DEBUG" value="1"/>
-    <env name="SHELL_VERBOSITY" value="-1"/>
-  </php>
-  <testsuites>
-    <testsuite name="Functional Test Suite">
-      <directory>tests</directory>
-    </testsuite>
-  </testsuites>
-  <!--    <extensions>-->
-  <!--        <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension" />-->
-  <!--    </extensions>-->
-  <!--    <listeners>-->
-  <!--        <listener class="\DAMA\DoctrineTestBundle\PHPUnit\PHPUnitListener" />-->
-  <!--    </listeners>-->
+    <coverage>
+        <include>
+            <directory>src</directory>
+        </include>
+        <report>
+            <html outputDirectory="var/coverage/"/>
+        </report>
+    </coverage>
+    <php>
+        <ini name="error_reporting" value="-1"/>
+        <env name="KERNEL_CLASS" value="App\Kernel"/>
+        <env name="APP_ENV" value="test"/>
+        <env name="APP_DEBUG" value="1"/>
+        <env name="SHELL_VERBOSITY" value="-1"/>
+    </php>
+    <testsuites>
+        <testsuite name="Functional Test Suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <extensions>
+        <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension"/>
+    </extensions>
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+    </listeners>
 </phpunit>

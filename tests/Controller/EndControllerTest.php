@@ -19,10 +19,21 @@ class EndControllerTest extends WebTestCasePlus
 
     public function testEnd()
     {
-        // instantiate the view and test it
+        $this->getNamePW('user_test');
+
+        // logon as user
+        $this->submitLoginForm($this->userName, $this->pw);
+
+        $this->assertTrue($this->client->getResponse()->isRedirection());
+        $this->client->followRedirect();
+        $this->assertEquals('/reports', $this->client->getRequest()->getPathInfo());
+
+        // logout
         $this->client->request('GET', '/end');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
         $this->client->followRedirect();
 
+        $this->client->request('GET', '/');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('/', $this->client->getRequest()->getPathInfo());
     }

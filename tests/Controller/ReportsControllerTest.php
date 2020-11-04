@@ -131,21 +131,21 @@ class ReportsControllerTest extends WebTestCasePlus
         $this->submitLoginForm($this->userName, $this->pw);
 
         $this->assertTrue($this->client->getResponse()->isRedirection());
-        $this->crawler = $this->client->followRedirect();
+        $crawler = $this->client->followRedirect();
 
         // verify view
         $view = $this->client->getResponse()->getContent();
         $this->assertStringContainsString("<h3>Notes on these reports:</h3>", $view);
 
         // verify links & test exports
-//        $this->verifyLink('Composite Referee Certifications (Highest Certification, Safe Haven & Concussion Awareness)', 'bshca');
-        $this->verifyLink('Referee Assessors', 'ra');
-        $this->verifyLink('Referee Instructors', 'ri');
-        $this->verifyLink('Referee Instructor Evaluators', 'rie');
-        $this->verifyLink('Referee Upgrade Candidates', 'ruc');
-        $this->verifyLink('Unregistered Referees', 'urr');
+        $this->verifyLink($crawler, 'Composite Referee Certifications (Highest Certification, Safe Haven & Concussion Awareness)', 'bshca');
+        $this->verifyLink($crawler, 'Referee Assessors', 'ra');
+        $this->verifyLink($crawler, 'Referee Instructors', 'ri');
+        $this->verifyLink($crawler, 'Referee Instructor Evaluators', 'rie');
+        $this->verifyLink($crawler, 'Referee Upgrade Candidates', 'ruc');
+        $this->verifyLink($crawler, 'Unregistered Referees', 'urr');
 
-        $this->assertEmpty($this->crawler->selectLink('National Referee Assessors')->getNode(0));
+        $this->assertEmpty($crawler->selectLink('National Referee Assessors')->getNode(0));
 
     }
 
@@ -156,19 +156,13 @@ class ReportsControllerTest extends WebTestCasePlus
         $this->submitLoginForm($this->userName, $this->pw);
 
         $this->assertTrue($this->client->getResponse()->isRedirection());
-        $this->crawler = $this->client->followRedirect();
+        $crawler = $this->client->followRedirect();
 
         $view = $this->client->getResponse()->getContent();
         $this->assertStringContainsString("<h3>Notes on these reports:</h3>", $view);
 
-        // verify links
-//        $this->verifyLink('Composite Referee Certifications (Highest Certification, Safe Haven & Concussion Awareness)', 'bshca');
-//        $this->verifyLink('Referee Assessors', 'ra');
-//        $this->verifyLink('Referee Instructors', 'ri');
-//        $this->verifyLink('Referee Instructor Evaluators', 'rie');
-//        $this->verifyLink('Referee Upgrade Candidates', 'ruc');
-//        $this->verifyLink('Unregistered Referees', 'urr');
-        $this->verifyLink('National Referee Assessors', 'nra');
+        // verify Admin links
+        $this->verifyLink($crawler, 'National Referee Assessors', 'nra');
     }
 
 }

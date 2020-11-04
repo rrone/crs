@@ -44,7 +44,7 @@ class AdminController extends AbstractController2
 
         $this->logStamp($request);
 
-        $request->query->set('user', $this->user);
+        $request->query->set('user', (array)$this->user);
         $response = new Response();
         $response->headers->set('admin', $this->generateUrl('admin'));
 
@@ -71,37 +71,31 @@ class AdminController extends AbstractController2
     public function handler(Request $request)
     {
         $this->user = $request->get('user');
+        $this->msg[] = '';
 
-        if ($request->isMethod('POST')) {
-            $_POST = $request->request->all();
-            $this->msg[] = '';
+        $_POST = $request->request->all();
+        foreach (array_keys($_POST) as $key) {
+            switch ($key) {
+                case 'btnAddUser':
+                    return $this->btnAddUser($_POST);
 
-            if (in_array('btnAddUser', array_keys($_POST))) {
+                case 'btnUpdate':
+                    return $this->btnUpdate($_POST);
 
-                return $this->btnAddUser($_POST);
+                case 'btnExportLog':
+                    return 'ExportLog';
 
-            } elseif (in_array('btnUpdate', array_keys($_POST))) {
+                case 'btnLogItem':
+                    if (!empty($_POST['logNote'])) {
+                        $msg = $this->user['name'] . ' note: ' . $_POST['logNote'];
+                        $this->dw->logInfo('CRS', $msg);
+                    }
+                    return 'LogItem';
 
-                return $this->btnUpdate($_POST);
-
-            } elseif (in_array('btnDone', array_keys($_POST))) {
-
-                return 'Done';
-
-            } elseif (in_array('btnExportLog', array_keys($_POST))) {
-
-                return 'ExportLog';
-
-            } elseif (in_array('btnLogItem', array_keys($_POST))) {
-
-                if (!empty($_POST['logNote'])) {
-                    $msg = $this->user->name . ' note: ' . $_POST['logNote'];
-                    $this->dw->logInfo('CRS', $msg);
-                }
-
-                return 'LogItem';
-
+                case 'btnDone':
+                    return 'Done';
             }
+
         }
 
         return null;
@@ -117,7 +111,7 @@ class AdminController extends AbstractController2
         $adminPath = $this->generateUrl('admin');
 
         $content = array(
-            'admin' => $this->user->admin,
+            'admin' => $this->user['admin'],
             'users' => $this->renderContent(),
             'action' => $adminPath,
             'messageAdd' => $this->msg['add'] ?? '',
@@ -161,36 +155,36 @@ class AdminController extends AbstractController2
         $userName = $post['userName'];
         $pw = $post['newPassword'];
 
-        if (!empty($userName) && !empty($pw)) {
-            $userData = array(
-                'name' => $userName,
-                'enabled' => true,
-            );
+        $this->msg['add'] = '';
+        if (empty($pw)) {
+            $this->msg['add'] .= "<br>Password may not be blank.";
+            $this->msgStyle['add'] = "color:#FF0000";
+        }
 
-            $this->msg['add'] = null;
-            $this->msgStyle['add'] = null;
-            $user = $this->dw->getUserByName($userName);
+        if (empty($userName)) {
+            $this->msg['add'] .= "User name may not be blank.";
+            $this->msgStyle['add'] = "color:#FF0000";
+        }
 
-            if (is_null($user)) {
-                $userData['hash'] = password_hash($pw, PASSWORD_BCRYPT);
+        $userData = array(
+            'name' => $userName,
+            'enabled' => true,
+        );
 
-                $this->dw->setUser($userData);
-                $this->dw->logInfo('CRS', $this->user->name . ": New user " . $userData['name'] . " added");
-                $this->msg['add'] = "$userName has been enabled.";
-                $this->msgStyle['add'] = "color:#000000";
-            } else {
-                $this->msg['add'] = "User already exists. Update the password below.";
-                $this->msgStyle['add'] = "color:#FF0000";
-            }
+        $this->msg['add'] = null;
+        $this->msgStyle['add'] = null;
+        $user = $this->dw->getUserByName($userName);
+
+        if (is_null($user)) {
+            $userData['hash'] = password_hash($pw, PASSWORD_BCRYPT);
+
+            $this->dw->setUser($userData);
+            $this->dw->logInfo('CRS', $this->user['name'] . ": New user " . $userData['name'] . " added");
+            $this->msg['add'] = "$userName has been enabled.";
+            $this->msgStyle['add'] = "color:#000000";
         } else {
-            if (empty($userName)) {
-                $this->msg['add'] = "User name may not be blank.";
-                $this->msgStyle['add'] = "color:#FF0000";
-            }
-            if (empty($pw)) {
-                $this->msg['add'] .= "<br>Password may not be blank.";
-                $this->msgStyle['add'] = "color:#FF0000";
-            }
+            $this->msg['add'] = "User already exists. Update the password below.";
+            $this->msgStyle['add'] = "color:#FF0000";
         }
 
         return 'AddUser';
@@ -212,24 +206,17 @@ class AdminController extends AbstractController2
 
             $user = $this->dw->getUserByName($userName);
 
-            if (is_null($user)) {
-                $userData = array(
-                    'name' => $userName,
-                    'enabled' => false,
-                );
-            } else {
-                $userData = array(
-                    'name' => $user->name,
-                    'enabled' => $user->enabled,
-                );
-            }
+            $userData = array(
+                'name' => $user->name,
+                'enabled' => $user->enabled,
+            );
 
             $userData['hash'] = password_hash($pw, PASSWORD_BCRYPT);
 
             $this->dw->setUser($userData);
 
             $this->msg['update'] = "$userName password has been updated.";
-            $this->dw->logInfo('CRS', $this->user->name . ": " . $this->msg['update']);
+            $this->dw->logInfo('CRS', $this->user['name'] . ": " . $this->msg['update']);
 
             $this->msgStyle['update'] = "color:#000000";
         } else {

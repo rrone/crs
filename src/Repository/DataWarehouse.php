@@ -107,7 +107,7 @@ class DataWarehouse
      */
     public function setUser($user)
     {
-        if (empty($user)) {
+        if(empty($user['name'])){
             return null;
         }
 
@@ -123,7 +123,7 @@ class DataWarehouse
             $stmt->execute([$newUser->name, $newUser->enabled, $newUser->hash]);
             $newUser = $this->getUserByName($newUser->name);
 
-            return $newUser->id;
+            return isset($newUser) ? $newUser->id : null;
 
         } else {
             $stmt = $this->conn->prepare("UPDATE crs_users SET `hash` = ? WHERE `id` = ?");
@@ -131,7 +131,6 @@ class DataWarehouse
 
             return $u->id;
         }
-
     }
 
     /**

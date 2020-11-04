@@ -2,18 +2,12 @@
 
 namespace Tests\Abstracts;
 
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class WebTestCasePlus extends WebTestCase
 {
     protected $c;
     protected $client;
-    protected $crawler;
     protected $userName;
     protected $pw;
 
@@ -54,42 +48,40 @@ class WebTestCasePlus extends WebTestCase
 
     protected function submitLoginForm($userName, $pwd)
     {
-        $this->client->request('GET', '/end');
-        $this->crawler = $this->client->followRedirect();
+        $this->client->followRedirects(true);
+        $crawler = $this->client->request('GET', '/end');
+        $this->client->followRedirects(false);
 
-        $form = $this->crawler->selectButton("Logon")->form(
-            [
-                'user' => $userName,
-                'passwd' => $pwd,
-            ]
-        );
+        $form = $crawler->selectButton("Logon")->form([
+            'user' => $userName,
+            'passwd' => $pwd,
+        ]);
 
         $this->client->submit($form);
-
     }
 
     protected function submitAdminForm($btn = null, $txt = '', $userName = '')
     {
-        $this->getNamePW('admin_test');
+        $this->getNamePW('dev_test');
         $this->submitLoginForm($this->userName, $this->pw);
-        $this->crawler = $this->client->request('GET', '/admin');
+        $crawler = $this->client->request('GET', '/admin');
 
-        $form = $this->crawler->selectButton($btn)->form();
+        $form = $crawler->selectButton($btn)->form();
 
         switch ($btn) {
-            case 'Add User':
+            case 'btnAddUser':
                 $form['userName'] = $userName;
                 $form['newPassword'] = $txt;
                 break;
-            case 'Update':
-                $form['selectAssignor']->select($userName);
+            case 'btnUpdate':
+                $form['selectAssignor']->setValue($userName);
                 $form['passwordInput'] = $txt;
-                $btn = null;
                 break;
-            case 'Add to Log':
+            case 'btnLogItem':
                 $form['logNote'] = $txt;
                 break;
-            case 'Done':
+            case 'btnExportLog':
+            case 'btnDone':
                 break;
         }
 
@@ -99,9 +91,9 @@ class WebTestCasePlus extends WebTestCase
 
     }
 
-    protected function verifyLink($name, $page)
+    protected function verifyLink($crawler, $name, $page)
     {
-        $link = $this->crawler->selectLink($name)->link();
+        $link = $crawler->selectLink($name)->link();
         $uri = $this->client->click($link)->getUri();
         $this->assertEquals("http://localhost/$page", $uri);
 

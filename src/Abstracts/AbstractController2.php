@@ -76,28 +76,23 @@ abstract class AbstractController2 extends AbstractController
 
     protected function logStamp(Request $request)
     {
-        if (is_null($this->session->get('admin'))) {
+        if ($this->session->get('name') == 'Super Admin') {
             return null;
         }
 
         $_GET = $request->query;
-        $uri = $request->getUri();
-        $user = isset($this->user) ? $this->user->name : 'Anonymous';
+        $uri = $request->getRequestUri();
+        $user = isset($this->user->name) ? $this->user->name : 'Anonymous';
         $post = $request->isMethod('post') ? 'with updated ref assignments' : '';
 
         switch ($uri) {
-            case $this->generateUrl('/'):
-            case $this->generateUrl('logon'):
             case '/':
             case '/logon':
-                //TODO: Why is $uri == '/adm' passing this case?
                 $logMsg = $uri != $this->generateUrl('admin') ? "$user: CRS logon" : null;
                 break;
-            case $this->generateUrl('end'):
             case '/end':
                 $logMsg = "$user: CRS log off";
                 break;
-            case $this->generateUrl('reports'):
             case '/reports':
                 if (!empty($post)) {
                     $logMsg = "$user: CRS $uri dispatched $post";

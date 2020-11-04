@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Abstracts\AbstractController2;
@@ -6,7 +7,9 @@ use App\Abstracts\AbstractController2;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\Annotation\Route;@Route::class;
+use Symfony\Component\Routing\Annotation\Route;
+
+@Route::class;
 
 class EndController extends AbstractController2
 {
@@ -26,10 +29,8 @@ class EndController extends AbstractController2
     {
         $this->logStamp($request);
 
-        if(session_status() == PHP_SESSION_ACTIVE){
-            $session = $this->request->getSession();
-            $session->invalidate();
-        }
+        $session = $this->request->getSession();
+        $session->invalidate();
 
         return $this->redirectToRoute('logon');
     }

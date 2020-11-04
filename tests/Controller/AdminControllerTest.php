@@ -45,10 +45,10 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertTrue($this->client->getResponse()->isRedirection());
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
 
-        $this->crawler = $this->client->followRedirect();
+        $this->client->followRedirect();
         $this->assertEquals('/reports', $this->client->getRequest()->getPathInfo());
 
-        $this->crawler = $this->client->followRedirect();
+        $this->client->followRedirect();
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('/', $this->client->getRequest()->getPathInfo());
     }
@@ -62,7 +62,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertTrue($this->client->getResponse()->isRedirection());
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
 
-        $this->crawler = $this->client->followRedirect();
+        $this->client->followRedirect();
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('/reports', $this->client->getRequest()->getPathInfo());
     }
@@ -73,7 +73,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->getNamePW('admin_test');
         $this->submitLoginForm($this->userName, $this->pw);
 
-        $this->crawler = $this->client->followRedirect();
+        $this->client->followRedirect();
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('/reports', $this->client->getRequest()->getPathInfo());
 
@@ -95,9 +95,16 @@ class AdminControllerTest extends WebTestCasePlus
         $userName = 'userName';
         $pwd = 'password';
 
-        $this->submitAdminForm("Add User", $pwd, $userName);
+        $this->submitAdminForm("btnAddUser", $pwd, $userName);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('/admin', $this->client->getRequest()->getPathInfo());
+
+        // test user exists
+        $this->submitAdminForm("btnAddUser", $pwd, $userName);
+        // test blank user name
+        $this->submitAdminForm("btnAddUser", $pwd, '');
+        // test blank pw
+        $this->submitAdminForm("btnAddUser", '', $userName);
 
         $u = $dw->getUserByName($userName);
         $this->assertNotEmpty($u);
@@ -111,27 +118,49 @@ class AdminControllerTest extends WebTestCasePlus
 
     }
 
-    public function xtestPWChange()
+    public function testPWChange()
     {
         $this->getNamePW('user_test');
-        $this->pw = 'Area--';
+        $userName = $this->userName;
+        $pw = 'Area--';
 
-        $this->submitAdminForm("Update", $this->pw, $this->userName);
+        $this->submitLoginForm($this->userName, $this->pw);
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $this->client->followRedirect();
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals('/reports', $this->client->getRequest()->getPathInfo());
+
+        $this->client->request('GET', '/end');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $this->client->followRedirect();
+
+        $this->submitAdminForm("btnUpdate", $pw, $userName);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('/admin', $this->client->getRequest()->getPathInfo());
 
-        $this->submitLoginForm($this->userName, $this->pw);
+        $this->submitLoginForm($userName, $pw);
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $this->client->followRedirect();
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertEquals('/', $this->client->getRequest()->getPathInfo());
+        $this->assertEquals('/reports', $this->client->getRequest()->getPathInfo());
 
         $this->getNamePW('user_test');
-        $this->submitAdminForm("Update", $this->pw, $this->userName);
+        $this->submitAdminForm("btnUpdate", $this->pw, $this->userName);
+
+        $this->submitLoginForm($this->userName, $this->pw);
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $this->client->followRedirect();
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals('/reports', $this->client->getRequest()->getPathInfo());
+
+        // test blank pw
+        $this->submitAdminForm("btnUpdate", '', $userName);
 
     }
 
     public function testLogNote()
     {
-        $this->submitAdminForm("Add to Log", 'TEST: testLogNote: add to log');
+        $this->submitAdminForm("btnLogItem", 'TEST: testLogNote: add to log');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('/admin', $this->client->getRequest()->getPathInfo());
     }
@@ -139,7 +168,7 @@ class AdminControllerTest extends WebTestCasePlus
     public function testDoneButton()
     {
         // invoke the controller action and test it
-        $this->submitAdminForm('Done');
+        $this->submitAdminForm('btnDone');
 
         $this->assertTrue($this->client->getResponse()->isRedirection());
         $this->client->followRedirect();
@@ -176,5 +205,13 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', $rpt);
     }
 
+    public function testLogExport()
+    {
+        $this->submitAdminForm('btnExportLog');
 
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $this->client->followRedirect();
+        $contentType = $this->client->getResponse()->headers->get('content-type');
+        $this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', $contentType);
+    }
 }

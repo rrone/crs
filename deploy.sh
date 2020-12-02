@@ -15,7 +15,7 @@ echo ">>> Checkout master branch from Git repository..."
 echo
 
 echo ">>> Build production assets..."
-encore production --progress
+yarn encore production --progress
 echo
 
 echo ">>> Purge development items..."

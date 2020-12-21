@@ -11,8 +11,6 @@ use App\Abstracts\AbstractController2;
 
 use Symfony\Component\Routing\Annotation\Route;
 
-@Route::class;
-
 class LogonController extends AbstractController2
 {
     private $url;
@@ -90,7 +88,7 @@ class LogonController extends AbstractController2
         return null;
     }
 
-    public function renderPage()
+    public function renderPage(): array
     {
 
         $content = array(
@@ -105,7 +103,7 @@ class LogonController extends AbstractController2
         return $content;
     }
 
-    protected function renderContent()
+    protected function renderContent(): ?string
     {
         $html = null;
 
@@ -144,7 +142,7 @@ EOD;
         return $html;
     }
 
-    public function selectedUsers($users)
+    public function selectedUsers($users): ?string
     {
         $options = null;
 

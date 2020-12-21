@@ -6,7 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
-        "laminas/laminas-code": "3.4.*",
+        "laminas/laminas-code": "3.5.*",
         "laminas/laminas-eventmanager": "3.3.*",
         "phpoffice/phpspreadsheet": "1.*",
         "sensio/framework-extra-bundle": "5.6.*",
@@ -30,7 +30,7 @@
         "symfony/yaml": "5.2.*"
     },
     "require-dev": {
-        "dama/doctrine-test-bundle": "6.4.*",
+        "dama/doctrine-test-bundle": "6.5.*",
         "phpunit/phpunit": "9.5.*",
         "symfony/apache-pack": "1.*",
         "symfony/browser-kit": "5.2.*",

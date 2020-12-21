@@ -11,8 +11,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 use Symfony\Component\Routing\Annotation\Route;
 
-@Route::class;
-
 class AdminController extends AbstractController2
 {
     private $super;

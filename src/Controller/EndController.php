@@ -9,8 +9,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 
-@Route::class;
-
 class EndController extends AbstractController2
 {
     public function __construct(RequestStack $requestStack)

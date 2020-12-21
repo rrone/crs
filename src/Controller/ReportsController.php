@@ -10,8 +10,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 use Symfony\Component\Routing\Annotation\Route;
 
-@Route::class;
-
 use App\Abstracts\AbstractController2;
 
 class ReportsController extends AbstractController2

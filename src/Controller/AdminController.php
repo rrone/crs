@@ -30,13 +30,13 @@ class AdminController extends AbstractController2
     /**
      * @Route("/admin", name="admin" )
      * @param Request $request
-     * @return RedirectResponse|null
+     * @return RedirectResponse|Response
      * @throws Exception
      * @throws \Doctrine\DBAL\Driver\Exception
      */
     public function index(Request $request)
     {
-        if (!$this->isAuthorized() || !$this->user->admin) {
+        if (!$this->isAuthorized() && !$this->super) {
             return $this->redirectToRoute('reports');
         }
 
@@ -66,7 +66,7 @@ class AdminController extends AbstractController2
      * @throws Exception
      * @throws \Doctrine\DBAL\Driver\Exception
      */
-    public function handler(Request $request)
+    public function handler(Request $request): ?string
     {
         $this->user = $request->get('user');
         $this->msg[] = '';
@@ -127,7 +127,7 @@ class AdminController extends AbstractController2
      * @return array
      * @throws Exception
      */
-    protected function renderContent()
+    protected function renderContent(): array
     {
         $users = $this->dw->getAllUsers();
 
@@ -148,7 +148,7 @@ class AdminController extends AbstractController2
      * @throws Exception
      * @throws \Doctrine\DBAL\Driver\Exception
      */
-    protected function btnAddUser(array $post)
+    protected function btnAddUser(array $post): string
     {
         $userName = $post['userName'];
         $pw = $post['newPassword'];
@@ -195,7 +195,7 @@ class AdminController extends AbstractController2
      * @throws Exception
      * @throws \Doctrine\DBAL\Driver\Exception
      */
-    protected function btnUpdate(array $post)
+    protected function btnUpdate(array $post): string
     {
         $userName = $post['selectAssignor'];
         $pw = $post['passwordInput'];

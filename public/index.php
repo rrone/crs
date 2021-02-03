@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 require dirname(__DIR__).'/config/bootstrap.php';
 
 (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
-ini_set("display_errors", 1);
 
 if ($_SERVER['APP_ENV'] === 'dev') {
     umask(0000);
@@ -17,8 +16,9 @@ if ($_SERVER['APP_ENV'] === 'dev') {
     ini_set('xdebug.var_display_max_children', -1);
     ini_set('xdebug.var_display_max_data', -1);
 
+    ini_set("display_errors", 1);
     ini_set('max_execution_time', 600);
-    ini_set('max_input_time', 600);
+    ini_set('memory_limit', '2G');
 
     Debug::enable();
 

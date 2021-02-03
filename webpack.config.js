@@ -11,7 +11,7 @@ Encore
 
     // copy image files to build folder
     .copyFiles({
-        from: "./assets/images"
+        from: "./assets/images/"
     })
 
     /*

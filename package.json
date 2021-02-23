@@ -16,6 +16,7 @@
     "datatables.net-dt": "^1.10.21",
     "jquery": "^3.5.0",
     "minimist": "^1.2.5",
+    "node-notifier": "^8.0.1",
     "object-path": "^0.11.5",
     "popper.js": "^1.16.1",
     "require": "^2.4.20",
@@ -23,9 +24,9 @@
     "uglify-js": "^3.10.4"
   },
   "devDependencies": {
-    "@symfony/webpack-encore": "^0.31.0",
+    "@symfony/webpack-encore": "^1.1.1",
     "core-js": "^3.6.5",
     "regenerator-runtime": "^0.13.7",
-    "webpack-notifier": "^1.8.0"
+    "webpack-notifier": "^1.13.0"
   }
 }

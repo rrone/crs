@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 ## Exit immediately if a command exits with a non-zero status.
 set -e
-#set distribution folder alias
-dev="$HOME"/Sites/AYSO/_dev/crs
-prod="$HOME"/Sites/AYSO/_services/crs
-config="$HOME"/Sites/AYSO/_dev/crs/config
-PHP=/usr/local/etc/php/7.4/conf.d
+#set folder aliases
+ayso="$HOME"/Sites/AYSO
+dev="${ayso}"/_dev/crs
+config="${dev}"/config
+
+prod="${ayso}"/_services/crs.ayso1ref.com
+
+PHP=/usr/local/etc/php/8.0/conf.d
 
 ## clear the screen
 printf "\033c"
@@ -28,29 +31,30 @@ fi
 echo ">>> Clear distribution folder..."
 rm -rf "${prod:?}"
 mkdir "${prod}"
+mkdir "${prod}"/crs
 echo
 
 echo ">>> Copying app to distribution..."
-cp ./.env.dist "${prod}"/.env
-cp -f ./*.json "${prod}"
-cp -f ./*.lock "${prod}"
+cp ./.env.dist "${prod}"/crs/.env
+cp -f ./*.json "${prod}"/crs
+cp -f ./*.lock "${prod}"/crs
 
-mkdir "${prod}"/bin
-cp bin/console "${prod}"/bin
+mkdir "${prod}"/crs/bin
+cp bin/console "${prod}"/crs/bin
 
 echo ">>> Copying config to distribution..."
-cp -rf "${config}" "${prod}"
+cp -rf "${config}" "${prod}"/crs
 
 echo ">>> Clear distribution config..."
-rm -rf "${prod}"/config/packages/dev
-rm -rf "${prod}"/config/packages/test
-rm -rf "${prod}"/config/routes/dev
+rm -rf "${prod}"/crs/config/packages/dev
+rm -rf "${prod}"/crs/config/packages/test
+rm -rf "${prod}"/crs/config/routes/dev
 
-cp -rf public "${prod}"
-cp -rf src "${prod}"
-mkdir  "${prod}"/var
-cp -rf var/xlsx/ "${prod}"/var/xlsx/
-cp -rf templates "${prod}"
+cp -rf public "${prod}/crs"
+cp -rf src "${prod}/crs"
+mkdir  "${prod}"/crs/var
+cp -rf var/xlsx/ "${prod}"/crs/var/xlsx/
+cp -rf templates "${prod}"/crs
 echo
 
 echo ">>> Removing OSX jetsam..."
@@ -58,10 +62,10 @@ find "${prod}" -type f -name '.DS_Store' -delete
 echo
 
 echo ">>> Removing development jetsam..."
-find "${prod}"/src -type f -name '*Test.php' -delete
+find "${prod}"/crs/src -type f -name '*Test.php' -delete
 echo
 
-cd "${prod}"
+cd "${prod}"/crs
     yarn install --prod=true
     composer install --no-dev
 
@@ -70,6 +74,8 @@ cd "${prod}"
     rm -f -r ./webpack.config.js
 
     bin/console cache:clear
+
+    ln -s public ../public_html
 
 cd "${dev}"
 

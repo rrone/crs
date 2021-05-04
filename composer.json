@@ -9,7 +9,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "laminas/laminas-code": "3.*",
-        "laminas/laminas-eventmanager": "3.3.*",
+        "laminas/laminas-eventmanager": "3.*",
         "phpoffice/phpspreadsheet": "1.*",
         "sensio/framework-extra-bundle": "5.6.*",
         "symfony/asset": "5.2.*",

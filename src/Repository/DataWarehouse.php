@@ -16,9 +16,9 @@ class DataWarehouse
     /**
      * @var Connection $conn
      */
-    protected $conn;
+    protected Connection $conn;
 
-    protected $root;
+    protected string $root;
 
     /**
      * @const BIGINT
@@ -38,7 +38,7 @@ class DataWarehouse
     /**
      * @return int
      */
-    public function bigLimit()
+    public function bigLimit(): int
     {
         return self::BIGINT;
     }
@@ -47,7 +47,7 @@ class DataWarehouse
      * @param $elem
      * @return null|object
      */
-    private function getZero($elem)
+    private function getZero($elem): ?object
     {
         return isset($elem[0]) ? (object)$elem[0] : null;
     }
@@ -58,7 +58,7 @@ class DataWarehouse
      * @return array
      * @throws Doctrine\DBAL\Exception
      */
-    public function getAllUsers()
+    public function getAllUsers(): array
     {
 
         return $this->conn->fetchAllAssociative('SELECT * FROM crs_users');
@@ -69,7 +69,7 @@ class DataWarehouse
      * @return null|object
      * @throws Doctrine\DBAL\Exception
      */
-    public function getUserByName($name)
+    public function getUserByName($name): ?object
     {
         if (empty($name)) {
             return null;
@@ -86,15 +86,14 @@ class DataWarehouse
      * @return null|object
      * @throws Doctrine\DBAL\Driver\Exception|Doctrine\DBAL\Exception
      */
-    public function getUserByHash($hash)
+    public function getUserByHash($hash): ?object
     {
         if (empty($hash)) {
             return null;
         }
 
         $stmt = $this->conn->prepare("SELECT * FROM crs_users WHERE `hash` LIKE ?");
-        $stmt->execute([$hash]);
-        $user = $stmt->fetchAllAssociative();
+        $user = $stmt->executeQuery([$hash])->fetchAllAssociative();
 
         return $this->getZero($user);
 
@@ -120,14 +119,14 @@ class DataWarehouse
             );
 
             $stmt = $this->conn->prepare("INSERT INTO crs_users (`name`, `enabled`, `hash`) VALUES (?, ?, ?)");
-            $stmt->execute([$newUser->name, $newUser->enabled, $newUser->hash]);
+            $stmt->executeQuery([$newUser->name, $newUser->enabled, $newUser->hash]);
             $newUser = $this->getUserByName($newUser->name);
 
             return isset($newUser) ? $newUser->id : null;
 
         } else {
             $stmt = $this->conn->prepare("UPDATE crs_users SET `hash` = ? WHERE `id` = ?");
-            $stmt->execute([$user['hash'], (int)$u->id]);
+            $stmt->executeQuery([$user['hash'], (int)$u->id]);
 
             return $u->id;
         }
@@ -145,7 +144,7 @@ class DataWarehouse
             return null;
         }
         $stmt = $this->conn->prepare("DELETE FROM crs_users WHERE `name` = ?");
-        $stmt->execute([$user->name]);
+        $stmt->executeQuery([$user->name]);
 
         return null;
     }
@@ -156,7 +155,7 @@ class DataWarehouse
      * @return mixed
      * @throws Doctrine\DBAL\Exception
      */
-    public function getHighestRefCerts($userKey, $limit = self::BIGINT)
+    public function getHighestRefCerts($userKey, int $limit = self::BIGINT): array
     {
         return $this->conn->fetchAllAssociative(
             "
@@ -174,10 +173,10 @@ class DataWarehouse
     /**
      * @param mixed $userKey
      * @param integer $limit
-     * @return mixed
+     * @return array[]
      * @throws Doctrine\DBAL\Exception
      */
-    public function getRefAssessors($userKey = '', $limit = self::BIGINT)
+    public function getRefAssessors($userKey = '', int $limit = self::BIGINT): array
     {
         return $this->conn->fetchAllAssociative(
             "
@@ -192,10 +191,10 @@ class DataWarehouse
     /**
      * @param mixed $userKey
      * @param integer $limit
-     * @return mixed
+     * @return array[]
      * @throws Doctrine\DBAL\Exception
      */
-    public function getRefNationalAssessors($userKey = '', $limit = self::BIGINT)
+    public function getRefNationalAssessors($userKey = '', int $limit = self::BIGINT): array
     {
         return $this->conn->fetchAllAssociative(
             "
@@ -213,7 +212,7 @@ class DataWarehouse
      * @return mixed
      * @throws Doctrine\DBAL\Exception
      */
-    public function getRefInstructors($userKey = '', $limit = self::BIGINT)
+    public function getRefInstructors($userKey = '', int $limit = self::BIGINT): array
     {
         return $this->conn->fetchAllAssociative(
             "
@@ -231,7 +230,7 @@ class DataWarehouse
      * @return mixed
      * @throws Doctrine\DBAL\Exception
      */
-    public function getRefInstructorEvaluators($userKey = '', $limit = self::BIGINT)
+    public function getRefInstructorEvaluators($userKey = '', int $limit = self::BIGINT): array
     {
         return $this->conn->fetchAllAssociative(
             "
@@ -250,7 +249,7 @@ class DataWarehouse
      * @return mixed
      * @throws Doctrine\DBAL\Exception
      */
-    public function getRefUpgradeCandidates($userKey = '', $limit = self::BIGINT)
+    public function getRefUpgradeCandidates($userKey = '', int $limit = self::BIGINT): array
     {
         return $this->conn->fetchAllAssociative(
             "
@@ -268,7 +267,7 @@ class DataWarehouse
      * @return mixed
      * @throws Doctrine\DBAL\Exception
      */
-    public function getUnregisteredRefs($userKey = '', $limit = self::BIGINT)
+    public function getUnregisteredRefs($userKey = '', int $limit = self::BIGINT) : array
     {
         return $this->conn->fetchAllAssociative(
             "
@@ -290,7 +289,7 @@ class DataWarehouse
      * @return mixed
      * @throws Doctrine\DBAL\Exception
      */
-    public function getRefsConcussion($userKey = '', $limit = self::BIGINT)
+    public function getRefsConcussion($userKey = '', int $limit = self::BIGINT): array
     {
         return $this->conn->fetchAllAssociative(
             "
@@ -308,7 +307,7 @@ class DataWarehouse
      * @return mixed
      * @throws Doctrine\DBAL\Exception
      */
-    public function getSafeHavenRefs($userKey = '', $limit = self::BIGINT)
+    public function getSafeHavenRefs($userKey = '', int $limit = self::BIGINT): array
     {
         return $this->conn->fetchAllAssociative(
             "
@@ -326,7 +325,7 @@ class DataWarehouse
      * @return mixed
      * @throws Doctrine\DBAL\Exception
      */
-    public function getCompositeRefCerts($userKey = '', $limit = self::BIGINT)
+    public function getCompositeRefCerts($userKey = '', int $limit = self::BIGINT): array
     {
         return $this->conn->fetchAllAssociative(
             "
@@ -345,10 +344,10 @@ class DataWarehouse
     /**
      * @param mixed $userKey
      * @param integer $limit
-     * @return mixed
+     * @return array[]
      * @throws Doctrine\DBAL\Exception
      */
-    public function getRefsWithNoBSCerts($userKey = '', $limit = self::BIGINT)
+    public function getRefsWithNoBSCerts($userKey = '', int $limit = self::BIGINT): array
     {
         return $this->conn->fetchAllAssociative(
             "
@@ -365,10 +364,10 @@ class DataWarehouse
     }
 
     /**
-     * @return mixed
+     * @return array[]
      * @throws Doctrine\DBAL\Exception
      */
-    public function getReports()
+    public function getReports(): array
     {
         return $this->conn->fetchAllAssociative(
             "
@@ -380,10 +379,10 @@ class DataWarehouse
     }
 
     /**
-     * @return mixed
+     * @return array[]
      * @throws Doctrine\DBAL\Exception
      */
-    public function getReportNotes()
+    public function getReportNotes(): array
     {
         return $this->conn->fetchAllAssociative(
             "
@@ -444,10 +443,10 @@ class DataWarehouse
     }
 
     /**
-     * @return mixed[]
+     * @return array
      * @throws Doctrine\DBAL\Exception
      */
-    public function getAccessLog()
+    public function getAccessLog(): array
     {
         return $this->conn->fetchAllAssociative("SELECT * FROM crs_log");
     }

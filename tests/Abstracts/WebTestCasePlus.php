@@ -2,14 +2,16 @@
 
 namespace Tests\Abstracts;
 
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class WebTestCasePlus extends WebTestCase
 {
-    protected $c;
-    protected $client;
-    protected $userName;
-    protected $pw;
+    protected ContainerInterface $c;
+    protected ?KernelBrowser $client;
+    protected string $userName;
+    protected string $pw;
 
     protected function setUp(): void
     {

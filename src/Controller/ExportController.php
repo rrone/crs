@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,6 +40,7 @@ class ExportController extends AbstractController2
      * @Route("/nra", name="nra")
      * @param Request $request
      * @return RedirectResponse|Response
+     * @throws Exception
      */
     public function invoke(Request $request)
     {

@@ -8,6 +8,7 @@ use DateTimeZone;
 use App\Repository\DataWarehouse;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,13 +18,13 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 abstract class AbstractController2 extends AbstractController
 {
     /** @var Connection */
-    protected $conn;
+    protected Connection $conn;
 
     /** @var Request */
-    protected $request;
+    protected Request $request;
 
     /** @var DataWarehouse */
-    protected $dw;
+    protected DataWarehouse $dw;
 
     /**
      * @var SessionInterface
@@ -31,13 +32,30 @@ abstract class AbstractController2 extends AbstractController
     protected $session;
 
     //shared variables
+    /**
+     * @var mixed|stdClass
+     */
     protected $user;
 
     //view variables
-    protected $page_title;
-    protected $msg;
-    protected $msgStyle;
+    /**
+     * @var string
+     */
+    protected string $page_title;
+    /**
+     * @var array|string[]
+     */
+    protected array $msg;
+    /**
+     * @var array|string[]
+     */
+    protected array $msgStyle;
 
+    /**
+     * AbstractController2 constructor
+     * @param RequestStack $requestStack
+     * @throws \Exception
+     */
     public function __construct(RequestStack $requestStack)
     {
         global $kernel;
@@ -59,7 +77,10 @@ abstract class AbstractController2 extends AbstractController
 
     }
 
-    protected function isAuthorized()
+    /**
+     * @return bool|null
+     */
+    protected function isAuthorized(): ?bool
     {
         if (!$this->session->get('authed')) {
             return null;
@@ -74,6 +95,11 @@ abstract class AbstractController2 extends AbstractController
         return true;
     }
 
+    /**
+     * @param Request $request
+     * @return null
+     * @throws \Exception
+     */
     protected function logStamp(Request $request)
     {
         if ($this->session->get('name') == 'Super Admin') {
@@ -82,7 +108,7 @@ abstract class AbstractController2 extends AbstractController
 
         $_GET = $request->query;
         $uri = $request->getRequestUri();
-        $user = isset($this->user->name) ? $this->user->name : 'Anonymous';
+        $user = $this->user->name ?? 'Anonymous';
         $post = $request->isMethod('post') ? 'with updated ref assignments' : '';
 
         switch ($uri) {
@@ -113,7 +139,11 @@ abstract class AbstractController2 extends AbstractController
 
     }
 
-    protected function getUpdateTimestamp()
+    /**
+     * @return string
+     * @throws Exception
+     */
+    protected function getUpdateTimestamp(): string
     {
         $utc = $this->dw->getUpdateTimestamp();
 
@@ -123,7 +153,11 @@ abstract class AbstractController2 extends AbstractController
         return $ts->format('Y-m-d H:i T');
     }
 
-    protected function getBaseContent()
+    /**
+     * @return array
+     * @throws Exception
+     */
+    protected function getBaseContent(): array
     {
         return array(
             'root' => $this->generateUrl('logon'),

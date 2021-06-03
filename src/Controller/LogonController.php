@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +19,7 @@ class LogonController extends AbstractController2
     /**
      * LogonController constructor.
      * @param RequestStack $requestStack
+     * @throws Exception
      */
     public function __construct(RequestStack $requestStack)
     {
@@ -28,6 +30,7 @@ class LogonController extends AbstractController2
      * @Route("/", name="logon")
      * @Route("/logon", name="/")
      * @return RedirectResponse|Response
+     * @throws Exception
      */
     public function index()
     {
@@ -95,12 +98,10 @@ class LogonController extends AbstractController2
             'content' => $this->renderContent(),
             'users' => $this->url,
             'message' => $this->msg[0],
-            'admin' => isset($this->user->admin) ? $this->user->admin : false,
+            'admin' => $this->user->admin ?? false,
         );
 
-        $content = array_merge($content, $this->getBaseContent());
-
-        return $content;
+        return array_merge($content, $this->getBaseContent());
     }
 
     protected function renderContent(): ?string

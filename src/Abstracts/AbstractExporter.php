@@ -154,7 +154,7 @@ abstract class AbstractExporter
         //get data
         $data = $content['data'];
         //get options (if any)
-        $options = isset($content['options']) ? $content['options'] : null;
+        $options = $content['options'] ?? null;
 
         //select active sheet
         $this->ws = $this->objPHPExcel->getActiveSheet();

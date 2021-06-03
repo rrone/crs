@@ -15,9 +15,9 @@ use App\Abstracts\AbstractController2;
 class ReportsController extends AbstractController2
 {
     /**
-     * @var
+     * @var bool
      */
-    private $super;
+    private bool $super;
 
     /**
      * ReportsController constructor.
@@ -33,6 +33,7 @@ class ReportsController extends AbstractController2
      * @Route("/reports", name="reports")
      * @param Request $request
      * @return RedirectResponse|Response
+     * @throws \Doctrine\DBAL\Exception
      */
     public function index(Request $request)
     {
@@ -51,8 +52,9 @@ class ReportsController extends AbstractController2
 
     /**
      * @return Response
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function renderPage()
+    public function renderPage(): Response
     {
         $content = array(
             'admin' => $this->user->admin,
@@ -69,8 +71,9 @@ class ReportsController extends AbstractController2
 
     /**
      * @return string|null
+     * @throws \Doctrine\DBAL\Exception
      */
-    protected function renderContent()
+    protected function renderContent(): ?string
     {
         $html = null;
 

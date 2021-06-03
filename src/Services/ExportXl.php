@@ -14,19 +14,14 @@ use DateTime;
 use DateTimeZone;
 use Exception;
 
-use Symfony\Component\Routing\Annotation\Route;
-@Route::class;
-
 define("xlsxFile", realpath(__DIR__.'/../../var/xlsx/CompositeRefCerts.xlsx'));
 
 class ExportXl extends AbstractExporter
 {
     /* @var DataWarehouse */
-    private $dw;
+    private DataWarehouse $dw;
 
-    private $outFileName;
-    private $user;
-    private $baseURL;
+    private string $outFileName;
 
     /**
      * ExportXl constructor.
@@ -48,16 +43,17 @@ class ExportXl extends AbstractExporter
     /**
      * @param Request $request
      * @return Response
+     * @throws \Doctrine\DBAL\Exception
      */
     public function invoke(Request $request)
     {
-        $this->user = $request->request->get('user');
-        $this->baseURL = $request->request->get('baseURL');
+        $user1 = (object) $request->request->get('user');
+        $baseURL = $request->request->get('baseURL');
 
-        if ($this->user->admin) {
+        if ($user1->admin) {
             $userKey = '%%';
         } else {
-            $key = explode(' ', $this->user->name);
+            $key = explode(' ', $user1->name);
             $userKey = end($key);
             $userKey = $userKey == '10' ? '1' : $userKey;
         }
@@ -69,7 +65,7 @@ class ExportXl extends AbstractExporter
 
         $uri = str_replace('/', '', $uri);
 
-        $user = explode(' ', $this->user->name);
+        $user = explode(' ', $user1->name);
         $u = strtoupper(str_replace('/', '', end($user)));
 
         switch ($uri) {
@@ -116,7 +112,7 @@ class ExportXl extends AbstractExporter
                 break;
             // @codeCoverageIgnoreEnd
             case 'nra':
-                if ($this->user->admin) {
+                if ($user1->admin) {
                     $this->outFileName = "NationalRefAssessors.$u.$this->outFileName";
                     $results = $this->dw->getRefNationalAssessors($userKey, $limit);
                 } else {
@@ -135,10 +131,10 @@ class ExportXl extends AbstractExporter
 
         // generate the response
         if (is_null($results)) {
-            return new RedirectResponse($this->baseURL);
+            return new RedirectResponse($baseURL);
         } else {
             $content = null;
-            if ((bool) $this->user->section && $uri == 'bshca') {
+            if ($user1->section && $uri == 'bshca') {
                 // @codeCoverageIgnoreStart
                 if ($_SERVER['APP_ENV'] === 'dev') {
                     $this->generateExport($content, $results);
@@ -173,14 +169,14 @@ class ExportXl extends AbstractExporter
     /**
      * @param $content
      * @param array $certs
-     * @return array | null
+     * @return void
      */
-    private function generateExport(&$content, array $certs)
+    private function generateExport(&$content, array $certs): void
     {
         // @codeCoverageIgnoreStart
         if (is_null($certs) or empty($certs)) {
             $content['report']['data'] = array('There was an error generating your report.');
-            return null;
+            return;
         }
         // @codeCoverageIgnoreEnd
 
@@ -228,11 +224,9 @@ class ExportXl extends AbstractExporter
             $content['report']['options']['freezePane'] = 'A2';
             $content['report']['options']['horizontalAlignment'] = ['B1:Z' => 'left'];
             $content['report']['options']['selectRange'] = 'A2';
-        } else {
-            return null;
+
         }
 
-        return $content;
     }
 
 }

@@ -1,4 +1,5 @@
 framework:
     test: true
     session:
+        enabled: true
         storage_id: session.storage.mock_file

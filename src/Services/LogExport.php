@@ -4,15 +4,23 @@ namespace App\Services;
 
 use App\Repository\DataWarehouse;
 use App\Abstracts\AbstractExporter;
+use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 class LogExport extends AbstractExporter
 {
     /* @var DataWarehouse */
-    private $dw;
+    private DataWarehouse $dw;
 
-    private $outFileName;
+    /**
+     * @var string
+     */
+    private string $outFileName;
 
+    /**
+     * LogExport constructor.
+     * @param DataWarehouse $dataWarehouse
+     */
     public function __construct(DataWarehouse $dataWarehouse)
     {
         parent::__construct('xls');
@@ -22,7 +30,11 @@ class LogExport extends AbstractExporter
         $this->outFileName = 'Log_'.date('Ymd_His').'.'.$this->getFileExtension();
     }
 
-    public function handler()
+    /**
+     * @return Response
+     * @throws Exception
+     */
+    public function handler(): Response
     {
         // generate the response
         $response = new Response();
@@ -37,7 +49,12 @@ class LogExport extends AbstractExporter
         return $response;
     }
 
-    public function generateAccessLogData(&$content)
+    /**
+     * @param $content
+     * @return array
+     * @throws Exception
+     */
+    public function generateAccessLogData(&$content): array
     {
         $log = $this->dw->getAccessLog();
 

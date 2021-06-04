@@ -19,13 +19,13 @@ use PhpOffice\PhpSpreadsheet\Style\Protection;
 
 abstract class AbstractExporter
 {
-    private $format;
-    private $objPHPExcel;
+    private string $format;
+    private PhpSpreadsheet\Spreadsheet $objPHPExcel;
 
-    public $fileExtension;
-    public $contentType;
+    public string $fileExtension;
+    public string $contentType;
 
-    protected $ws;
+    protected PhpSpreadsheet\Worksheet\Worksheet $ws;
 
     public function __construct($format)
     {
@@ -43,7 +43,7 @@ abstract class AbstractExporter
         }
     }
 
-    public function getFileExtension()
+    public function getFileExtension(): string
     {
         return $this->fileExtension;
     }
@@ -52,7 +52,7 @@ abstract class AbstractExporter
      * @param $content
      * @return null|string
      */
-    public function export($content)
+    public function export($content): ?string
     {
         switch ($this->format) {
             case 'xls':
@@ -94,7 +94,7 @@ abstract class AbstractExporter
 //
 //    }
 
-    public function is_asso($a)
+    public function is_asso($a): bool
     {
         foreach (array_keys($a) as $key) {
             if (!is_int($key)) {
@@ -137,7 +137,7 @@ abstract class AbstractExporter
 
     }
 
-    private function pregMatch($rng)
+    private function pregMatch($rng): string
     {
         preg_match('/(.+[a-zA-Z])/', $rng, $matches);
 
@@ -160,7 +160,7 @@ abstract class AbstractExporter
         $this->ws = $this->objPHPExcel->getActiveSheet();
 
         //load data into sheet
-        $this->ws->fromArray($data, null, 'A1');
+        $this->ws->fromArray($data);
 
         //auto-size columns
         foreach (range('A', $this->ws->getHighestDataColumn()) as $col) {

@@ -3,12 +3,17 @@
 namespace Tests\Controller;
 
 use App\Repository\DataWarehouse;
+use Generator;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Tests\Abstracts\WebTestCasePlus;
 
 class AdminControllerTest extends WebTestCasePlus
 {
 
     /**
+     * @runInSeparateProcess
+     * @Security("!has_role('ROLE_USER')")
      * @dataProvider provideAdminUrls
      * @param $url
      */
@@ -18,16 +23,20 @@ class AdminControllerTest extends WebTestCasePlus
 
         $this->submitLoginForm($this->userName, $this->pw);
 
+        $this->expectException(AccessDeniedException::class);
         $this->client->request('GET', $url);
 
         $this->assertResponseIsSuccessful();
     }
 
-    public function provideAdminUrls()
+    public function provideAdminUrls(): Generator
     {
         yield ['/admin'];
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testInvalidLogin()
     {
         // invoke the controller action and test it
@@ -38,9 +47,13 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertStringNotContainsString("Password may not be blank", $view);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testAdminAsAnonymous()
     {
         // instantiate the view and test it
+        $this->expectException(AccessDeniedException::class);
         $this->client->request('GET', '/admin');
         $this->assertTrue($this->client->getResponse()->isRedirection());
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
@@ -53,6 +66,9 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertEquals('/', $this->client->getRequest()->getPathInfo());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testAdminAsUser()
     {
         // invoke the controller action and test it
@@ -67,6 +83,9 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertEquals('/reports', $this->client->getRequest()->getPathInfo());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testAdminAsAdmin()
     {
         // invoke the controller action and test it
@@ -78,6 +97,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertEquals('/reports', $this->client->getRequest()->getPathInfo());
 
         // verify view
+        $this->expectException(AccessDeniedException::class);
         $this->client->request('GET', '/admin');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('/admin', $this->client->getRequest()->getPathInfo());
@@ -85,6 +105,9 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertStringContainsString("<h1>Administrative Functions</h1>", $view);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testNewPW()
     {
         global $kernel;
@@ -95,6 +118,7 @@ class AdminControllerTest extends WebTestCasePlus
         $userName = 'userName';
         $pwd = 'password';
 
+        $this->expectException(AccessDeniedException::class);
         $this->submitAdminForm("btnAddUser", $pwd, $userName);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('/admin', $this->client->getRequest()->getPathInfo());
@@ -108,7 +132,7 @@ class AdminControllerTest extends WebTestCasePlus
 
         $u = $dw->getUserByName($userName);
         $this->assertNotEmpty($u);
-        if(!empty($u)) {
+        if (!empty($u)) {
             $this->assertEquals($u->name, $userName);
             $this->assertTrue(password_verify($pwd, $u->hash));
         }
@@ -118,6 +142,9 @@ class AdminControllerTest extends WebTestCasePlus
 
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testPWChange()
     {
         $this->getNamePW('user_test');
@@ -134,6 +161,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
         $this->client->followRedirect();
 
+        $this->expectException(AccessDeniedException::class);
         $this->submitAdminForm("btnUpdate", $pw, $userName);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('/admin', $this->client->getRequest()->getPathInfo());
@@ -158,16 +186,24 @@ class AdminControllerTest extends WebTestCasePlus
 
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testLogNote()
     {
+        $this->expectException(AccessDeniedException::class);
         $this->submitAdminForm("btnLogItem", 'TEST: testLogNote: add to log');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('/admin', $this->client->getRequest()->getPathInfo());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testDoneButton()
     {
         // invoke the controller action and test it
+        $this->expectException(AccessDeniedException::class);
         $this->submitAdminForm('btnDone');
 
         $this->assertTrue($this->client->getResponse()->isRedirection());
@@ -178,6 +214,9 @@ class AdminControllerTest extends WebTestCasePlus
 
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testLogExportAsUser()
     {
         // invoke the controller action and test it
@@ -192,6 +231,9 @@ class AdminControllerTest extends WebTestCasePlus
 
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testLogExportAsAdmin()
     {
         // invoke the controller action and test it
@@ -205,8 +247,12 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', $rpt);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testLogExport()
     {
+        $this->expectException(AccessDeniedException::class);
         $this->submitAdminForm('btnExportLog');
 
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());

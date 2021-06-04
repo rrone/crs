@@ -5,11 +5,13 @@ namespace Tests\Controller;
 use App\Controller\ReportsController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Tests\Abstracts\WebTestCasePlus;
 
 class ReportsControllerTest extends WebTestCasePlus
 {
     /**
+     * @runInSeparateProcess
      * @dataProvider providePageUrls
      * @param $url
      */
@@ -18,6 +20,12 @@ class ReportsControllerTest extends WebTestCasePlus
         $this->getNamePW('admin_test');
         $this->submitLoginForm($this->userName, $this->pw);
 
+        switch ($url) {
+            case '/admin':
+                $this->expectException(AccessDeniedException::class);
+                break;
+            default:
+        }
         $page = $this->client->request('GET', $url);
 
         switch ($url) {
@@ -41,6 +49,7 @@ class ReportsControllerTest extends WebTestCasePlus
     }
 
     /**
+     * @runInSeparateProcess
      * @dataProvider provideReportUrls
      * @param $url
      */
@@ -69,6 +78,7 @@ class ReportsControllerTest extends WebTestCasePlus
     }
 
     /**
+     * @runInSeparateProcess
      * @dataProvider provideRedirectUrls
      * @param $url
      */
@@ -111,6 +121,9 @@ class ReportsControllerTest extends WebTestCasePlus
         $this->assertTrue($controller instanceof AbstractController);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testReportsAsAnonymous()
     {
         // instantiate the view and test it
@@ -124,6 +137,9 @@ class ReportsControllerTest extends WebTestCasePlus
         $this->assertEquals('/', $this->client->getRequest()->getPathInfo());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testReportsAsUser()
     {
         $this->getNamePW('user_test');
@@ -149,6 +165,9 @@ class ReportsControllerTest extends WebTestCasePlus
 
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testReportsAsAdmin()
     {
         $this->getNamePW('admin_test');

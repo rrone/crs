@@ -17,6 +17,9 @@ class EndControllerTest extends WebTestCasePlus
         $this->assertTrue($controller instanceof AbstractController);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testEnd()
     {
         $this->getNamePW('user_test');

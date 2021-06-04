@@ -22,6 +22,7 @@ class ReportsController extends AbstractController2
     /**
      * ReportsController constructor.
      * @param RequestStack $requestStack
+     * @throws Exception
      */
     public function __construct(RequestStack $requestStack)
     {

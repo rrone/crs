@@ -18,8 +18,6 @@ class DataWarehouse
      */
     protected Connection $conn;
 
-    protected string $root;
-
     /**
      * @const BIGINT
      */

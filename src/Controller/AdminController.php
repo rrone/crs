@@ -13,11 +13,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends AbstractController2
 {
-    private $super;
+    private bool $super;
 
     /**
      * AdminController constructor
      * @param RequestStack $requestStack
+     * @throws \Exception
      */
     public function __construct(RequestStack $requestStack)
     {

@@ -3,6 +3,7 @@
 namespace Tests\Controller;
 
 use App\Controller\LogonController;
+use Generator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Tests\Abstracts\WebTestCasePlus;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -10,6 +11,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class LogonControllerTest extends WebTestCasePlus
 {
     /**
+     * @runInSeparateProcess
      * @dataProvider provideHomeUrls
      * @param $url
      */
@@ -20,13 +22,14 @@ class LogonControllerTest extends WebTestCasePlus
         $this->assertResponseIsSuccessful();
     }
 
-    public function provideHomeUrls()
+    public function provideHomeUrls(): Generator
     {
         yield ['/'];
         yield ['/logon'];
     }
 
     /**
+     * @runInSeparateProcess
      * @dataProvider provideUnauthUrls
      * @param $url
      */
@@ -41,7 +44,7 @@ class LogonControllerTest extends WebTestCasePlus
         $this->assertEquals('/logon', $this->client->getRequest()->getPathInfo());
     }
 
-    public function provideUnauthUrls()
+    public function provideUnauthUrls(): Generator
     {
         yield ['/log'];
     }
@@ -55,6 +58,9 @@ class LogonControllerTest extends WebTestCasePlus
         $this->assertTrue($controller instanceof AbstractController);
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testRoot()
     {
         // instantiate the view and test it
@@ -68,6 +74,9 @@ class LogonControllerTest extends WebTestCasePlus
 
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testLogonAsUser()
     {
         $this->getNamePW('user_test');
@@ -82,6 +91,9 @@ class LogonControllerTest extends WebTestCasePlus
 
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testLogonAsUserWithBadPW()
     {
         $this->getNamePW('user_test');
@@ -97,6 +109,9 @@ class LogonControllerTest extends WebTestCasePlus
     }
 
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testLogonAsAdmin()
     {
         $this->getNamePW('admin_test');
@@ -111,6 +126,9 @@ class LogonControllerTest extends WebTestCasePlus
 
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testLogonAsDeveloper()
     {
         $this->getNamePW('dev_test');

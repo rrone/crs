@@ -15,12 +15,13 @@ use App\Services\ExportXl;
 
 class ExportController extends AbstractController2
 {
-    private $exportXl;
+    private ExportXl $exportXl;
 
     /**
      * ExportController constructor.
      * @param RequestStack $requestStack
      * @param ExportXl $exportXl
+     * @throws \Exception
      */
     public function __construct(RequestStack $requestStack, ExportXl $exportXl)
     {

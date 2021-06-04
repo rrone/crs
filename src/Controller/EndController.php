@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Abstracts\AbstractController2;
 
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -22,8 +23,9 @@ class EndController extends AbstractController2
      * @Route("/unk", name="unk")
      * @param Request $request
      * @return RedirectResponse
+     * @throws Exception
      */
-    public function __index(Request $request)
+    public function __index(Request $request): RedirectResponse
     {
         $this->logStamp($request);
 

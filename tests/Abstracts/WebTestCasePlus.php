@@ -5,6 +5,7 @@ namespace Tests\Abstracts;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class WebTestCasePlus extends WebTestCase
 {
@@ -30,7 +31,7 @@ class WebTestCasePlus extends WebTestCase
 
         $kernel = $this->client->getKernel();
 
-        $this->c = self::$container;
+        $this->c = self::getContainer();
 
     }
 
@@ -41,7 +42,7 @@ class WebTestCasePlus extends WebTestCase
             $this->pw = '';
         }
 
-        $cred = self::$container->getParameter($paramStr);
+        $cred = self::getContainer()->getParameter($paramStr);
 
         $this->userName = $cred['user'];
         $this->pw = $cred['pw'];

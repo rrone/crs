@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Doctrine\DBAL\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,12 +14,13 @@ use App\Abstracts\AbstractController2;
 
 class LogExportController extends AbstractController2
 {
-    private $exporter;
+    private LogExport $exporter;
 
     /**
      * LogExportController constructor
      * @param LogExport $logExport
      * @param RequestStack $requestStack
+     * @throws \Exception
      */
     public function __construct(LogExport $logExport, RequestStack $requestStack)
     {
@@ -31,6 +33,7 @@ class LogExportController extends AbstractController2
      * @Route("/log", name="log")
      * @param Request $request
      * @return RedirectResponse|Response
+     * @throws Exception
      */
     public function index(Request $request)
     {

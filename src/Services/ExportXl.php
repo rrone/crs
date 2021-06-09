@@ -188,33 +188,45 @@ class ExportXl extends AbstractExporter
 
             $labels = [];
             foreach ($rec as $hdr => $val) {
-                $labels[] = $hdr;
+                switch ($hdr) {
+                    case 'Address':
+                        break;
+                    default:
+                        $labels[] = $hdr;
+                }
             }
+            $labels[] = 'Health & Safety';
 
             $data = array($labels);
 
             //set the data : 1 record in each row
             foreach ($certs as $cert) {
                 $row = [];
+                $trainingComplete = true;
                 if (!empty($cert)) {
                     foreach ($cert as $key => $value) {
                         switch ($key) {
                             case 'Name':
                             case 'First Name':
                             case 'Last Name':
-                            case 'Address':
                             case 'City':
                                 $value = ucwords(strtolower($value));
                                 break;
                             case 'Email':
                                 $value = strtolower($value);
                                 break;
+                            case 'shCertDate':
+                            case 'cdcCertDate':
+                            case 'scaCertDate':
+                                $trainingComplete = $trainingComplete && !is_null($value);
                         }
 
-                        $row[] = $value;
+                        if ($key !== 'Address') {
+                            $row[] = $value;
+                        }
                     }
+                    $row[] = $trainingComplete ? 'COMPLETE' : '';
                 }
-
                 $data[] = $row;
             }
         }

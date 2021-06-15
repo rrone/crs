@@ -23,6 +23,8 @@ class ExportXl extends AbstractExporter
 
     private string $outFileName;
 
+    private string $uri;
+
     /**
      * ExportXl constructor.
      * @param DataWarehouse $dataWarehouse
@@ -58,17 +60,17 @@ class ExportXl extends AbstractExporter
             $userKey = $userKey == '10' ? '1' : $userKey;
         }
 
-        $uri = $request->attributes->get('_route');
+        $this->uri = $request->attributes->get('_route');
 
         $limit = $request->query->get('limit');
         $limit = is_null($limit) ? $this->dw->bigLimit() : $limit;
 
-        $uri = str_replace('/', '', $uri);
+        $this->uri = str_replace('/', '', $this->uri);
 
         $user = explode(' ', $user1->name);
         $u = strtoupper(str_replace('/', '', end($user)));
 
-        switch ($uri) {
+        switch ($this->uri) {
             // @codeCoverageIgnoreStart
             case 'hrc':
                 $this->outFileName = "HighestRefCerts.$u.$this->outFileName";
@@ -134,7 +136,7 @@ class ExportXl extends AbstractExporter
             return new RedirectResponse($baseURL);
         } else {
             $content = null;
-            if ($user1->section && $uri == 'bshca') {
+            if ($user1->section && $this->uri == 'bshca') {
                 // @codeCoverageIgnoreStart
                 if ($_SERVER['APP_ENV'] === 'dev') {
                     $this->generateExport($content, $results);
@@ -195,7 +197,9 @@ class ExportXl extends AbstractExporter
                         $labels[] = $hdr;
                 }
             }
-            $labels[] = 'Health & Safety';
+            if ($this->uri == 'bshca') {
+                $labels[] = 'Health & Safety';
+            }
 
             $data = array($labels);
 
@@ -225,7 +229,9 @@ class ExportXl extends AbstractExporter
                             $row[] = $value;
                         }
                     }
-                    $row[] = $trainingComplete ? 'COMPLETE' : '';
+                    if ($this->uri == 'bshca') {
+                        $row[] = $trainingComplete ? 'COMPLETE' : '';
+                    }
                 }
                 $data[] = $row;
             }

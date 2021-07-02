@@ -38,6 +38,8 @@ echo ">>> Copying app to distribution..."
 cp ./.env.dist "${prod}"/crs/.env
 cp -f ./*.json "${prod}"/crs
 cp -f ./*.lock "${prod}"/crs
+cp -f .yarnrc.yml "${prod}"/crs
+cp -rf .yarn "${prod}"/crs
 
 mkdir "${prod}"/crs/bin
 cp bin/console "${prod}"/crs/bin
@@ -66,12 +68,14 @@ find "${prod}"/crs/src -type f -name '*Test.php' -delete
 echo
 
 cd "${prod}"/crs
-    yarn install --prod=true
+    yarn workspaces focus --production
     composer install --no-dev
 
     rm -f -r ./assets
     rm -f -r ./migrations
     rm -f -r ./webpack.config.js
+    rm -f .yarnrc.yml
+    rm -rf .yarn
 
     bin/console cache:clear
 

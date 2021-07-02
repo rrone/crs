@@ -6,13 +6,13 @@
 
     {% block head %}{% endblock %}
 
-    <link rel="icon" href="{{ absolute_url('/') }}build/s1logo_crs.png" sizes="16x16">
+    <link rel="icon" href="{{ url('logon') }}build/s1logo_crs.png" sizes="16x16">
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
     {{ encore_entry_link_tags('app') }}
-    <link rel='apple-touch-icon-precomposed' href="{{ absolute_url('/') }}build/s1logo_crs.png"/>
+    <link rel='apple-touch-icon-precomposed' href="{{ url('logon') }}build/s1logo_crs.png"/>
     <style>
         {% block style %}{% endblock %}
     </style>
@@ -46,7 +46,7 @@
                 <p>Find an issue with the Certification Reporting System? Log it in the <a href="{{ issueTracker }}"
                                                                                            target="_blank">issue
                         tracker</a><a
-                        href="/admin">.</a></p>
+                        href="{{ admin }}">.</a></p>
             {% else %}
                 <p>Find an issue with the Certification Reporting System? Log it in the <a href="{{ issueTracker }}"
                                                                                            target="_blank">issue

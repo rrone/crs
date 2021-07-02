@@ -5,16 +5,18 @@
 /tests--old/
 README.md
 *.base
+bin/.phpunit
+sql
+pw_hash.php
+bin
+*.bak
+
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
-bin/.phpunit
-sql
-pw_hash.php
-bin
 
 ###> phpunit/phpunit ###
 /phpunit.xml
@@ -34,4 +36,3 @@ bin
 ###> symfony/phpunit-bridge ###
 .phpunit
 ###< symfony/phpunit-bridge ###
-*.bak

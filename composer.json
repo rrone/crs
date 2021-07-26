@@ -4,7 +4,7 @@
     "name": "ayso/certification_reporting_system",
     "description": "An application to publish AYSO certification volunteer certifications",
     "require": {
-        "php": "7.4",
+        "php": "^7.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
@@ -16,7 +16,7 @@
         "symfony/console": "5.3.*",
         "symfony/dotenv": "5.3.*",
         "symfony/expression-language": "5.3.*",
-        "symfony/flex": "1.13.*",
+        "symfony/flex": "^1.13",
         "symfony/form": "5.3.*",
         "symfony/framework-bundle": "5.3.*",
         "symfony/intl": "5.3.*",

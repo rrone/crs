@@ -14,7 +14,7 @@ use DateTime;
 use DateTimeZone;
 use Exception;
 
-define("xlsxFile", realpath(__DIR__.'/../../var/xlsx/CompositeRefCerts.xlsx'));
+define("xlsxFile", realpath(__DIR__ . '/../../var/xlsx/CompositeRefCerts.xlsx'));
 
 class ExportXl extends AbstractExporter
 {
@@ -39,7 +39,7 @@ class ExportXl extends AbstractExporter
         $ts = new DateTime($utc, new DateTimeZone('UTC'));
         $ts->setTimezone(new DateTimeZone('America/Los_Angeles'));
         $ts = $ts->format('Ymd_His');
-        $this->outFileName = 'Report_'.$ts.'.'.$this->getFileExtension();
+        $this->outFileName = 'Report_' . $ts . '.' . $this->getFileExtension();
     }
 
     /**
@@ -49,7 +49,7 @@ class ExportXl extends AbstractExporter
      */
     public function invoke(Request $request)
     {
-        $user1 = (object) $request->request->get('user');
+        $user1 = (object)$request->request->get('user');
         $baseURL = $request->request->get('baseURL');
 
         if ($user1->admin) {
@@ -144,7 +144,7 @@ class ExportXl extends AbstractExporter
                 }
                 // @codeCoverageIgnoreEnd
 
-                try{
+                try {
                     $response = new BinaryFileResponse(realpath(xlsxFile));
                     // @codeCoverageIgnoreStart
                 } catch (Exception $e) {
@@ -162,7 +162,7 @@ class ExportXl extends AbstractExporter
             }
         }
         $response->headers->set('Content-Type', $this->contentType);
-        $response->headers->set('Content-Disposition', 'attachment; filename='.$this->outFileName);
+        $response->headers->set('Content-Disposition', 'attachment; filename=' . $this->outFileName);
         $response->headers->set('Set-Cookie', 'fileDownload=true; path=/');
 
         return $response;
@@ -190,12 +190,7 @@ class ExportXl extends AbstractExporter
 
             $labels = [];
             foreach ($rec as $hdr => $val) {
-                switch ($hdr) {
-                    case 'Address':
-                        break;
-                    default:
-                        $labels[] = $hdr;
-                }
+                $labels[] = $hdr;
             }
             if ($this->uri == 'bshca') {
                 $labels[] = 'Health & Safety';
@@ -225,14 +220,13 @@ class ExportXl extends AbstractExporter
                                 $trainingComplete = $trainingComplete && !is_null($value);
                         }
 
-                        if ($key !== 'Address') {
-                            $row[] = $value;
-                        }
+                        $row[] = $value;
                     }
                     if ($this->uri == 'bshca') {
                         $row[] = $trainingComplete ? 'COMPLETE' : '';
                     }
                 }
+
                 $data[] = $row;
             }
         }

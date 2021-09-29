@@ -11,7 +11,7 @@
     "bootstrap": "^4.5.2",
     "browsers": "^1.0.2",
     "chokidar": "^3.4.2",
-    "datatables.net": "^1.10.21",
+    "datatables.net": "^1.11.3",
     "datatables.net-dt": "^1.10.21",
     "is-svg": "^4.2.2",
     "jquery": "^3.5.0",

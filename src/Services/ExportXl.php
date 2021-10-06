@@ -205,19 +205,25 @@ class ExportXl extends AbstractExporter
                 if (!empty($cert)) {
                     foreach ($cert as $key => $value) {
                         switch ($key) {
-                            case 'Name':
-                            case 'First Name':
-                            case 'Last Name':
+                            case 'First_Name':
+                            case 'Last_Name':
                             case 'City':
                                 $value = ucwords(strtolower($value));
                                 break;
                             case 'Email':
                                 $value = strtolower($value);
                                 break;
-                            case 'shCertDate':
-                            case 'cdcCertDate':
-                            case 'scaCertDate':
+                            case 'Safe_Haven_Date':
+                            case 'Concussion_Awareness_Date':
+                            case 'Sudden_Cardiac_Arrest_Date':
                                 $trainingComplete = $trainingComplete && !is_null($value);
+                                break;
+                            case 'RiskStatus':
+                                if ($value == 'Green' OR $value == 'Purple') {
+                                    $trainingComplete = $trainingComplete && !is_null($value);
+                                } else {
+                                    $trainingComplete = false;
+                                }
                         }
 
                         $row[] = $value;

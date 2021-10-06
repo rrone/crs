@@ -161,8 +161,8 @@ class DataWarehouse
             WHERE `sar` LIKE '%$userKey%' OR `area` = ''
             ORDER BY `Section`, `Area`, ABS(`Region`), FIELD(`CertificationDesc`, 'National Referee','National 2 Referee',
             'Advanced Referee', 'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee',
-                                'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official',
-                                'U-8 Official & Safe Haven Referee', '') , `Last Name` , `First Name` , `AYSOID`
+                                'Assistant Referee', 'Assistant Referee & Safe Haven Referee', '8U Official',
+                                '8U Official & Safe Haven Referee', '') , `Last Name` , `First Name` , `AYSOID`
             LIMIT $limit
             "
         );
@@ -274,8 +274,8 @@ class DataWarehouse
             ORDER BY `Section`, `Area`, ABS(`Region`),
                     FIELD(`CertificationDesc`, 'National Referee','National 2 Referee', 'Advanced Referee',
                     'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee',
-                    'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official',
-                    'U-8 Official & Safe Haven Referee', '') , `Last Name` , `First Name` , `AYSOID`
+                    'Assistant Referee', 'Assistant Referee & Safe Haven Referee', '8U Official',
+                    '8U Official & Safe Haven Referee', '') , `Last Name` , `First Name` , `AYSOID`
             LIMIT $limit
             "
         );
@@ -332,8 +332,8 @@ class DataWarehouse
             ORDER BY `Section`, `Area`, ABS(`Region`),
                 FIELD(`CertificationDesc`, 'National Referee','National 2 Referee', 'Advanced Referee',
                 'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee',
-                'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official',
-                'U-8 Official & Safe Haven Referee', '') , `Last Name` , `First Name` , `AYSOID`
+                'Assistant Referee', 'Assistant Referee & Safe Haven Referee', '8U Official',
+                '8U Official & Safe Haven Referee', '') , `Last_Name` , `First_Name` , `AYSOID`
             LIMIT $limit
             "
         );
@@ -354,8 +354,8 @@ class DataWarehouse
             ORDER BY `Section`, `Area`, ABS(`Region`),
                     FIELD(`CertificationDesc`, 'National Referee','National 2 Referee', 'Advanced Referee',
                     'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee',
-                    'Assistant Referee', 'Assistant Referee & Safe Haven Referee', 'U-8 Official',
-                    'U-8 Official & Safe Haven Referee', '') , `Last Name` , `First Name` , `AYSOID`
+                    'Assistant Referee', 'Assistant Referee & Safe Haven Referee', '8U Official',
+                    '8U Official & Safe Haven Referee', '') , `Last Name` , `First Name` , `AYSOID`
             LIMIT $limit
             "
         );
@@ -385,11 +385,11 @@ class DataWarehouse
         return $this->conn->fetchAllAssociative(
             "
             SELECT * FROM crs_report_notes
+            WHERE `enabled` IS TRUE
             ORDER BY `seq`
         "
         );
     }
-
 
     /**
      * @return mixed

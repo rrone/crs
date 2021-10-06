@@ -1,0 +1,31 @@
+{% extends "layout.html.twig" %}
+
+{% block head %}{% endblock %}
+
+{% block style %} {% endblock %}
+
+{% block user %}
+{% endblock %}
+
+{% block content %}
+    <div style="text-align:center" class="legend">
+        <h3>
+            Due to the transition of AYSO systems to different platforms, volunteer data is temporarily unavailable.
+        </h3>
+        <h3>
+            Please check back in November 2021 for updates.
+        </h3>
+    </div>
+
+    <div id="preparing-file-modal" title="Preparing report..." style="display: none;">
+        We are preparing your report, please wait...
+    </div>
+
+    <div id="error-modal" title="Error" style="display: none;">
+        There was a problem generating your report, please try again.
+    </div>
+
+{% endblock %}
+
+{% block script %}
+{% endblock %}

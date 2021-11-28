@@ -61,7 +61,7 @@ class ReportsControllerTest extends WebTestCasePlus
         $this->client->request('GET', $url);
         $this->assertResponseIsSuccessful();
 
-        $rpt = $this->client->getResponse()->headers->get('content-type');
+        $rpt = $this->client->getResponse()->headers->all('content-type')[0];
         $this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', $rpt);
     }
 

@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class LogonController extends AbstractController2
 {
-    private $url;
+    private string $url;
 
     /**
      * LogonController constructor.

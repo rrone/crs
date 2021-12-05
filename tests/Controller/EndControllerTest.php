@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Controller;
 
 use App\Controller\EndController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

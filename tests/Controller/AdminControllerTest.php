@@ -125,8 +125,8 @@ class AdminControllerTest extends WebTestCasePlus
 
         // test user exists
         $this->submitAdminForm("btnAddUser", $pwd, $userName);
-        // test blank user name
-        $this->submitAdminForm("btnAddUser", $pwd, '');
+        // test blank user name (default)
+        $this->submitAdminForm("btnAddUser", $pwd);
         // test blank pw
         $this->submitAdminForm("btnAddUser", '', $userName);
 

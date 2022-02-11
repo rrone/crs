@@ -4,13 +4,13 @@ use Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\DropDatabaseDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\Proxy\RunSqlDoctrineCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Bundle\FrameworkBundle\Tests\Functional\app\AppKernel;
+use App\Kernel;
 use Symfony\Component\Console\Input\ArrayInput;
 
 require_once __DIR__.'/../vendor/autoload.php';
 function bootstrap()
 {
-    $kernel = new AppKernel('test', true);
+    $kernel = new Kernel('test', true);
     $kernel->boot();
     $application = new Application($kernel);
     $application->setAutoExit(false);

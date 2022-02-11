@@ -39,7 +39,7 @@ class LogonControllerTest extends WebTestCasePlus
         $this->assertTrue($this->client->getResponse()->isRedirection());
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
 
-        $crawler = $this->client->followRedirect();
+        $this->client->followRedirect();
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('/logon', $this->client->getRequest()->getPathInfo());
     }

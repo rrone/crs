@@ -15,7 +15,7 @@
     "datatables.net-dt": "^1.10.21",
     "is-svg": "^4.2.2",
     "jquery": "^3.5.0",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.6",
     "node-notifier": "^8.0.1",
     "object-path": "^0.11.8",
     "popper.js": "^1.16.1",

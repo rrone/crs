@@ -5281,6 +5281,13 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"minimist@npm:^1.2.6":
+  version: 1.2.6
+  resolution: "minimist@npm:1.2.6"
+  checksum: 56b3aeedcc7776139f72ca9dce0dae06825437f71ebd823d97dc49a34f3280e627909d54aca6fa81c47e17f11e5affc7357bfb8fd8140ca6138e80f946dd0dbc
+  languageName: node
+  linkType: hard
+
 "minipass-collect@npm:^1.0.2":
   version: 1.0.2
   resolution: "minipass-collect@npm:1.0.2"
@@ -6943,7 +6950,7 @@ fsevents@~2.3.2:
     file-loader: ^6.0.0
     is-svg: ^4.2.2
     jquery: ^3.5.0
-    minimist: ^1.2.5
+    minimist: ^1.2.6
     node-notifier: ^8.0.1
     object-path: ^0.11.8
     popper.js: ^1.16.1

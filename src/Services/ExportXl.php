@@ -219,7 +219,7 @@ class ExportXl extends AbstractExporter
                                 $trainingComplete = $trainingComplete && !is_null($value);
                                 break;
                             case 'RiskStatus':
-                                if ($value == 'Green' OR $value == 'Purple') {
+                                if ($value == 'Green' OR $value == 'Blue') {
                                     $trainingComplete = $trainingComplete && !is_null($value);
                                 } else {
                                     $trainingComplete = false;

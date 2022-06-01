@@ -68,8 +68,8 @@ find "${prod}"/crs/src -type f -name '*Test.php' -delete
 echo
 
 cd "${prod}"/crs
-    yarn workspaces focus --production
     composer install --no-dev
+    yarn workspaces focus --production
 
     rm -f -r ./assets
     rm -f -r ./migrations

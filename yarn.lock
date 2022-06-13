@@ -2399,13 +2399,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bootstrap@npm:^4.5.2":
-  version: 4.6.1
-  resolution: "bootstrap@npm:4.6.1"
+"bootstrap@npm:^5.1.3":
+  version: 5.1.3
+  resolution: "bootstrap@npm:5.1.3"
   peerDependencies:
-    jquery: 1.9.1 - 3
-    popper.js: ^1.16.1
-  checksum: ff44e13787aafe1e2b8ac77802eae0f19bf957ea53a40ce3d9d4af9b67eab8adc585dc5a62cb6be82a3bc33e7ae67b0efd75f02282c0ddca09272d5c18a0b379
+    "@popperjs/core": ^2.10.2
+  checksum: 301b5ed872efba061104cf22ac93568e3837867fb5527ab9326a51510fb752bd4883e1d488225c8be72f86d9d3a55ef5b166aa7fa62c2fdd077c3f05b65752f8
   languageName: node
   linkType: hard
 
@@ -2923,10 +2922,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^3.6.5":
-  version: 3.22.7
-  resolution: "core-js@npm:3.22.7"
-  checksum: c5f1d8a96b6d1828d02583603d9df1fcbf45f95454585ff9d49ba7ea1470bf1422d00561044939bf4952465ae4ae2bf30a39b4874da8ed2741a3f3996bd175ab
+"core-js@npm:^3":
+  version: 3.23.0
+  resolution: "core-js@npm:3.23.0"
+  checksum: 4fcfec8133bd31ae34482bcdf891d8dcff4a64de656b82749c56d984b227cc107f755104aefb884b284f78d3e59fad24592de039ff7f78e60316cd4ade734af4
   languageName: node
   linkType: hard
 
@@ -3804,7 +3803,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"file-loader@npm:^6.0.0":
+"file-loader@npm:^6":
   version: 6.2.0
   resolution: "file-loader@npm:6.2.0"
   dependencies:
@@ -5461,17 +5460,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-notifier@npm:^8.0.1":
-  version: 8.0.2
-  resolution: "node-notifier@npm:8.0.2"
+"node-notifier@npm:^10.0.1":
+  version: 10.0.1
+  resolution: "node-notifier@npm:10.0.1"
   dependencies:
     growly: ^1.3.0
     is-wsl: ^2.2.0
-    semver: ^7.3.2
+    semver: ^7.3.5
     shellwords: ^0.1.1
-    uuid: ^8.3.0
+    uuid: ^8.3.2
     which: ^2.0.2
-  checksum: 7db1683003f6aaa4324959dfa663cd56e301ccc0165977a9e7737989ffe3b4763297f9fc85f44d0662b63a4fd85516eda43411b492a4d2fae207afb23773f912
+  checksum: ac09456152e433462dd3ca277048de7a60c6d63fc657e00ac72805841baf9bb2573e8d3f64c4b64af73546d1ed39733af6b0036c38b57a83c883aa33fff35a2e
   languageName: node
   linkType: hard
 
@@ -6622,7 +6621,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regenerator-runtime@npm:^0.13.4, regenerator-runtime@npm:^0.13.7":
+"regenerator-runtime@npm:^0, regenerator-runtime@npm:^0.13.4":
   version: 0.13.9
   resolution: "regenerator-runtime@npm:0.13.9"
   checksum: 65ed455fe5afd799e2897baf691ca21c2772e1a969d19bb0c4695757c2d96249eb74ee3553ea34a91062b2a676beedf630b4c1551cc6299afb937be1426ec55e
@@ -6892,25 +6891,25 @@ __metadata:
   dependencies:
     "@symfony/webpack-encore": ^1.1
     acorn: ^8.0.1
-    bootstrap: ^4.5.2
+    bootstrap: ^5.1.3
     browsers: ^1.0.2
     chokidar: ^3.4.2
-    core-js: ^3.6.5
+    core-js: ^3
     datatables.net: ^1.11.3
     datatables.net-dt: ^1.10.21
-    file-loader: ^6.0.0
+    file-loader: ^6
     is-svg: ^4.2.2
     jquery: ^3.5.0
     minimist: ^1.2.6
-    node-notifier: ^8.0.1
+    node-notifier: ^10.0.1
     object-path: ^0.11.8
     popper.js: ^1.16.1
-    regenerator-runtime: ^0.13.7
+    regenerator-runtime: ^0
     require: ^2.4.20
     stylelint: ^13.8.0
     stylelint-config-standard: ^22.0.0
     uglify-js: ^3.10.4
-    webpack-notifier: ^1.13.0
+    webpack-notifier: ^1
     xmldom: ^0.5.0
     xmlhttprequest: ^1.8.0
   languageName: unknown
@@ -8244,7 +8243,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-notifier@npm:^1.13.0":
+"webpack-notifier@npm:^1":
   version: 1.15.0
   resolution: "webpack-notifier@npm:1.15.0"
   dependencies:

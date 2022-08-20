@@ -33,7 +33,6 @@ class AdminController extends AbstractController2
      * @param Request $request
      * @return RedirectResponse|Response
      * @throws Exception
-     * @throws \Doctrine\DBAL\Driver\Exception
      */
     public function index(Request $request)
     {
@@ -65,7 +64,6 @@ class AdminController extends AbstractController2
      * @param Request $request
      * @return string|null
      * @throws Exception
-     * @throws \Doctrine\DBAL\Driver\Exception
      */
     public function handler(Request $request): ?string
     {
@@ -147,7 +145,6 @@ class AdminController extends AbstractController2
      * @param array $post
      * @return string
      * @throws Exception
-     * @throws \Doctrine\DBAL\Driver\Exception
      */
     protected function btnAddUser(array $post): string
     {
@@ -194,7 +191,6 @@ class AdminController extends AbstractController2
      * @param array $post
      * @return string
      * @throws Exception
-     * @throws \Doctrine\DBAL\Driver\Exception
      */
     protected function btnUpdate(array $post): string
     {

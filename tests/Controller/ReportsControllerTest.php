@@ -67,13 +67,19 @@ class ReportsControllerTest extends WebTestCasePlus
 
     public function provideReportUrls()
     {
-        yield ['/bshca'];
+        yield ['/crct'];
         yield ['/ra'];
         yield ['/ri'];
         yield ['/rie'];
         yield ['/ruc'];
         yield ['/urr'];
         yield ['/nra'];
+        yield ['/rsh'];
+        yield ['/rcdc'];
+        yield ['/rss'];
+        yield ['/rsca'];
+        yield ['/rls'];
+        yield ['/rxr'];
 
     }
 
@@ -94,19 +100,23 @@ class ReportsControllerTest extends WebTestCasePlus
     {
         yield ['/end'];
         yield ['/reports'];
-        yield ['/bshca'];
+        yield ['/crct'];
         yield ['/ra'];
         yield ['/ri'];
         yield ['/rie'];
         yield ['/ruc'];
         yield ['/urr'];
         yield ['/nra'];
+        yield ['/rsh'];
+        yield ['/rcdc'];
+        yield ['/rss'];
+        yield ['/rsca'];
+        yield ['/rls'];
+        yield ['/rxr'];
 
 //        //unused reports defined in ExportXl
 //        yield ['/hrc'];
 //        yield ['/nocerts'];
-//        yield ['/rcdc'];
-//        yield ['/rsh'];
 
         //bad link
         yield ['/xyz'];
@@ -154,12 +164,16 @@ class ReportsControllerTest extends WebTestCasePlus
         $this->assertStringContainsString("<h3>Notes on these reports:</h3>", $view);
 
         // verify links & test exports
-        $this->verifyLink($crawler, 'Composite Referee Certifications (Highest Certification, Safe Haven & Concussion Awareness)', 'bshca');
-        $this->verifyLink($crawler, 'Referee Assessors', 'ra');
+        $this->verifyLink($crawler, 'Composite Referee Certification & Training', 'crct');
         $this->verifyLink($crawler, 'Referee Instructors', 'ri');
         $this->verifyLink($crawler, 'Referee Instructor Evaluators', 'rie');
-        $this->verifyLink($crawler, 'Referee Upgrade Candidates', 'ruc');
-        $this->verifyLink($crawler, 'Unregistered Referees', 'urr');
+        $this->verifyLink($crawler, 'Referee Assessors', 'ra');
+        $this->verifyLink($crawler, 'Referees Missing Safe Haven Training', 'rsh');
+        $this->verifyLink($crawler, 'Referees Missing Concussion Training', 'rcdc');
+        $this->verifyLink($crawler, 'Referees Missing Sudden Cardiac Arrest', 'rsca');
+        $this->verifyLink($crawler, 'Referees Missing SafeSport', 'rss');
+        $this->verifyLink($crawler, 'Referees Missing LiveScan', 'rls');
+        $this->verifyLink($crawler, 'Referees with Expired Risk Status', 'rxr');
 
         $this->assertEmpty($crawler->selectLink('National Referee Assessors')->getNode(0));
 

@@ -32,13 +32,19 @@ class ExportController extends AbstractController2
     }
 
     /**
-     * @Route("/bshca", name="bshca")
+     * @Route("/crct", name="crct")
      * @Route("/ra", name="ra")
      * @Route("/ri", name="ri")
      * @Route("/rie", name="rie")
      * @Route("/ruc", name="ruc")
      * @Route("/urr", name="urr")
      * @Route("/nra", name="nra")
+     * @Route("/rsh", name="rsh")
+     * @Route("/rcdc", name="rcdc")
+     * @Route("/rss", name="rss")
+     * @Route("/rsca", name="rsca")
+     * @Route("/rls", name="rls")
+     * @Route("/rxr", name="rxr")
      * @param Request $request
      * @return RedirectResponse|Response
      * @throws Exception

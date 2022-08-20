@@ -104,13 +104,29 @@ class ExportXl extends AbstractExporter
                 $results = $this->dw->getUnregisteredRefs($userKey, $limit);
                 break;
             // @codeCoverageIgnoreStart
-            case 'rcdc':
-                $this->outFileName = "ConcussionRefs.$u.$this->outFileName";
-                $results = $this->dw->getRefsConcussion($userKey, $limit);
-                break;
             case 'rsh':
-                $this->outFileName = "SafeHavenRefs.$u.$this->outFileName";
+                $this->outFileName = "MissingSafeHaven.$u.$this->outFileName";
                 $results = $this->dw->getSafeHavenRefs($userKey, $limit);
+                break;
+            case 'rcdc':
+                $this->outFileName = "MissingConcussionRefs.$u.$this->outFileName";
+                $results = $this->dw->getConcussionRefs($userKey, $limit);
+                break;
+            case 'rsca':
+                $this->outFileName = "MissingSuddenCardiacArrest.$u.$this->outFileName";
+                $results = $this->dw->SuddenCardiacArrestRefs($userKey, $limit);
+                break;
+            case 'rss':
+                $this->outFileName = "MissingSafeSport.$u.$this->outFileName";
+                $results = $this->dw->getSafeSportRefs($userKey, $limit);
+                break;
+            case 'rls':
+                $this->outFileName = "MissingLiveScan.$u.$this->outFileName";
+                $results = $this->dw->getLiveScanRefs($userKey, $limit);
+                break;
+            case 'rxr':
+                $this->outFileName = "ExpiredRiskStatus.$u.$this->outFileName";
+                $results = $this->dw->getExpiredRiskRefs($userKey, $limit);
                 break;
             // @codeCoverageIgnoreEnd
             case 'nra':
@@ -121,7 +137,7 @@ class ExportXl extends AbstractExporter
                     $results = null;
                 }
                 break;
-            case 'bshca':
+            case 'crct':
                 $this->outFileName = "CompositeRefCerts.$u.$this->outFileName";
                 $results = $this->dw->getCompositeRefCerts($userKey, $limit);
                 break;
@@ -177,7 +193,8 @@ class ExportXl extends AbstractExporter
     {
         // @codeCoverageIgnoreStart
         if (is_null($certs) or empty($certs)) {
-            $content['report']['data'] = array('There was an error generating your report.');
+            $content['report']['data'] = array('There were no records found for this report.');
+            $content['report']['options'] = [];
             return;
         }
         // @codeCoverageIgnoreEnd
@@ -216,6 +233,8 @@ class ExportXl extends AbstractExporter
                             case 'Safe_Haven_Date':
                             case 'Concussion_Awareness_Date':
                             case 'Sudden_Cardiac_Arrest_Date':
+                            case 'SafeSport_Date':
+                            case 'LiveScan_Date':
                                 $trainingComplete = $trainingComplete && !is_null($value);
                                 break;
                             case 'RiskStatus':

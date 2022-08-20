@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Exception;
+use http\Message;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -86,7 +87,7 @@ class ReportsController extends AbstractController2
         $reports = $this->dw->getReports();
         foreach ($reports as $report) {
             $report = (object)$report;
-            if (!$report->admin || ($report->admin && $this->user->admin)) {
+            if (!$report->admin || $this->user->admin) {
                 try { // handle possible exception if database table report differs from defined routes
                     $href = $this->generateUrl($report->key);
                     $notes = empty($report->notes) ? null : "<span style='font-weight:normal'> ($report->notes)</span>";

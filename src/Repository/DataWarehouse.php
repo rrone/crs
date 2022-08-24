@@ -172,7 +172,7 @@ class DataWarehouse
     {
         return $this->conn->fetchAllAssociative(
             "
-            SELECT `SAR`,`CertificationDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Cell_Phone`,`Email`
+            SELECT `SAR`,`CertificationDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`
             FROM crs_rpt_ra
             WHERE `CertificationDesc` = 'National Referee Assessor' AND `Current` <> ''
             ORDER BY `Section`, `Area`, ABS(`Region`), `Last_Name` , `First_Name`
@@ -540,7 +540,7 @@ class DataWarehouse
     {
         return $this->conn->fetchAllAssociative(
             "
-            SELECT `SAR`,`CertificationDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Cell_Phone`,`Email`
+            SELECT `SAR`,`CertificationDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`
             FROM crs_rpt_ra
             WHERE `Current` <> ''
             ORDER BY FIELD(`CertificationDesc`, 'National Referee Assessor', 'Referee Assessor', '') , `SAR`, `Last_Name` , `First_Name`
@@ -556,7 +556,7 @@ class DataWarehouse
     {
         return $this->conn->fetchAllAssociative(
             "
-            SELECT `SAR`,`CertificationDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Cell_Phone`,`Email`
+            SELECT `SAR`,`CertificationDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`
             FROM crs_rpt_ri
             WHERE `Current` <> ''
             ORDER BY `Section`, `Area`, ABS(`Region`), FIELD(`CertificationDesc`, 'National Referee Instructor', 'Advanced Referee Instructor', 'Intermediate Referee Instructor', 'Regional Referee Instructor') , `Last_Name` , `First_Name`
@@ -572,7 +572,7 @@ class DataWarehouse
     {
         return $this->conn->fetchAllAssociative(
             "
-            SELECT `SAR`,`InstructorDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Cell_Phone`,`Email`
+            SELECT `SAR`,`InstructorDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`
             FROM crs_rpt_rie
             WHERE `Current` <> ''
         "

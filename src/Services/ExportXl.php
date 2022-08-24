@@ -70,13 +70,9 @@ class ExportXl extends AbstractExporter
         $user = explode(' ', $user1->name);
         $u = strtoupper(str_replace('/', '', end($user)));
 
+        $shName = 'Updated ' . date('Y-M-d');
+
         switch ($this->uri) {
-            // @codeCoverageIgnoreStart
-            case 'hrc':
-                $this->outFileName = "HighestRefCerts.$u.$this->outFileName";
-                $results = $this->dw->getHighestRefCerts($userKey, $limit);
-                break;
-            // @codeCoverageIgnoreEnd
             case 'ra':
                 $this->outFileName = "RefAssessors.$u.$this->outFileName";
                 $results = $this->dw->getRefAssessors($userKey, $limit);
@@ -89,12 +85,6 @@ class ExportXl extends AbstractExporter
                 $this->outFileName = "RefInstructorEvaluators.$u.$this->outFileName";
                 $results = $this->dw->getRefInstructorEvaluators($userKey, $limit);
                 break;
-            // @codeCoverageIgnoreStart
-            case 'nocerts':
-                $this->outFileName = "RefsWithNoBSCerts.$u.$this->outFileName";
-                $results = $this->dw->getRefsWithNoBSCerts($userKey, $limit);
-                break;
-            // @codeCoverageIgnoreEnd
             case 'ruc':
                 $this->outFileName = "RefUpgradeCandidates.$u.$this->outFileName";
                 $results = $this->dw->getRefUpgradeCandidates($userKey, $limit);
@@ -129,10 +119,34 @@ class ExportXl extends AbstractExporter
                 $results = $this->dw->getExpiredRiskRefs($userKey, $limit);
                 break;
             // @codeCoverageIgnoreEnd
+            case 'xra':
+                if ($user1->admin) {
+                    $this->outFileName = "RefAssessors.1.Report." . $this->getFileExtension();
+                    $results = $this->dw->getRefAssessorsReport();
+                } else {
+                    $results = null;
+                }
+                break;
+            case 'xri':
+                if ($user1->admin) {
+                    $this->outFileName = "RefInstructors.1.Report." . $this->getFileExtension();
+                    $results = $this->dw->getRefInstructorsReport();
+                } else {
+                    $results = null;
+                }
+                break;
+            case 'xrie':
+                if ($user1->admin) {
+                    $this->outFileName = "RefInstructorEvaluators.1.Report." . $this->getFileExtension();
+                    $results = $this->dw->getRefInstructorEvaluatorsReport();
+                } else {
+                    $results = null;
+                }
+                break;
             case 'nra':
                 if ($user1->admin) {
-                    $this->outFileName = "NationalRefAssessors.$u.$this->outFileName";
-                    $results = $this->dw->getRefNationalAssessors($userKey, $limit);
+                    $this->outFileName = "NationalRefAssessors.1.Report." . $this->getFileExtension();
+                    $results = $this->dw->getRefNationalAssessors();
                 } else {
                     $results = null;
                 }
@@ -155,7 +169,7 @@ class ExportXl extends AbstractExporter
             if ($user1->section && $this->uri == 'bshca') {
                 // @codeCoverageIgnoreStart
                 if ($_SERVER['APP_ENV'] === 'dev') {
-                    $this->generateExport($content, $results);
+                    $this->generateExport($content, $results, $shName);
                     file_put_contents(realpath(xlsxFile), $this->export($content));
                 }
                 // @codeCoverageIgnoreEnd
@@ -166,14 +180,14 @@ class ExportXl extends AbstractExporter
                 } catch (Exception $e) {
                     $response = new Response();
 
-                    $this->generateExport($content, array());
+                    $this->generateExport($content, array(), $shName);
                     $response->setContent($this->export($content));
 
                 }
                 // @codeCoverageIgnoreEnd
             } else {
                 $response = new Response();
-                $this->generateExport($content, $results);
+                $this->generateExport($content, $results, $shName);
                 $response->setContent($this->export($content));
             }
         }
@@ -187,22 +201,20 @@ class ExportXl extends AbstractExporter
     /**
      * @param $content
      * @param array $certs
+     * @param string $shName
      * @return void
      */
-    private function generateExport(&$content, array $certs): void
+    private function generateExport(&$content, array $certs, string $shName): void
     {
         // @codeCoverageIgnoreStart
-        if (is_null($certs) or empty($certs)) {
-            $content['report']['data'] = array('There were no records found for this report.');
-            $content['report']['options'] = [];
+        if (empty($certs)) {
+            $content[$shName]['data'] = array('There were no records found for this report.');
+            $content[$shName]['options'] = [];
             return;
         }
         // @codeCoverageIgnoreEnd
 
-        $data = [];
-
         //set the header labels
-        if (!empty($certs)) {
             $rec = (array)$certs[0];
 
             $labels = [];
@@ -238,7 +250,7 @@ class ExportXl extends AbstractExporter
                                 $trainingComplete = $trainingComplete && !is_null($value);
                                 break;
                             case 'RiskStatus':
-                                if ($value == 'Green' OR $value == 'Blue') {
+                                if ($value == 'Green' or $value == 'Blue') {
                                     $trainingComplete = $trainingComplete && !is_null($value);
                                 } else {
                                     $trainingComplete = false;
@@ -254,13 +266,12 @@ class ExportXl extends AbstractExporter
 
                 $data[] = $row;
             }
-        }
-        if (!empty($data)) {
 
-            $content['report']['data'] = $data;
-            $content['report']['options']['freezePane'] = 'A2';
-            $content['report']['options']['horizontalAlignment'] = ['B1:Z' => 'left'];
-            $content['report']['options']['selectRange'] = 'A2';
+        if (!empty($data)) {
+            $content[$shName]['data'] = $data;
+            $content[$shName]['options']['freezePane'] = 'A2';
+            $content[$shName]['options']['horizontalAlignment'] = ['B1:Z' => 'left'];
+            $content[$shName]['options']['selectRange'] = 'A2';
 
         }
 

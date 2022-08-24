@@ -45,6 +45,9 @@ class ExportController extends AbstractController2
      * @Route("/rsca", name="rsca")
      * @Route("/rls", name="rls")
      * @Route("/rxr", name="rxr")
+     * @Route("/xra", name="xra")
+     * @Route("/xri", name="xri")
+     * @Route("/xrie", name="xrie")
      * @param Request $request
      * @return RedirectResponse|Response
      * @throws Exception

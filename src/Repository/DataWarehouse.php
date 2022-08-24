@@ -572,8 +572,8 @@ class DataWarehouse
     {
         return $this->conn->fetchAllAssociative(
             "
-            SELECT `SAR`,`CertificationDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Cell_Phone`,`Email`
-            FROM crs_rpt_ri
+            SELECT `SAR`,`InstructorDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Cell_Phone`,`Email`
+            FROM crs_rpt_rie
             WHERE `Current` <> ''
         "
         );

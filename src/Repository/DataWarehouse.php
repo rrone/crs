@@ -157,7 +157,7 @@ class DataWarehouse
         return $this->conn->fetchAllAssociative(
             "
             SELECT * FROM crs_rpt_ra
-            WHERE (`sar` LIKE '%$userKey%' OR `area` = '') AND `Current` <> ''
+            WHERE `sar` LIKE '%$userKey%'
             ORDER BY `Section`, `Area`, ABS(`Region`), FIELD(`CertificationDesc`, 'National Referee Assessor', 'Referee Assessor', '') , `Last_Name` , `First_Name`
             LIMIT $limit
         "
@@ -174,7 +174,7 @@ class DataWarehouse
             "
             SELECT `SAR`,`CertificationDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`
             FROM crs_rpt_ra
-            WHERE `CertificationDesc` = 'National Referee Assessor' AND `Current` <> ''
+            WHERE `CertificationDesc` = 'National Referee Assessor'
             ORDER BY `Section`, `Area`, ABS(`Region`), `Last_Name` , `First_Name`
         "
         );
@@ -191,7 +191,7 @@ class DataWarehouse
         return $this->conn->fetchAllAssociative(
             "
             SELECT * FROM crs_rpt_ri
-            WHERE (`sar` LIKE '%$userKey%' OR `area` = '') AND `Current` <> ''
+            WHERE `sar` LIKE '%$userKey%'
             ORDER BY `Section`, `Area`, ABS(`Region`), FIELD(`CertificationDesc`, 'National Referee Instructor', 'Advanced Referee Instructor', 'Intermediate Referee Instructor', 'Regional Referee Instructor', '') , `Last_Name` , `First_Name` , `AYSOID`
             LIMIT $limit
         "
@@ -209,7 +209,7 @@ class DataWarehouse
         return $this->conn->fetchAllAssociative(
             "
             SELECT * FROM crs_rpt_rie
-            WHERE (`sar` LIKE '%$userKey%' OR `area` = '') AND `Current` <> ''
+            WHERE `sar` LIKE '%$userKey%'
             ORDER BY `Section`, `Area`, ABS(`Region`), FIELD
                 (`InstructorDesc`, 'National Referee Instructor', 'Advanced Referee Instructor', 'Intermediate Referee Instructor', 'Regional Referee Instructor', 'Referee Instructor') , `Last_Name` , `First_Name`
             LIMIT $limit
@@ -228,7 +228,7 @@ class DataWarehouse
         return $this->conn->fetchAllAssociative(
             "
             SELECT * FROM crs_rpt_ref_upgrades
-            WHERE `sar` LIKE '%$userKey%' OR `area` = ''
+            WHERE `sar` LIKE '%$userKey%'
             ORDER BY LEFT(`SAR`,4), FIELD(`Training`, 'National Referee Course', 'Advanced Referee Course', 'Intermediate Referee Course', 'National Referee Assessor Course', 'Referee Assessor Course', 'Advanced Referee Instructor Course', 'Intermediate Referee Instructor Course', 'Regional Referee Instructor Course', '') , `Last_Name` , `TrainingDate`
             LIMIT $limit
             "
@@ -540,7 +540,7 @@ class DataWarehouse
     {
         return $this->conn->fetchAllAssociative(
             "
-            SELECT `SAR`,`CertificationDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`
+            SELECT `SAR`,`CertificationDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`, `Current`
             FROM crs_rpt_ra
             WHERE `Current` <> ''
             ORDER BY FIELD(`CertificationDesc`, 'National Referee Assessor', 'Referee Assessor', '') , `SAR`, `Last_Name` , `First_Name`
@@ -556,7 +556,7 @@ class DataWarehouse
     {
         return $this->conn->fetchAllAssociative(
             "
-            SELECT `SAR`,`CertificationDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`
+            SELECT `SAR`,`CertificationDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`, `Current`
             FROM crs_rpt_ri
             WHERE `Current` <> ''
             ORDER BY `Section`, `Area`, ABS(`Region`), FIELD(`CertificationDesc`, 'National Referee Instructor', 'Advanced Referee Instructor', 'Intermediate Referee Instructor', 'Regional Referee Instructor') , `Last_Name` , `First_Name`
@@ -572,9 +572,9 @@ class DataWarehouse
     {
         return $this->conn->fetchAllAssociative(
             "
-            SELECT `SAR`,`InstructorDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`
+            SELECT `SAR`,`InstructorDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`, `Current`
             FROM crs_rpt_rie
-            WHERE `Current` <> ''
+            WHERE `InstructorDesc` IN ('National Referee Instructor', 'Advanced Referee Instructor') AND `Current` <> ''
         "
         );
     }

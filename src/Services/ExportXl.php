@@ -120,7 +120,7 @@ class ExportXl extends AbstractExporter
                 break;
             case 'nra':
                 if ($user1->admin) {
-                    $this->outFileName = "NationalRefAssessors".$u.$this->outFileName;
+                    $this->outFileName = "NationalRefAssessors.$u.$this->outFileName";
                     $results = $this->dw->getRefNationalAssessors();
                 } else {
                     $results = null;

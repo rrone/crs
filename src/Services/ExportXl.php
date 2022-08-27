@@ -118,6 +118,14 @@ class ExportXl extends AbstractExporter
                 $this->outFileName = "ExpiredRiskStatus.$u.$this->outFileName";
                 $results = $this->dw->getExpiredRiskRefs($userKey, $limit);
                 break;
+            case 'nra':
+                if ($user1->admin) {
+                    $this->outFileName = "NationalRefAssessors".$u.$this->outFileName;
+                    $results = $this->dw->getRefNationalAssessors();
+                } else {
+                    $results = null;
+                }
+                break;
             // @codeCoverageIgnoreEnd
             case 'xra':
                 if ($user1->admin) {
@@ -143,10 +151,10 @@ class ExportXl extends AbstractExporter
                     $results = null;
                 }
                 break;
-            case 'nra':
+            case 'xnra':
                 if ($user1->admin) {
                     $this->outFileName = "NationalRefAssessors.1.Report." . $this->getFileExtension();
-                    $results = $this->dw->getRefNationalAssessors();
+                    $results = $this->dw->getRefNationalAssessorsReport();
                 } else {
                     $results = null;
                 }

@@ -174,7 +174,7 @@ class ExportXl extends AbstractExporter
             return new RedirectResponse($baseURL);
         } else {
             $content = null;
-            if ($user1->section && $this->uri == 'bshca') {
+            if ($user1->section && $this->uri == 'crct') {
                 // @codeCoverageIgnoreStart
                 if ($_SERVER['APP_ENV'] === 'dev') {
                     $this->generateExport($content, $results, $shName);
@@ -229,7 +229,7 @@ class ExportXl extends AbstractExporter
             foreach ($rec as $hdr => $val) {
                 $labels[] = $hdr;
             }
-            if ($this->uri == 'bshca') {
+            if ($this->uri == 'crct') {
                 $labels[] = 'Health & Safety';
             }
 
@@ -267,7 +267,7 @@ class ExportXl extends AbstractExporter
 
                         $row[] = $value;
                     }
-                    if ($this->uri == 'bshca') {
+                    if ($this->uri == 'crct') {
                         $row[] = $trainingComplete ? 'COMPLETE' : '';
                     }
                 }

@@ -168,12 +168,13 @@ class ReportsControllerTest extends WebTestCasePlus
         $this->verifyLink($crawler, 'Referee Instructors', 'ri');
         $this->verifyLink($crawler, 'Referee Instructor Evaluators', 'rie');
         $this->verifyLink($crawler, 'Referee Assessors', 'ra');
-        $this->verifyLink($crawler, 'Referees Missing Safe Haven Training', 'rsh');
-        $this->verifyLink($crawler, 'Referees Missing Concussion Training', 'rcdc');
-        $this->verifyLink($crawler, 'Referees Missing Sudden Cardiac Arrest', 'rsca');
-        $this->verifyLink($crawler, 'Referees Missing SafeSport', 'rss');
-        $this->verifyLink($crawler, 'Referees Missing LiveScan', 'rls');
-        $this->verifyLink($crawler, 'Referees with Expired Risk Status', 'rxr');
+        $this->verifyLink($crawler, 'Referee Upgrade Candidates', 'ruc');
+//        $this->verifyLink($crawler, 'Referees Missing Safe Haven Training', 'rsh');
+//        $this->verifyLink($crawler, 'Referees Missing Concussion Training', 'rcdc');
+//        $this->verifyLink($crawler, 'Referees Missing Sudden Cardiac Arrest', 'rsca');
+//        $this->verifyLink($crawler, 'Referees Missing SafeSport', 'rss');
+//        $this->verifyLink($crawler, 'Referees Missing LiveScan', 'rls');
+//        $this->verifyLink($crawler, 'Referees with Expired Risk Status', 'rxr');
 
         $this->assertEmpty($crawler->selectLink('National Referee Assessors')->getNode(0));
 

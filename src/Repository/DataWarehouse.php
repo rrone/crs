@@ -635,42 +635,4 @@ class DataWarehouse
         );
     }
 
-
-//    public function showVariables()
-//    {
-//        return $this->conn->getConnection();
-//    }
-//Log reader
-//    /**
-//     * @param $key
-//     * @param $userName
-//     * @return string|null
-//     * @throws Exception
-//     */
-//    public function getLastLogon($key, $userName)
-//    {
-//        $timestamp = null;
-//
-//        $ts = $this->conn->fetchAllAssociative('log')
-//            ->where(
-//                [
-//                    ['projectKey', 'like', $key],
-//                    ['note', 'like', "$userName: CRS logon%"],
-//                ]
-//            )
-//            ->orderBy('timestamp', 'desc')
-//            ->limit(1)
-//            ->get();
-//
-//        $ts = $this->getZero($ts);
-//
-//        if (!empty($ts)) {
-//            $utc = new DateTime($ts->timestamp, new DateTimeZone('UTC'));
-//            $time = $utc->setTimezone(new DateTimeZone('America/Los_Angeles'));
-//            $timestamp = $time->format('Y-M-j H:i');
-//        }
-//
-//        return $timestamp;
-//    }
-
 }

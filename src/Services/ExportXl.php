@@ -254,8 +254,9 @@ class ExportXl extends AbstractExporter
                             case 'Concussion_Awareness_Date':
                             case 'Sudden_Cardiac_Arrest_Date':
                             case 'SafeSport_Date':
-                            case 'LiveScan_Date':
                                 $trainingComplete = $trainingComplete && !is_null($value);
+                                break;
+                            case 'LiveScan_Date':
                                 break;
                             case 'RiskStatus':
                                 if ($value == 'Green' or $value == 'Blue') {

@@ -5,7 +5,6 @@ namespace Tests\Abstracts;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class WebTestCasePlus extends WebTestCase
 {

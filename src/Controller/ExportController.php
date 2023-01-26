@@ -42,6 +42,7 @@ class ExportController extends AbstractController2
      * @Route("/rsh", name="rsh")
      * @Route("/rcdc", name="rcdc")
      * @Route("/rss", name="rss")
+     * @Route("/rssx", name="rssx")
      * @Route("/rsca", name="rsca")
      * @Route("/rls", name="rls")
      * @Route("/rxr", name="rxr")

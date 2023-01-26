@@ -110,6 +110,10 @@ class ExportXl extends AbstractExporter
                 $this->outFileName = "MissingSafeSport.$u.$this->outFileName";
                 $results = $this->dw->getSafeSportRefs($userKey, $limit);
                 break;
+            case 'rssx':
+                $this->outFileName = "SafeSportExpiration.$u.$this->outFileName";
+                $results = $this->dw->getSafeSportExpirationRefs($userKey, $limit);
+                break;
             case 'rls':
                 $this->outFileName = "MissingLiveScan.$u.$this->outFileName";
                 $results = $this->dw->getLiveScanRefs($userKey, $limit);

@@ -487,13 +487,50 @@ class DataWarehouse
             "
             SELECT *
             FROM crs_rpt_ref_certs
-            WHERE (`sar` LIKE '%$userKey%' ) AND `SafeSport_Date` IS NULL AND `MY` >= '$MY'
+            WHERE (`sar` LIKE '%$userKey%' ) AND `SafeSport_Date` <> '' AND `MY` >= '$MY'
             ORDER BY `Section`, `Area` , ABS(`Region`) , `Last_Name` , `First_Name`
             LIMIT $limit
         "
         );
 
         foreach ($results as &$result) {
+            unset($result['Safe_Haven_Date']);
+            unset($result['Concussion_Awareness_Date']);
+            unset($result['Sudden_Cardiac_Arrest_Date']);
+            unset($result['LiveScan_Date']);
+            unset($result['RiskStatus']);
+            unset($result['RiskExpireDate']);
+        }
+
+        return $results;
+
+    }
+
+    /**
+     * @param mixed $userKey
+     * @param int $limit
+     * @return array[]
+     * @throws Doctrine\DBAL\Exception
+     */
+    public function getSafeSportExpirationRefs($userKey, int $limit = self::BIGINT): array
+    {
+        $MY = CurrentMY;
+
+        $results = $this->conn->fetchAllAssociative(
+            "
+            SELECT *
+            FROM crs_rpt_rssx
+            WHERE (`sar` LIKE '%$userKey%' ) AND `SafeSport_Date` <> '' AND `MY` >= '$MY'
+            ORDER BY `Section`, `Area`, ABS(`Region`), `Last_Name`, `First_Name`
+            LIMIT $limit
+        "
+        );
+
+        foreach ($results as &$result) {
+            unset($result['AYSOID']);
+            unset($result['Cell_Phone']);
+            unset($result['DOB']);
+            unset($result['Gender']);
             unset($result['Safe_Haven_Date']);
             unset($result['Concussion_Awareness_Date']);
             unset($result['Sudden_Cardiac_Arrest_Date']);
@@ -560,6 +597,10 @@ class DataWarehouse
         );
 
         foreach ($results as &$result) {
+            unset($result['AYSOID']);
+            unset($result['Cell_Phone']);
+            unset($result['DOB']);
+            unset($result['Gender']);
             unset($result['Safe_Haven_Date']);
             unset($result['Concussion_Awareness_Date']);
             unset($result['Sudden_Cardiac_Arrest_Date']);

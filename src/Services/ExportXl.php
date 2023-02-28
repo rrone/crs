@@ -243,6 +243,8 @@ class ExportXl extends AbstractExporter
             foreach ($certs as $cert) {
                 $row = [];
                 $trainingComplete = true;
+                $is_18 = $this->is_18($cert['DOB']);
+
                 if (!empty($cert)) {
                     foreach ($cert as $key => $value) {
                         switch ($key) {
@@ -257,17 +259,17 @@ class ExportXl extends AbstractExporter
                             case 'Safe_Haven_Date':
                             case 'Concussion_Awareness_Date':
                             case 'Sudden_Cardiac_Arrest_Date':
+                                $trainingComplete = $trainingComplete && !empty($value);
+                                break;
                             case 'SafeSport_Date':
-                                $trainingComplete = $trainingComplete && !is_null($value);
+                                if ($is_18)
+                                    $trainingComplete = $trainingComplete && !empty($value);
                                 break;
                             case 'LiveScan_Date':
                                 break;
                             case 'RiskStatus':
-                                if ($value == 'Green' or $value == 'Blue') {
-                                    $trainingComplete = $trainingComplete && !is_null($value);
-                                } else {
-                                    $trainingComplete = false;
-                                }
+                                $trainingComplete =  $trainingComplete && ($value == 'Green' or (!$is_18 && $value == 'Blue'));
+                                break;
                         }
 
                         $row[] = $value;
@@ -288,6 +290,22 @@ class ExportXl extends AbstractExporter
 
         }
 
+    }
+
+    /**
+     * @param string $dob
+     * @return bool
+     */
+    private function is_18(string $dob):bool {
+        return date_diff(date_create($dob), date_create())->y > 17;
+    }
+
+    /**
+     * @param string $dob
+     * @return float
+     */
+    private function age(string $dob):float {
+        return date_diff(date_create($dob), date_create())->y;
     }
 
 }

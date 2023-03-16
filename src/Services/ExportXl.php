@@ -243,7 +243,6 @@ class ExportXl extends AbstractExporter
             foreach ($certs as $cert) {
                 $row = [];
                 $trainingComplete = true;
-                $is_18 = $this->is_18($cert['DOB']);
 
                 if (!empty($cert)) {
                     foreach ($cert as $key => $value) {
@@ -262,12 +261,14 @@ class ExportXl extends AbstractExporter
                                 $trainingComplete = $trainingComplete && !empty($value);
                                 break;
                             case 'SafeSport_Date':
+                                $is_18 = $this->is_18($cert['DOB']);
                                 if ($is_18)
                                     $trainingComplete = $trainingComplete && !empty($value);
                                 break;
                             case 'LiveScan_Date':
                                 break;
                             case 'RiskStatus':
+                                $is_18 = $this->is_18($cert['DOB']);
                                 $trainingComplete =  $trainingComplete && ($value == 'Green' or (!$is_18 && $value == 'Blue'));
                                 break;
                         }

@@ -529,7 +529,6 @@ class DataWarehouse
         foreach ($results as &$result) {
             unset($result['AYSOID']);
             unset($result['Cell_Phone']);
-            unset($result['DOB']);
             unset($result['Gender']);
             unset($result['Safe_Haven_Date']);
             unset($result['Concussion_Awareness_Date']);
@@ -599,7 +598,6 @@ class DataWarehouse
         foreach ($results as &$result) {
             unset($result['AYSOID']);
             unset($result['Cell_Phone']);
-            unset($result['DOB']);
             unset($result['Gender']);
             unset($result['Safe_Haven_Date']);
             unset($result['Concussion_Awareness_Date']);

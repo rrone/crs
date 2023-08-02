@@ -2,7 +2,7 @@
     "type": "project",
     "license": "MIT",
     "name": "ayso/certification_reporting_system",
-    "description": "An application to publish AYSO certification volunteer certifications",
+    "description": "An application to publish AYSO volunteer certifications",
     "require": {
         "php": ">=7.4",
         "ext-ctype": "*",

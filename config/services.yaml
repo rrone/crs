@@ -5,7 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
-    app.version: '2023.08.02.01'
+    app.version: '2023.08.02.02'
 
     sra:
         name: 'Rick Roberts'

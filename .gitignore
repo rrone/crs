@@ -25,7 +25,7 @@ yarn-error.log
 
 ###> symfony/framework-bundle ###
 /.env.local
-/.env.local.php
+/.env.local
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/

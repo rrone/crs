@@ -4,6 +4,8 @@ namespace Tests\Repository;
 
 use App\Repository\DataWarehouse;
 use Doctrine\DBAL\Connection;
+use Psr\Container\ContainerInterface;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class DataWarehouseTest extends KernelTestCase
@@ -18,12 +20,12 @@ class DataWarehouseTest extends KernelTestCase
     /**
      * @var DataWarehouse
      */
-    protected $dw;
+    protected DataWarehouse $dw;
 
-    protected $userName;
-    protected $user;
-    protected $c;
-    protected $pw;
+    protected string $userName;
+    protected stdClass $user;
+    protected ContainerInterface $c;
+    protected string $pw;
 
     protected function setUp(): void
     {
@@ -95,7 +97,7 @@ class DataWarehouseTest extends KernelTestCase
         $result = $this->dw->getRefAssessors('1', 10);
         $this->assertEquals(10, sizeof($result));
 
-        $result = $this->dw->getRefNationalAssessors('1', 10);
+        $result = $this->dw->getRefNationalAssessors();
         $this->assertEquals(42, sizeof($result));
 
         $result = $this->dw->getRefInstructors('1', 10);
@@ -111,6 +113,15 @@ class DataWarehouseTest extends KernelTestCase
         $this->assertEquals(10, sizeof($result));
 
         $result = $this->dw->getConcussionRefs('1', 10);
+        $this->assertEquals(10, sizeof($result));
+
+        $result = $this->dw->getSafeSportExpirationRefs('1', 10);
+        $this->assertEquals(10, sizeof($result));
+
+        $result = $this->dw->getLiveScanRefs('1', 10);
+        $this->assertEquals(10, sizeof($result));
+
+        $result = $this->dw->getExpiredRiskRefs('1', 10);
         $this->assertEquals(10, sizeof($result));
 
     }

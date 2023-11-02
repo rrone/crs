@@ -297,8 +297,8 @@ class DataWarehouse
             unset($result['Sudden_Cardiac_Arrest_Date']);
             unset($result['SafeSport_Date']);
             unset($result['LiveScan_Date']);
-            unset($result['RiskStatus']);
-            unset($result['RiskExpireDate']);
+            unset($result['Risk_Status']);
+            unset($result['Risk_Expire_Date']);
         }
 
         return $results;
@@ -465,9 +465,10 @@ class DataWarehouse
             unset($result['Safe_Haven_Date']);
             unset($result['Concussion_Awareness_Date']);
             unset($result['SafeSport_Date']);
+            unset($result['SafeSport_Expire_Date']);
             unset($result['LiveScan_Date']);
-            unset($result['RiskStatus']);
-            unset($result['RiskExpireDate']);
+            unset($result['Risk_Status']);
+            unset($result['Risk_Expire_Date']);
         }
 
         return $results;
@@ -498,8 +499,8 @@ class DataWarehouse
             unset($result['Concussion_Awareness_Date']);
             unset($result['Sudden_Cardiac_Arrest_Date']);
             unset($result['LiveScan_Date']);
-            unset($result['RiskStatus']);
-            unset($result['RiskExpireDate']);
+            unset($result['Risk_Status']);
+            unset($result['Risk_Expire_Date']);
         }
 
         return $results;
@@ -534,8 +535,8 @@ class DataWarehouse
             unset($result['Concussion_Awareness_Date']);
             unset($result['Sudden_Cardiac_Arrest_Date']);
             unset($result['LiveScan_Date']);
-            unset($result['RiskStatus']);
-            unset($result['RiskExpireDate']);
+            unset($result['Risk_Status']);
+            unset($result['Risk_Expire_Date']);
         }
 
         return $results;
@@ -567,8 +568,9 @@ class DataWarehouse
             unset($result['Concussion_Awareness_Date']);
             unset($result['Sudden_Cardiac_Arrest_Date']);
             unset($result['SafeSport_Date']);
-            unset($result['RiskStatus']);
-            unset($result['RiskExpireDate']);
+            unset($result['SafeSport_Expire_Date']);
+            unset($result['Risk_Status']);
+            unset($result['Risk_Expire_Date']);
         }
 
         return $results;
@@ -589,7 +591,7 @@ class DataWarehouse
             "
             SELECT *
             FROM crs_rpt_ref_certs
-            WHERE (`sar` LIKE '%$userKey%' ) AND `RiskStatus` IN ('None', 'Expired', NULL) AND `MY` >= '$MY'
+            WHERE (`sar` LIKE '%$userKey%' ) AND `Risk_Status` IN ('None', 'Expired', NULL) AND `MY` >= '$MY'
             ORDER BY `Section`, `Area` , ABS(`Region`) , `Last_Name` , `First_Name`
             LIMIT $limit
         "
@@ -603,6 +605,7 @@ class DataWarehouse
             unset($result['Concussion_Awareness_Date']);
             unset($result['Sudden_Cardiac_Arrest_Date']);
             unset($result['SafeSport_Date']);
+            unset($result['SafeSport_Expire_Date']);
             unset($result['LiveScan_Date']);
         }
 

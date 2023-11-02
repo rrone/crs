@@ -6,7 +6,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine;
 use Exception;
 
-define("CurrentMY", "MY2018");
+define("CurrentMY", "MY2019");
 
 /**
  * Class DataWarehouse

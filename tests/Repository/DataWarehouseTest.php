@@ -96,7 +96,7 @@ class DataWarehouseTest extends KernelTestCase
         $this->assertEquals(10, sizeof($result));
 
         $result = $this->dw->getRefNationalAssessors('1', 10);
-        $this->assertEquals(45, sizeof($result));
+        $this->assertEquals(42, sizeof($result));
 
         $result = $this->dw->getRefInstructors('1', 10);
         $this->assertEquals(10, sizeof($result));

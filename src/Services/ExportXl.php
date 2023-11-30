@@ -70,6 +70,7 @@ class ExportXl extends AbstractExporter
         $user = explode(' ', $user1->name);
         $u = strtoupper(str_replace('/', '', end($user)));
 
+        date_default_timezone_set('America/Los_Angeles');
         $shName = 'Updated ' . date('Y-M-d');
 
         switch ($this->uri) {

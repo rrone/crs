@@ -38,6 +38,8 @@ echo ">>> Copying app to distribution..."
 cp ./.env.dist "${prod}"/.env
 cp -f ./*.json "${prod}"
 cp -f ./*.lock "${prod}"
+cp -f ./*.md "${prod}"
+cp -f ./*.txt "${prod}"
 cp -f .yarnrc.yml "${prod}"
 cp -rf .yarn "${prod}"
 

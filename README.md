@@ -17,10 +17,13 @@ This application integrates volunteer certification reports drawn from the Assoc
 1. All reports are delivered as Excel workbooks
 2. Report data is extracted at least weekly from AYSO Sports Affinity for Referees in Section 1
 3. Reports include the highest Certification, Safe Haven, Concussion Awareness, Sudden Cardiac Arrest, SafeSport, Background Checks & LiveScan data for MY2019 and later registrations. Background Check color code decoded at AYSO Wiki
-4. Suggestions for other reports? Apparent report errors? Contact the Section 1 Referee Administrator
-5. Any omissions or duplicate IDs should be addressed by a problem report to support@ayso.org
+4. Any omissions or duplicate IDs should be addressed by a problem report to support@ayso.org
+
+## How to suggest a new report
+Suggestions for other reports? Apparent report errors? Contact the Section 1 Referee Administrator
+
+## How to report a bug
+Find an issue with the Certification Reporting System? Log it in the issue tracker at https://github.com/rrone/crs/issues.
 
 ## Support
 Questions? Contact the Section 1 Referee Administrator.
-
-Find an issue with the Certification Reporting System? Log it in the issue tracker at https://github.com/rrone/crs/issues.

@@ -5,12 +5,12 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
-    app.version: '2024.03.20.00'
+    app.version: '2024.03.29.00'
 
     sra:
         name: 'Rick Roberts'
         email: 'ayso1sra@gmail.com'
-        subject: 'subject=Suggestion for a volunteer report'
+        subject: 'subject=Suggestion for a CRS report'
 
     issueTracker: 'https://github.com/rrone/crs/issues'
 

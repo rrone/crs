@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use DateTime;
 use DateTimeZone;
 use Exception;
+use function PHPUnit\Framework\isEmpty;
+use function PHPUnit\Framework\isNull;
 
 define("xlsxFile", realpath(__DIR__ . '/../../var/xlsx/CompositeRefCerts.xlsx'));
 
@@ -243,7 +245,6 @@ class ExportXl extends AbstractExporter
             //set the data : 1 record in each row
             foreach ($certs as $cert) {
                 $row = [];
-                $trainingComplete = true;
 
                 if (!empty($cert)) {
                     foreach ($cert as $key => $value) {
@@ -253,31 +254,22 @@ class ExportXl extends AbstractExporter
                             case 'City':
                                 $value = ucwords(strtolower($value));
                                 break;
-                            case 'Email':
-                                $value = strtolower($value);
-                                break;
-                            case 'Safe_Haven_Date':
-                            case 'Concussion_Awareness_Date':
-                            case 'Sudden_Cardiac_Arrest_Date':
-                                $trainingComplete = $trainingComplete && !empty($value);
-                                break;
-                            case 'SafeSport_Date':
-                                $is_18 = $this->is_18($cert['DOB']);
-                                if ($is_18)
-                                    $trainingComplete = $trainingComplete && !empty($value);
-                                break;
-                            case 'LiveScan_Date':
-                                break;
-                            case 'RiskStatus':
-                                $is_18 = $this->is_18($cert['DOB']);
-                                $trainingComplete =  $trainingComplete && ($value == 'Green' or (!$is_18 && $value == 'Blue'));
-                                break;
+                        case 'Email':
+                            $value = strtolower($value);
+                            break;
                         }
-
                         $row[] = $value;
                     }
                     if ($this->uri == 'crct') {
-                        $row[] = $trainingComplete ? 'COMPLETE' : '';
+                        $is_18 = $this->is_18($cert['DOB']);
+                        if ($cert['Safe_Haven_Date'] == '' or
+                            $cert['Concussion_Awareness_Date'] == ''  or
+                            $cert['Sudden_Cardiac_Arrest_Date'] == '' or
+                            $cert['Risk_Status'] == 'Expired' or
+                            ($is_18 and $cert['SafeSport_Date'] == ''))
+                            $row[] = '';
+                        else
+                            $row[] = 'COMPLETE';
                     }
                 }
 

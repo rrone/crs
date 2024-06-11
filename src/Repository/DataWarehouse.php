@@ -201,7 +201,10 @@ class DataWarehouse
             SELECT *
             FROM crs_rpt_ri
             WHERE `sar` LIKE '%$userKey%' AND `MY` >= '$MY'
-            ORDER BY `Section`, `Area`, ABS(`Region`), FIELD(`CertificationDesc`, 'National Referee Instructor', 'Advanced Referee Instructor', 'Intermediate Referee Instructor', 'Regional Referee Instructor', '') , `Last_Name` , `First_Name` , `AYSOID`
+            ORDER BY `Section`, `Area`, ABS(`Region`),
+                     FIELD(`CertificationDesc`, 'National Referee Instructor', 'Advanced Referee Instructor',
+                     'Intermediate Referee Instructor', 'Regional Referee Instructor', '') ,
+                `Last_Name` , `First_Name` , `AdminID`
             LIMIT $limit
         "
         );
@@ -222,7 +225,9 @@ class DataWarehouse
             FROM crs_rpt_rie
             WHERE `sar` LIKE '%$userKey%' AND `MY` >= '$MY'
             ORDER BY `Section`, `Area`, ABS(`Region`), FIELD
-                (`InstructorDesc`, 'National Referee Instructor', 'Advanced Referee Instructor', 'Intermediate Referee Instructor', 'Regional Referee Instructor', 'Referee Instructor') , `Last_Name` , `First_Name`
+                (`InstructorDesc`, 'National Referee Instructor', 'Advanced Referee Instructor',
+                'Intermediate Referee Instructor', 'Regional Referee Instructor', 'Referee Instructor') ,
+                `Last_Name` , `First_Name`
             LIMIT $limit
         "
         );
@@ -243,7 +248,10 @@ class DataWarehouse
             SELECT *
             FROM crs_rpt_ref_upgrades
             WHERE `sar` LIKE '%$userKey%' AND `MY` >= '$MY'
-            ORDER BY LEFT(`SAR`,4), FIELD(`Training`, 'National Referee Course', 'Advanced Referee Course', 'Intermediate Referee Course', 'National Referee Assessor Course', 'Referee Assessor Course', 'Advanced Referee Instructor Course', 'Intermediate Referee Instructor Course', 'Regional Referee Instructor Course', '') , `Last_Name` , `TrainingDate`
+            ORDER BY LEFT(`SAR`,4), FIELD(`Training`, 'National Referee Course', 'Advanced Referee Course',
+            'Intermediate Referee Course', 'National Referee Assessor Course', 'Referee Assessor Course',
+            'Advanced Referee Instructor Course', 'Intermediate Referee Instructor Course',
+            'Regional Referee Instructor Course', '') , `Last_Name` , `TrainingDate`
             LIMIT $limit
             "
         );
@@ -286,8 +294,10 @@ class DataWarehouse
             "
             SELECT *
             FROM crs_rpt_ref_certs
-            WHERE (`sar` LIKE '%$userKey%' ) AND `Concussion_Awareness_Date` IS NULL AND `MY` >= '$MY'
-            ORDER BY `Section` , `Area` , ABS(`Region`) , `Last_Name` , `First_Name` , `AYSOID`
+            WHERE (`sar` LIKE '%$userKey%' ) AND
+                  (`Concussion_Awareness_Date` = '') AND
+                  `MY` >= '$MY'
+            ORDER BY `Section` , `Area` , ABS(`Region`) , `Last_Name` , `First_Name` , `AdminID`
             LIMIT $limit
         "
         );
@@ -318,8 +328,10 @@ class DataWarehouse
             "
             SELECT *
             FROM crs_rpt_ref_certs
-            WHERE (`sar` LIKE '%$userKey%' ) AND `Safe_Haven_Date` IS NULL AND `MY` >= '$MY'
-            ORDER BY `Section`, `Area` , ABS(`Region`) , `Last_Name` , `First_Name` , `AYSOID`
+            WHERE (`sar` LIKE '%$userKey%' ) AND
+              (`Safe_Haven_Date`= '') AND
+                  `MY` >= '$MY'
+            ORDER BY `Section`, `Area` , ABS(`Region`) , `Last_Name` , `First_Name` , `AdminID`
             LIMIT $limit
         "
         );
@@ -344,7 +356,7 @@ class DataWarehouse
                 FIELD(`CertificationDesc`, 'National Referee','National 2 Referee', 'Advanced Referee',
                 'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee',
                 'Assistant Referee', 'Assistant Referee & Safe Haven Referee', '8U Official',
-                '8U Official & Safe Haven Referee', '') , `Last_Name` , `First_Name` , `AYSOID`
+                '8U Official & Safe Haven Referee', '') , `Last_Name` , `First_Name` , `AdminID`
             LIMIT $limit
             "
         );
@@ -455,7 +467,9 @@ class DataWarehouse
             "
             SELECT *
             FROM crs_rpt_ref_certs
-            WHERE (`sar` LIKE '%$userKey%' ) AND `Sudden_Cardiac_Arrest_Date` IS NULL AND `MY` >= '$MY'
+            WHERE (`sar` LIKE '%$userKey%' ) AND
+                  (`Sudden_Cardiac_Arrest_Date` = '') AND
+                  `MY` >= '$MY'
             ORDER BY `Section`, `Area` , ABS(`Region`) , `Last_Name` , `First_Name`
             LIMIT $limit
         "
@@ -528,7 +542,6 @@ class DataWarehouse
         );
 
         foreach ($results as &$result) {
-            unset($result['AYSOID']);
             unset($result['Cell_Phone']);
             unset($result['Gender']);
             unset($result['Safe_Haven_Date']);
@@ -557,7 +570,9 @@ class DataWarehouse
             "
             SELECT *
             FROM crs_rpt_ref_certs
-            WHERE (`sar` LIKE '%$userKey%' ) AND `LiveScan_Date` IS NULL AND `MY` >= '$MY'
+            WHERE (`sar` LIKE '%$userKey%' ) AND
+                  (`LiveScan_Date` = '') AND
+                  `MY` >= '$MY'
             ORDER BY `Section`, `Area` , ABS(`Region`) , `Last_Name` , `First_Name`
             LIMIT $limit
         "
@@ -598,7 +613,6 @@ class DataWarehouse
         );
 
         foreach ($results as &$result) {
-            unset($result['AYSOID']);
             unset($result['Cell_Phone']);
             unset($result['Gender']);
             unset($result['Safe_Haven_Date']);
@@ -624,7 +638,8 @@ class DataWarehouse
             SELECT `SAR`,`CertificationDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`
             FROM crs_rpt_ra
             WHERE `Current` <> ''
-            ORDER BY FIELD(`CertificationDesc`, 'National Referee Assessor', 'Referee Assessor', '') , `SAR`, `Last_Name` , `First_Name`
+            ORDER BY FIELD(`CertificationDesc`, 'National Referee Assessor', 'Referee Assessor', ''),
+                     `SAR`, `Last_Name` , `First_Name`
         "
         );
     }
@@ -640,7 +655,9 @@ class DataWarehouse
             SELECT `SAR`,`CertificationDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`
             FROM crs_rpt_ri
             WHERE `Current` <> ''
-            ORDER BY `Section`, `Area`, ABS(`Region`), FIELD(`CertificationDesc`, 'National Referee Instructor', 'Advanced Referee Instructor', 'Intermediate Referee Instructor', 'Regional Referee Instructor') , `Last_Name` , `First_Name`
+            ORDER BY `Section`, `Area`, ABS(`Region`), FIELD(`CertificationDesc`, 'National Referee Instructor',
+            'Advanced Referee Instructor', 'Intermediate Referee Instructor', 'Regional Referee Instructor'),
+                `Last_Name` , `First_Name`
         "
         );
     }
@@ -655,7 +672,8 @@ class DataWarehouse
             "
             SELECT `SAR`,`InstructorDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`
             FROM crs_rpt_rie
-            WHERE `InstructorDesc` IN ('National Referee Instructor', 'Advanced Referee Instructor') AND `Current` <> ''
+            WHERE `InstructorDesc` IN ('National Referee Instructor', 'Advanced Referee Instructor') AND
+                  `Current` <> ''
         "
         );
     }

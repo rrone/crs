@@ -13,8 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 use DateTime;
 use DateTimeZone;
 use Exception;
-use function PHPUnit\Framework\isEmpty;
-use function PHPUnit\Framework\isNull;
 
 define("xlsxFile", realpath(__DIR__ . '/../../var/xlsx/CompositeRefCerts.xlsx'));
 

@@ -103,9 +103,9 @@ class ReportsController extends AbstractController2
         $hrefEnd = $this->generateUrl('end');
 
         $html .= "<h3 class=\"center\">";
-        if ($this->super) {
-            $html .= "<a href=$hrefAdmin >Admin Functions - </a> ";
-        }
+//        if ($this->super) {
+//            $html .= "<a href=$hrefAdmin >Admin Functions - </a> ";
+//        }
         $html .= "<a href=$hrefEnd >Log Off</a></h3>\n";
 
         return $html;

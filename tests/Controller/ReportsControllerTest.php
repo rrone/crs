@@ -77,6 +77,7 @@ class ReportsControllerTest extends WebTestCasePlus
         yield ['/rsh'];
         yield ['/rcdc'];
         yield ['/rss'];
+        yield ['/rssx'];
         yield ['/rsca'];
         yield ['/rls'];
         yield ['/rxr'];
@@ -110,6 +111,7 @@ class ReportsControllerTest extends WebTestCasePlus
         yield ['/rsh'];
         yield ['/rcdc'];
         yield ['/rss'];
+        yield ['/rssx'];
         yield ['/rsca'];
         yield ['/rls'];
         yield ['/rxr'];

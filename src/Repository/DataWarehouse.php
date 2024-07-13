@@ -295,7 +295,7 @@ class DataWarehouse
             SELECT *
             FROM crs_rpt_ref_certs
             WHERE (`sar` LIKE '%$userKey%' ) AND
-                  (`Concussion_Awareness_Date` = '') AND
+                  (COALESCE(`Concussion_Awareness_Date`, '') = '') AND
                   `MY` >= '$MY'
             ORDER BY `Section` , `Area` , ABS(`Region`) , `Last_Name` , `First_Name` , `AdminID`
             LIMIT $limit
@@ -329,7 +329,7 @@ class DataWarehouse
             SELECT *
             FROM crs_rpt_ref_certs
             WHERE (`sar` LIKE '%$userKey%' ) AND
-              (`Safe_Haven_Date`= '') AND
+              (COALESCE(`Safe_Haven_Date`, '') = '') AND
                   `MY` >= '$MY'
             ORDER BY `Section`, `Area` , ABS(`Region`) , `Last_Name` , `First_Name` , `AdminID`
             LIMIT $limit
@@ -468,7 +468,7 @@ class DataWarehouse
             SELECT *
             FROM crs_rpt_ref_certs
             WHERE (`sar` LIKE '%$userKey%' ) AND
-                  (`Sudden_Cardiac_Arrest_Date` = '') AND
+                  (COALESCE(`Sudden_Cardiac_Arrest_Date`, '') = '') AND
                   `MY` >= '$MY'
             ORDER BY `Section`, `Area` , ABS(`Region`) , `Last_Name` , `First_Name`
             LIMIT $limit
@@ -535,7 +535,8 @@ class DataWarehouse
             "
             SELECT *
             FROM crs_rpt_rssx
-            WHERE (`sar` LIKE '%$userKey%' ) AND `SafeSport_Date` <> '' AND `MY` >= '$MY'
+            WHERE (`sar` LIKE '%$userKey%' ) AND
+                `MY` >= '$MY'
             ORDER BY `Section`, `Area`, ABS(`Region`), `Last_Name`, `First_Name`
             LIMIT $limit
         "
@@ -571,7 +572,7 @@ class DataWarehouse
             SELECT *
             FROM crs_rpt_ref_certs
             WHERE (`sar` LIKE '%$userKey%' ) AND
-                  (`LiveScan_Date` = '') AND
+                  (COALESCE(`LiveScan_Date`, '') = '') AND
                   `MY` >= '$MY'
             ORDER BY `Section`, `Area` , ABS(`Region`) , `Last_Name` , `First_Name`
             LIMIT $limit

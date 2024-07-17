@@ -599,6 +599,32 @@ class DataWarehouse
      * @return array[]
      * @throws Doctrine\DBAL\Exception
      */
+    public function getRefsNewCerts($userKey, int $limit = self::BIGINT): array
+    {
+        return $this->conn->fetchAllAssociative(
+            "
+            SELECT
+                `Section`, `Area`, `Region`, `FirstName`, `LastName`, `Gender`, `Email`, `Address`, `City`, `State`, `PostalCode`, `CertificationDesc`, `CertificationDate`
+            FROM
+                `crs_admin_info`
+            WHERE (CONCAT(`Section`, '/', `Area`) LIKE '%$userKey%' )
+                AND `CertificationDate` >= DATE_SUB(NOW(), INTERVAL 60 DAY)
+                AND `CertificationDesc` IN ('National Referee', 'Advanced Referee', 'Intermediate Referee')
+            ORDER BY FIELD(`CertificationDesc`, 'National Referee', 'Advanced Referee', 'Intermediate Referee'),
+                     CAST(`Section` AS unsigned), `Area`, `CertificationDate` DESC, CAST(`Region` AS unsigned),
+                     `LastName` DESC
+            LIMIT $limit
+            "
+        );
+
+    }
+
+    /**
+     * @param mixed $userKey
+     * @param int $limit
+     * @return array[]
+     * @throws Doctrine\DBAL\Exception
+     */
     public function getExpiredRiskRefs($userKey, int $limit = self::BIGINT): array
     {
         $MY = CurrentMY;

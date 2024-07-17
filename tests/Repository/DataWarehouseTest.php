@@ -92,7 +92,7 @@ class DataWarehouseTest extends KernelTestCase
 
     }
 
-    public function testUnusedDBMethods()
+    public function testDBMethods()
     {
         $result = $this->dw->getRefAssessors('1', 10);
         $this->assertEquals(10, sizeof($result));
@@ -123,6 +123,9 @@ class DataWarehouseTest extends KernelTestCase
 
         $result = $this->dw->getExpiredRiskRefs('1', 10);
         $this->assertEquals(10, sizeof($result));
+
+        $result = $this->dw->getRefsNewCerts('1', 5);
+        $this->assertEquals(5, sizeof($result));
 
     }
 }

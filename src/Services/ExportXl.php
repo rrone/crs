@@ -119,6 +119,10 @@ class ExportXl extends AbstractExporter
                 $this->outFileName = "MissingLiveScan.$u.$this->outFileName";
                 $results = $this->dw->getLiveScanRefs($userKey, $limit);
                 break;
+            case 'newcert':
+                $this->outFileName = "NewRefereeCerts.$u.$this->outFileName";
+                $results = $this->dw->getRefsNewCerts($userKey, $limit);
+                break;
             case 'rxr':
                 $this->outFileName = "ExpiredRiskStatus.$u.$this->outFileName";
                 $results = $this->dw->getExpiredRiskRefs($userKey, $limit);

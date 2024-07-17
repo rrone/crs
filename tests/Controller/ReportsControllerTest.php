@@ -81,6 +81,7 @@ class ReportsControllerTest extends WebTestCasePlus
         yield ['/rsca'];
         yield ['/rls'];
         yield ['/rxr'];
+        yield ['/newcert'];
 
     }
 
@@ -115,6 +116,7 @@ class ReportsControllerTest extends WebTestCasePlus
         yield ['/rsca'];
         yield ['/rls'];
         yield ['/rxr'];
+        yield ['/newcert'];
 
 //        //unused reports defined in ExportXl
 //        yield ['/hrc'];
@@ -171,6 +173,7 @@ class ReportsControllerTest extends WebTestCasePlus
         $this->verifyLink($crawler, 'Referee Instructor Evaluators', 'rie');
         $this->verifyLink($crawler, 'Referee Assessors', 'ra');
         $this->verifyLink($crawler, 'Referee Upgrade Candidates', 'ruc');
+        $this->verifyLink($crawler, 'New Referee Certifications', 'newcert');
 //        $this->verifyLink($crawler, 'Referees Missing Safe Haven Training', 'rsh');
 //        $this->verifyLink($crawler, 'Referees Missing Concussion Training', 'rcdc');
 //        $this->verifyLink($crawler, 'Referees Missing Sudden Cardiac Arrest', 'rsca');

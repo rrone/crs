@@ -3779,13 +3779,13 @@ __metadata:
   linkType: hard
 
 "fast-xml-parser@npm:^4.1.3":
-  version: 4.4.0
-  resolution: "fast-xml-parser@npm:4.4.0"
+  version: 4.4.1
+  resolution: "fast-xml-parser@npm:4.4.1"
   dependencies:
     strnum: "npm:^1.0.5"
   bin:
     fxparser: src/cli/cli.js
-  checksum: 8/ad33a4b5165a0ffcb6e17ae78825bd4619a8298844a8a8408f2ea141a0d2d9439d18865dc5254162f09fe54d510ff18e5d5c0a190869cab21fc745ee66be816b
+  checksum: 10c0/7f334841fe41bfb0bf5d920904ccad09cefc4b5e61eaf4c225bf1e1bb69ee77ef2147d8942f783ee8249e154d1ca8a858e10bda78a5d78b8bed3f48dcee9bf33
   languageName: node
   linkType: hard
 
@@ -6737,6 +6737,7 @@ __metadata:
     require: "npm:^2.4.20"
     stylelint: "npm:^15.10.1"
     stylelint-config-standard: "npm:^22.0.0"
+    uglify-js: "npm:^3.10.4"
     webpack-notifier: "npm:^1"
     xmldom: "npm:^0.5.0"
     xmlhttprequest: "npm:^1.8.0"
@@ -7717,6 +7718,15 @@ __metadata:
   bin:
     uglifyjs: bin/uglifyjs
   checksum: 8/a3b49da02fe6b486e24b1016d0d222bbf1130902f09eca0e35abfccf98bc298795a1afb6e26f7bf08d5ed5b85dad0a408ac701efd226ed9f569df6ca3e4f028f
+  languageName: node
+  linkType: hard
+
+"uglify-js@npm:^3.10.4":
+  version: 3.19.1
+  resolution: "uglify-js@npm:3.19.1"
+  bin:
+    uglifyjs: bin/uglifyjs
+  checksum: 10c0/7609ab3f10d54de5ef014770f845c747266a969e9092d2284ca0ba18f10a4488208c1491bd8b52bd4c40cf6687b47a77c495f08e4a625babcdd57f58e34a3976
   languageName: node
   linkType: hard
 

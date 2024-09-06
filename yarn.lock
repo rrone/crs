@@ -3,7 +3,11 @@
 
 __metadata:
   version: 8
+<<<<<<< HEAD
   cacheKey: 10
+=======
+  cacheKey: 10c0
+>>>>>>> 16e13dcad6f5376a5865830cb581b3ae6f9ebfc0
 
 "@ampproject/remapping@npm:^2.2.0":
   version: 2.3.0
@@ -5008,12 +5012,16 @@ __metadata:
   linkType: hard
 
 "micromatch@npm:^4.0.2, micromatch@npm:^4.0.4, micromatch@npm:^4.0.7":
-  version: 4.0.7
-  resolution: "micromatch@npm:4.0.7"
+  version: 4.0.8
+  resolution: "micromatch@npm:4.0.8"
   dependencies:
     braces: "npm:^3.0.3"
     picomatch: "npm:^2.3.1"
+<<<<<<< HEAD
   checksum: 8/3cde047d70ad80cf60c787b77198d680db3b8c25b23feb01de5e2652205d9c19f43bd81882f69a0fd1f0cde6a7a122d774998aad3271ddb1b8accf8a0f480cf7
+=======
+  checksum: 10c0/166fa6eb926b9553f32ef81f5f531d27b4ce7da60e5baf8c021d043b27a388fb95e46a8038d5045877881e673f8134122b59624d5cecbd16eb50a42e7a6b5ca8
+>>>>>>> 16e13dcad6f5376a5865830cb581b3ae6f9ebfc0
   languageName: node
   linkType: hard
 
@@ -6423,7 +6431,11 @@ __metadata:
     supports-preserve-symlinks-flag: "npm:^1.0.0"
   bin:
     resolve: bin/resolve
+<<<<<<< HEAD
   checksum: 10/f345cd37f56a2c0275e3fe062517c650bb673815d885e7507566df589375d165bbbf4bdb6aa95600a9bc55f4744b81f452b5a63f95b9f10a72787dba3c90890a
+=======
+  checksum: 10c0/0446f024439cd2e50c6c8fa8ba77eaa8370b4180f401a96abf3d1ebc770ac51c1955e12764cde449fde3fff480a61f84388e3505ecdbab778f4bef5f8212c729
+>>>>>>> 16e13dcad6f5376a5865830cb581b3ae6f9ebfc0
   languageName: node
   linkType: hard
 
@@ -6512,7 +6524,11 @@ __metadata:
     stylelint: "npm:^16.8.1"
     stylelint-config-standard: "npm:^36.0.1"
     uglify-js: "npm:^3.10.4"
+<<<<<<< HEAD
     webpack: "npm:^5.94.0"
+=======
+    webpack: "npm:^5.93.0"
+>>>>>>> 16e13dcad6f5376a5865830cb581b3ae6f9ebfc0
     webpack-notifier: "npm:^1"
     xmldom: "npm:^0.5.0"
     xmlhttprequest: "npm:^1.8.0"
@@ -7771,6 +7787,7 @@ __metadata:
   bin:
     webpack: bin/webpack.js
   checksum: 8/c93bd73d9e1ab49b07e139582187f1c3760ee2cf0163b6288fab2ae210e39e59240a26284e7e5d29bec851255ef4b43c51642c882fa5a94e16ce7cb906deeb47
+<<<<<<< HEAD
   languageName: node
   linkType: hard
 
@@ -7807,6 +7824,8 @@ __metadata:
   bin:
     webpack: bin/webpack.js
   checksum: 10/648449c5fbbb0839814116e3b2b044ac6c75a7ba272435155ddeb1e64dfaa2f8079be3adfbb691f648b69900756ce0f6fb73beab0ced3cf5e0fd46868b4593a6
+=======
+>>>>>>> 16e13dcad6f5376a5865830cb581b3ae6f9ebfc0
   languageName: node
   linkType: hard
 

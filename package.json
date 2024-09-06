@@ -24,7 +24,7 @@
     "stylelint": "^16.8.1",
     "stylelint-config-standard": "^36.0.1",
     "uglify-js": "^3.10.4",
-    "webpack": "^5.93.0",
+    "webpack": "^5.94.0",
     "xmldom": "^0.5.0",
     "xmlhttprequest": "^1.8.0"
   },

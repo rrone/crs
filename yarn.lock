@@ -6501,7 +6501,6 @@ __metadata:
     stylelint: ^16.8.1
     stylelint-config-standard: ^36.0.1
     uglify-js: ^3.10.4
-    webpack: ^5.94.0
     webpack-notifier: ^1
     xmldom: ^0.5.0
     xmlhttprequest: ^1.8.0
@@ -7747,7 +7746,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.35, webpack@npm:^5.94.0":
+"webpack@npm:^5.35":
   version: 5.94.0
   resolution: "webpack@npm:5.94.0"
   dependencies:

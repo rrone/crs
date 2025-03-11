@@ -295,7 +295,7 @@ class DataWarehouse
             SELECT *
             FROM crs_rpt_ref_certs
             WHERE (`sar` LIKE '%$userKey%' ) AND
-                  (COALESCE(`Concussion_Awareness_Date`, '') = '') AND
+                  (`Concussion_Awareness_Date` = '') AND
                   `MY` >= '$MY'
             ORDER BY `Section` , `Area` , ABS(`Region`) , `Last_Name` , `First_Name` , `AdminID`
             LIMIT $limit
@@ -329,7 +329,7 @@ class DataWarehouse
             SELECT *
             FROM crs_rpt_ref_certs
             WHERE (`sar` LIKE '%$userKey%' ) AND
-              (COALESCE(`Safe_Haven_Date`, '') = '') AND
+              (`Safe_Haven_Date` = '') AND
                   `MY` >= '$MY'
             ORDER BY `Section`, `Area` , ABS(`Region`) , `Last_Name` , `First_Name` , `AdminID`
             LIMIT $limit
@@ -468,7 +468,7 @@ class DataWarehouse
             SELECT *
             FROM crs_rpt_ref_certs
             WHERE (`sar` LIKE '%$userKey%' ) AND
-                  (COALESCE(`Sudden_Cardiac_Arrest_Date`, '') = '') AND
+                  (`Sudden_Cardiac_Arrest_Date` = '') AND
                   `MY` >= '$MY'
             ORDER BY `Section`, `Area` , ABS(`Region`) , `Last_Name` , `First_Name`
             LIMIT $limit
@@ -572,7 +572,7 @@ class DataWarehouse
             SELECT *
             FROM crs_rpt_ref_certs
             WHERE (`sar` LIKE '%$userKey%' ) AND
-                  (COALESCE(`LiveScan_Date`, '') = '') AND
+                  (`LiveScan_Date` = '') AND
                   `MY` >= '$MY'
             ORDER BY `Section`, `Area` , ABS(`Region`) , `Last_Name` , `First_Name`
             LIMIT $limit
@@ -601,7 +601,7 @@ class DataWarehouse
      */
     public function getRefsNewCerts($userKey, int $limit = self::BIGINT): array
     {
-        return $this->conn->fetchAllAssociative(
+       return $this->conn->fetchAllAssociative(
             "
             SELECT
                 `Section`, `Area`, `Region`, `FirstName`, `LastName`, `Gender`, `Email`, `Address`, `City`, `State`, `PostalCode`, `CertificationDesc`, `CertificationDate`

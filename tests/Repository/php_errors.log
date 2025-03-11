@@ -1,0 +1,16 @@
+[27-Mar-2020 19:53:13 UTC] PHP Fatal error:  PHPUnit\TextUI\DefaultResultPrinter cannot implement PHPUnit\TextUI\ResultPrinter - it is not an interface in /var/www/crsd.vhx.cloud/vendor/phpunit/phpunit/src/TextUI/DefaultResultPrinter.php on line 30
+[27-Mar-2020 19:53:13 UTC] PHP Stack trace:
+[27-Mar-2020 19:53:13 UTC] PHP   1. {main}() /var/www/crsd.vhx.cloud/bin/.phpunit/phpunit-8.3-0/phpunit:0
+[27-Mar-2020 19:53:13 UTC] PHP   2. PHPUnit\TextUI\Command::main() /var/www/crsd.vhx.cloud/bin/.phpunit/phpunit-8.3-0/phpunit:17
+[27-Mar-2020 19:53:13 UTC] PHP   3. Symfony\Bridge\PhpUnit\Legacy\CommandForV6->run() /var/www/crsd.vhx.cloud/bin/.phpunit/phpunit-8.3-0/src/TextUI/Command.php:160
+[27-Mar-2020 19:53:13 UTC] PHP   4. Symfony\Bridge\PhpUnit\Legacy\CommandForV6->handleArguments() /var/www/crsd.vhx.cloud/bin/.phpunit/phpunit-8.3-0/src/TextUI/Command.php:168
+[27-Mar-2020 19:53:13 UTC] PHP   5. Symfony\Bridge\PhpUnit\Legacy\CommandForV6->handlePrinter() /var/www/crsd.vhx.cloud/bin/.phpunit/phpunit-8.3-0/src/TextUI/Command.php:921
+[27-Mar-2020 19:53:13 UTC] PHP   6. class_exists() /var/www/crsd.vhx.cloud/bin/.phpunit/phpunit-8.3-0/src/TextUI/Command.php:1011
+[27-Mar-2020 19:53:13 UTC] PHP   7. spl_autoload_call() /var/www/crsd.vhx.cloud/bin/.phpunit/phpunit-8.3-0/src/TextUI/Command.php:1011
+[27-Mar-2020 19:53:13 UTC] PHP   8. Composer\Autoload\ClassLoader->loadClass() /var/www/crsd.vhx.cloud/bin/.phpunit/phpunit-8.3-0/src/TextUI/Command.php:1011
+[27-Mar-2020 19:53:13 UTC] PHP   9. Composer\Autoload\includeFile() /var/www/crsd.vhx.cloud/bin/.phpunit/phpunit-8.3-0/vendor/composer/ClassLoader.php:322
+[27-Mar-2020 19:53:13 UTC] PHP  10. include() /var/www/crsd.vhx.cloud/bin/.phpunit/phpunit-8.3-0/vendor/composer/ClassLoader.php:444
+[27-Mar-2020 19:53:13 UTC] PHP  11. spl_autoload_call() /var/www/crsd.vhx.cloud/vendor/phpunit/phpunit/src/Util/Log/TeamCity.php:29
+[27-Mar-2020 19:53:13 UTC] PHP  12. Composer\Autoload\ClassLoader->loadClass() /var/www/crsd.vhx.cloud/vendor/phpunit/phpunit/src/Util/Log/TeamCity.php:29
+[27-Mar-2020 19:53:13 UTC] PHP  13. Composer\Autoload\includeFile() /var/www/crsd.vhx.cloud/bin/.phpunit/phpunit-8.3-0/vendor/composer/ClassLoader.php:322
+[27-Mar-2020 19:53:13 UTC] PHP  14. include() /var/www/crsd.vhx.cloud/bin/.phpunit/phpunit-8.3-0/vendor/composer/ClassLoader.php:444

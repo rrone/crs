@@ -121,7 +121,12 @@ class ExportXl extends AbstractExporter
                 break;
             case 'newcert':
                 $this->outFileName = "NewRefereeCerts.$u.$this->outFileName";
-                $results = $this->dw->getRefsNewCerts($userKey, $limit);
+                $users = array ('%%', '1');
+                if(in_array($userKey, $users)){
+                    $results = $this->dw->getRefsNewCerts('%%', $limit);
+                } else {
+                    $results = $this->dw->getRefsNewCerts($userKey, $limit);
+                }
                 break;
             case 'rxr':
                 $this->outFileName = "ExpiredRiskStatus.$u.$this->outFileName";

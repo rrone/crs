@@ -33,5 +33,6 @@
     "file-loader": "^6",
     "regenerator-runtime": "^0",
     "webpack-notifier": "^1"
-  }
+  },
+  "packageManager": "yarn@4.9.1"
 }

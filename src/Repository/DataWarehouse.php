@@ -603,7 +603,7 @@ class DataWarehouse
     {
        return $this->conn->fetchAllAssociative(
             "
-            SELECT
+            SELECT DISTINCT
                 `Section`, `Area`, `Region`, `FirstName`, `LastName`, `Gender`, `Email`, `Address`, `City`, `State`, `PostalCode`, `CertificationDesc`, `CertificationDate`
             FROM
                 `crs_admin_info`

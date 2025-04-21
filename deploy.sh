@@ -2,7 +2,8 @@
 ## Exit immediately if a command exits with a non-zero status.
 set -e
 #set folder aliases
-ayso="$HOME"/Sites/AYSO
+
+ayso="$HOME"/development/_websites
 
 dev="${ayso}"/_dev/crs
 config="${dev}"/config

@@ -6385,7 +6385,6 @@ __metadata:
     uglify-js: "npm:^3.10.4"
     webpack-notifier: "npm:^1"
     xmldom: "npm:^0.5.0"
-    xmlhttprequest: "npm:^1.8.0"
     yarn: "npm:^1.22.22"
   languageName: unknown
   linkType: soft
@@ -7829,13 +7828,6 @@ __metadata:
   version: 1.4.2
   resolution: "xmlhttprequest@npm:1.4.2"
   checksum: 10c0/998166efd84fc78b6761989f93429d6f717e33855e3d79d7bb21774f17b5f4f6e7344ad03b13924445231120d6716c59defb10c20670f2e84969d33cb29e764b
-  languageName: node
-  linkType: hard
-
-"xmlhttprequest@npm:^1.8.0":
-  version: 1.8.0
-  resolution: "xmlhttprequest@npm:1.8.0"
-  checksum: 10c0/c890661562e4cb6c36a126071e956047164296f58b0058ab28a9c9f1c3b46a65bf421a242d3449363a2aadc3d9769146160b10a501710d476a17d77d41a5c99e
   languageName: node
   linkType: hard
 

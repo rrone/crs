@@ -249,7 +249,7 @@ class ExportXl extends AbstractExporter
 
             $data = array($labels);
 
-            //set the data : 1 record in each row
+            //set the data: 1 record in each row
             foreach ($certs as $cert) {
                 $row = [];
 

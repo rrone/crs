@@ -6,7 +6,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine;
 use Exception;
 
-define("CurrentMY", "MY2019");
+define("IncludedMY", "MY2019");
 
 /**
  * Class DataWarehouse
@@ -156,7 +156,7 @@ class DataWarehouse
      */
     public function getRefAssessors($userKey = '', int $limit = self::BIGINT): array
     {
-        $MY = CurrentMY;
+        $MY = IncludedMY;
 
         return $this->conn->fetchAllAssociative(
             "
@@ -174,7 +174,7 @@ class DataWarehouse
      */
     public function getRefNationalAssessors(): array
     {
-        $MY = CurrentMY;
+        $MY = IncludedMY;
 
         return $this->conn->fetchAllAssociative(
             "
@@ -194,7 +194,7 @@ class DataWarehouse
      */
     public function getRefInstructors($userKey = '', int $limit = self::BIGINT): array
     {
-        $MY = CurrentMY;
+        $MY = IncludedMY;
 
         return $this->conn->fetchAllAssociative(
             "
@@ -218,13 +218,15 @@ class DataWarehouse
      */
     public function getRefInstructorEvaluators($userKey = '', int $limit = self::BIGINT): array
     {
-        $MY = CurrentMY;
+        $MY = IncludedMY;
         return $this->conn->fetchAllAssociative(
             "
             SELECT *
             FROM crs_rpt_rie
             WHERE `sar` LIKE '%$userKey%' AND `MY` >= '$MY'
             ORDER BY `Section`, `Area`, ABS(`Region`), FIELD
+                (`CertificationDesc`, 'Referee Instructor Evaluator',
+                'Intermediate Referee Instructor Evaluator'), FIELD
                 (`InstructorDesc`, 'National Referee Instructor', 'Advanced Referee Instructor',
                 'Intermediate Referee Instructor', 'Regional Referee Instructor', 'Referee Instructor') ,
                 `Last_Name` , `First_Name`
@@ -241,7 +243,7 @@ class DataWarehouse
      */
     public function getRefUpgradeCandidates($userKey = '', int $limit = self::BIGINT): array
     {
-        $MY = CurrentMY;
+        $MY = IncludedMY;
 
         return $this->conn->fetchAllAssociative(
             "
@@ -288,7 +290,7 @@ class DataWarehouse
      */
     public function getConcussionRefs($userKey = '', int $limit = self::BIGINT): array
     {
-        $MY = CurrentMY;
+        $MY = IncludedMY;
 
         $results = $this->conn->fetchAllAssociative(
             "
@@ -322,7 +324,7 @@ class DataWarehouse
      */
     public function getSafeHavenRefs($userKey = '', int $limit = self::BIGINT): array
     {
-        $MY = CurrentMY;
+        $MY = IncludedMY;
 
         return $this->conn->fetchAllAssociative(
             "
@@ -345,7 +347,7 @@ class DataWarehouse
      */
     public function getCompositeRefCerts($userKey = '', int $limit = self::BIGINT): array
     {
-        $MY = CurrentMY;
+        $MY = IncludedMY;
 
         return $this->conn->fetchAllAssociative(
             "
@@ -461,7 +463,7 @@ class DataWarehouse
      */
     public function SuddenCardiacArrestRefs($userKey, int $limit = self::BIGINT): array
     {
-        $MY = CurrentMY;
+        $MY = IncludedMY;
 
         $results = $this->conn->fetchAllAssociative(
             "
@@ -496,7 +498,7 @@ class DataWarehouse
      */
     public function getSafeSportRefs($userKey, int $limit = self::BIGINT): array
     {
-        $MY = CurrentMY;
+        $MY = IncludedMY;
 
         $results = $this->conn->fetchAllAssociative(
             "
@@ -529,7 +531,7 @@ class DataWarehouse
      */
     public function getSafeSportExpirationRefs($userKey, int $limit = self::BIGINT): array
     {
-        $MY = CurrentMY;
+        $MY = IncludedMY;
 
         $results = $this->conn->fetchAllAssociative(
             "
@@ -565,7 +567,7 @@ class DataWarehouse
      */
     public function getLiveScanRefs($userKey, int $limit = self::BIGINT): array
     {
-        $MY = CurrentMY;
+        $MY = IncludedMY;
 
         $results = $this->conn->fetchAllAssociative(
             "
@@ -627,7 +629,7 @@ class DataWarehouse
      */
     public function getExpiredRiskRefs($userKey, int $limit = self::BIGINT): array
     {
-        $MY = CurrentMY;
+        $MY = IncludedMY;
 
         $results = $this->conn->fetchAllAssociative(
             "
@@ -697,10 +699,9 @@ class DataWarehouse
     {
         return $this->conn->fetchAllAssociative(
             "
-            SELECT `SAR`,`InstructorDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`
+            SELECT `SAR`,`CertificationDesc`,`InstructorDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`
             FROM crs_rpt_rie
-            WHERE `InstructorDesc` IN ('National Referee Instructor', 'Advanced Referee Instructor') AND
-                  `Current` <> ''
+            WHERE  `Current` <> ''
         "
         );
     }

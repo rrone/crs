@@ -15,7 +15,7 @@ PHP=/usr/local/etc/php/8.1/conf.d
 ## clear the screen
 printf "\033c"
 
-echo ">>> Checkout master branch from Git repository..."
+#echo ">>> Checkout master branch from Git repository..."
 #git checkout master
 echo
 

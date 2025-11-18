@@ -2,8 +2,7 @@
 ## Exit immediately if a command exits with a non-zero status.
 set -e
 #set folder aliases
-
-ayso="$HOME"/development/_websites
+ayso="$HOME"/Sites/AYSO
 
 dev="${ayso}"/_dev/crs
 config="${dev}"/config
@@ -15,7 +14,7 @@ PHP=/usr/local/etc/php/8.1/conf.d
 ## clear the screen
 printf "\033c"
 
-#echo ">>> Checkout master branch from Git repository..."
+echo ">>> Checkout master branch from Git repository..."
 #git checkout master
 echo
 
@@ -39,8 +38,6 @@ echo ">>> Copying app to distribution..."
 cp ./.env.dist "${prod}"/.env
 cp -f ./*.json "${prod}"
 cp -f ./*.lock "${prod}"
-cp -f ./*.md "${prod}"
-cp -f ./*.txt "${prod}"
 cp -f .yarnrc.yml "${prod}"
 cp -rf .yarn "${prod}"
 

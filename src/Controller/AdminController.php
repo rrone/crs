@@ -24,6 +24,8 @@ class AdminController extends AbstractController2
     {
         parent::__construct($requestStack);
 
+        $sa = $this->session->get('superadmin');
+        $this->super = is_bool($sa) ? $sa : false;
     }
 
     /**
@@ -34,9 +36,6 @@ class AdminController extends AbstractController2
      */
     public function index(Request $request)
     {
-        $sa = $this->session->get('superadmin');
-        $this->super = is_bool($sa) ? $sa : false;
-
         if (!$this->isAuthorized() && !$this->super) {
             return $this->redirectToRoute('reports');
         }
@@ -155,12 +154,12 @@ class AdminController extends AbstractController2
         $this->msg['add'] = '';
         if (empty($pw)) {
             $this->msg['add'] .= "<br>Password may not be blank.";
-            $this->msgStyle['add'] .= "color:#FF0000";
+            $this->msgStyle['add'] = "color:#FF0000";
         }
 
         if (empty($userName)) {
             $this->msg['add'] .= "User name may not be blank.";
-            $this->msgStyle['add'] .= "color:#FF0000";
+            $this->msgStyle['add'] = "color:#FF0000";
         }
 
         $userData = array(

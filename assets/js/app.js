@@ -18,6 +18,6 @@ $("#uploadFilename").bind("change", function () {
         $("#noFile").text("No file chosen...");
     } else {
         $(".file-upload").addClass("active");
-        $("#noFile").text(filename.replace("C:\\fake-path\\", ""));
+        $("#noFile").text(filename.replace("C:\\fakepath\\", ""));
     }
 });

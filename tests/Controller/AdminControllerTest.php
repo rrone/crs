@@ -4,6 +4,7 @@ namespace Tests\Controller;
 
 use App\Repository\DataWarehouse;
 use Generator;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Tests\Abstracts\WebTestCasePlus;
 

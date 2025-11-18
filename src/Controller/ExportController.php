@@ -46,7 +46,6 @@ class ExportController extends AbstractController2
      * @Route("/rsca", name="rsca")
      * @Route("/rls", name="rls")
      * @Route("/rxr", name="rxr")
-     * @Route("/newcert", name="newcert")
      * @Route("/xra", name="xra")
      * @Route("/xri", name="xri")
      * @Route("/xrie", name="xrie")

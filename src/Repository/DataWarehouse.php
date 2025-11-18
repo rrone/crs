@@ -6,7 +6,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine;
 use Exception;
 
-define("IncludedMY", "MY2019");
+define("CurrentMY", "MY2019");
 
 /**
  * Class DataWarehouse
@@ -156,7 +156,7 @@ class DataWarehouse
      */
     public function getRefAssessors($userKey = '', int $limit = self::BIGINT): array
     {
-        $MY = IncludedMY;
+        $MY = CurrentMY;
 
         return $this->conn->fetchAllAssociative(
             "
@@ -174,7 +174,7 @@ class DataWarehouse
      */
     public function getRefNationalAssessors(): array
     {
-        $MY = IncludedMY;
+        $MY = CurrentMY;
 
         return $this->conn->fetchAllAssociative(
             "
@@ -194,17 +194,14 @@ class DataWarehouse
      */
     public function getRefInstructors($userKey = '', int $limit = self::BIGINT): array
     {
-        $MY = IncludedMY;
+        $MY = CurrentMY;
 
         return $this->conn->fetchAllAssociative(
             "
             SELECT *
             FROM crs_rpt_ri
             WHERE `sar` LIKE '%$userKey%' AND `MY` >= '$MY'
-            ORDER BY `Section`, `Area`, ABS(`Region`),
-                     FIELD(`CertificationDesc`, 'National Referee Instructor', 'Advanced Referee Instructor',
-                     'Intermediate Referee Instructor', 'Regional Referee Instructor', '') ,
-                `Last_Name` , `First_Name` , `AdminID`
+            ORDER BY `Section`, `Area`, ABS(`Region`), FIELD(`CertificationDesc`, 'National Referee Instructor', 'Advanced Referee Instructor', 'Intermediate Referee Instructor', 'Regional Referee Instructor', '') , `Last_Name` , `First_Name` , `AYSOID`
             LIMIT $limit
         "
         );
@@ -218,18 +215,14 @@ class DataWarehouse
      */
     public function getRefInstructorEvaluators($userKey = '', int $limit = self::BIGINT): array
     {
-        $MY = IncludedMY;
+        $MY = CurrentMY;
         return $this->conn->fetchAllAssociative(
             "
             SELECT *
             FROM crs_rpt_rie
             WHERE `sar` LIKE '%$userKey%' AND `MY` >= '$MY'
             ORDER BY `Section`, `Area`, ABS(`Region`), FIELD
-                (`CertificationDesc`, 'Referee Instructor Evaluator',
-                'Intermediate Referee Instructor Evaluator'), FIELD
-                (`InstructorDesc`, 'National Referee Instructor', 'Advanced Referee Instructor',
-                'Intermediate Referee Instructor', 'Regional Referee Instructor', 'Referee Instructor') ,
-                `Last_Name` , `First_Name`
+                (`InstructorDesc`, 'National Referee Instructor', 'Advanced Referee Instructor', 'Intermediate Referee Instructor', 'Regional Referee Instructor', 'Referee Instructor') , `Last_Name` , `First_Name`
             LIMIT $limit
         "
         );
@@ -243,17 +236,14 @@ class DataWarehouse
      */
     public function getRefUpgradeCandidates($userKey = '', int $limit = self::BIGINT): array
     {
-        $MY = IncludedMY;
+        $MY = CurrentMY;
 
         return $this->conn->fetchAllAssociative(
             "
             SELECT *
             FROM crs_rpt_ref_upgrades
             WHERE `sar` LIKE '%$userKey%' AND `MY` >= '$MY'
-            ORDER BY LEFT(`SAR`,4), FIELD(`Training`, 'National Referee Course', 'Advanced Referee Course',
-            'Intermediate Referee Course', 'National Referee Assessor Course', 'Referee Assessor Course',
-            'Advanced Referee Instructor Course', 'Intermediate Referee Instructor Course',
-            'Regional Referee Instructor Course', '') , `Last_Name` , `TrainingDate`
+            ORDER BY LEFT(`SAR`,4), FIELD(`Training`, 'National Referee Course', 'Advanced Referee Course', 'Intermediate Referee Course', 'National Referee Assessor Course', 'Referee Assessor Course', 'Advanced Referee Instructor Course', 'Intermediate Referee Instructor Course', 'Regional Referee Instructor Course', '') , `Last_Name` , `TrainingDate`
             LIMIT $limit
             "
         );
@@ -290,16 +280,14 @@ class DataWarehouse
      */
     public function getConcussionRefs($userKey = '', int $limit = self::BIGINT): array
     {
-        $MY = IncludedMY;
+        $MY = CurrentMY;
 
         $results = $this->conn->fetchAllAssociative(
             "
             SELECT *
             FROM crs_rpt_ref_certs
-            WHERE (`sar` LIKE '%$userKey%' ) AND
-                  (`Concussion_Awareness_Date` = '') AND
-                  `MY` >= '$MY'
-            ORDER BY `Section` , `Area` , ABS(`Region`) , `Last_Name` , `First_Name` , `AdminID`
+            WHERE (`sar` LIKE '%$userKey%' ) AND `Concussion_Awareness_Date` IS NULL AND `MY` >= '$MY'
+            ORDER BY `Section` , `Area` , ABS(`Region`) , `Last_Name` , `First_Name` , `AYSOID`
             LIMIT $limit
         "
         );
@@ -309,8 +297,8 @@ class DataWarehouse
             unset($result['Sudden_Cardiac_Arrest_Date']);
             unset($result['SafeSport_Date']);
             unset($result['LiveScan_Date']);
-            unset($result['Risk_Status']);
-            unset($result['Risk_Expire_Date']);
+            unset($result['RiskStatus']);
+            unset($result['RiskExpireDate']);
         }
 
         return $results;
@@ -324,16 +312,14 @@ class DataWarehouse
      */
     public function getSafeHavenRefs($userKey = '', int $limit = self::BIGINT): array
     {
-        $MY = IncludedMY;
+        $MY = CurrentMY;
 
         return $this->conn->fetchAllAssociative(
             "
             SELECT *
             FROM crs_rpt_ref_certs
-            WHERE (`sar` LIKE '%$userKey%' ) AND
-              (`Safe_Haven_Date` = '') AND
-                  `MY` >= '$MY'
-            ORDER BY `Section`, `Area` , ABS(`Region`) , `Last_Name` , `First_Name` , `AdminID`
+            WHERE (`sar` LIKE '%$userKey%' ) AND `Safe_Haven_Date` IS NULL AND `MY` >= '$MY'
+            ORDER BY `Section`, `Area` , ABS(`Region`) , `Last_Name` , `First_Name` , `AYSOID`
             LIMIT $limit
         "
         );
@@ -347,7 +333,7 @@ class DataWarehouse
      */
     public function getCompositeRefCerts($userKey = '', int $limit = self::BIGINT): array
     {
-        $MY = IncludedMY;
+        $MY = CurrentMY;
 
         return $this->conn->fetchAllAssociative(
             "
@@ -358,7 +344,7 @@ class DataWarehouse
                 FIELD(`CertificationDesc`, 'National Referee','National 2 Referee', 'Advanced Referee',
                 'Intermediate Referee', 'Regional Referee', 'Regional Referee & Safe Haven Referee',
                 'Assistant Referee', 'Assistant Referee & Safe Haven Referee', '8U Official',
-                '8U Official & Safe Haven Referee', '') , `Last_Name` , `First_Name` , `AdminID`
+                '8U Official & Safe Haven Referee', '') , `Last_Name` , `First_Name` , `AYSOID`
             LIMIT $limit
             "
         );
@@ -463,15 +449,13 @@ class DataWarehouse
      */
     public function SuddenCardiacArrestRefs($userKey, int $limit = self::BIGINT): array
     {
-        $MY = IncludedMY;
+        $MY = CurrentMY;
 
         $results = $this->conn->fetchAllAssociative(
             "
             SELECT *
             FROM crs_rpt_ref_certs
-            WHERE (`sar` LIKE '%$userKey%' ) AND
-                  (`Sudden_Cardiac_Arrest_Date` = '') AND
-                  `MY` >= '$MY'
+            WHERE (`sar` LIKE '%$userKey%' ) AND `Sudden_Cardiac_Arrest_Date` IS NULL AND `MY` >= '$MY'
             ORDER BY `Section`, `Area` , ABS(`Region`) , `Last_Name` , `First_Name`
             LIMIT $limit
         "
@@ -481,10 +465,9 @@ class DataWarehouse
             unset($result['Safe_Haven_Date']);
             unset($result['Concussion_Awareness_Date']);
             unset($result['SafeSport_Date']);
-            unset($result['SafeSport_Expire_Date']);
             unset($result['LiveScan_Date']);
-            unset($result['Risk_Status']);
-            unset($result['Risk_Expire_Date']);
+            unset($result['RiskStatus']);
+            unset($result['RiskExpireDate']);
         }
 
         return $results;
@@ -498,7 +481,7 @@ class DataWarehouse
      */
     public function getSafeSportRefs($userKey, int $limit = self::BIGINT): array
     {
-        $MY = IncludedMY;
+        $MY = CurrentMY;
 
         $results = $this->conn->fetchAllAssociative(
             "
@@ -515,8 +498,8 @@ class DataWarehouse
             unset($result['Concussion_Awareness_Date']);
             unset($result['Sudden_Cardiac_Arrest_Date']);
             unset($result['LiveScan_Date']);
-            unset($result['Risk_Status']);
-            unset($result['Risk_Expire_Date']);
+            unset($result['RiskStatus']);
+            unset($result['RiskExpireDate']);
         }
 
         return $results;
@@ -531,28 +514,28 @@ class DataWarehouse
      */
     public function getSafeSportExpirationRefs($userKey, int $limit = self::BIGINT): array
     {
-        $MY = IncludedMY;
+        $MY = CurrentMY;
 
         $results = $this->conn->fetchAllAssociative(
             "
             SELECT *
             FROM crs_rpt_rssx
-            WHERE (`sar` LIKE '%$userKey%' ) AND
-                `MY` >= '$MY'
+            WHERE (`sar` LIKE '%$userKey%' ) AND `SafeSport_Date` <> '' AND `MY` >= '$MY'
             ORDER BY `Section`, `Area`, ABS(`Region`), `Last_Name`, `First_Name`
             LIMIT $limit
         "
         );
 
         foreach ($results as &$result) {
+            unset($result['AYSOID']);
             unset($result['Cell_Phone']);
             unset($result['Gender']);
             unset($result['Safe_Haven_Date']);
             unset($result['Concussion_Awareness_Date']);
             unset($result['Sudden_Cardiac_Arrest_Date']);
             unset($result['LiveScan_Date']);
-            unset($result['Risk_Status']);
-            unset($result['Risk_Expire_Date']);
+            unset($result['RiskStatus']);
+            unset($result['RiskExpireDate']);
         }
 
         return $results;
@@ -567,15 +550,13 @@ class DataWarehouse
      */
     public function getLiveScanRefs($userKey, int $limit = self::BIGINT): array
     {
-        $MY = IncludedMY;
+        $MY = CurrentMY;
 
         $results = $this->conn->fetchAllAssociative(
             "
             SELECT *
             FROM crs_rpt_ref_certs
-            WHERE (`sar` LIKE '%$userKey%' ) AND
-                  (`LiveScan_Date` = '') AND
-                  `MY` >= '$MY'
+            WHERE (`sar` LIKE '%$userKey%' ) AND `LiveScan_Date` IS NULL AND `MY` >= '$MY'
             ORDER BY `Section`, `Area` , ABS(`Region`) , `Last_Name` , `First_Name`
             LIMIT $limit
         "
@@ -586,9 +567,8 @@ class DataWarehouse
             unset($result['Concussion_Awareness_Date']);
             unset($result['Sudden_Cardiac_Arrest_Date']);
             unset($result['SafeSport_Date']);
-            unset($result['SafeSport_Expire_Date']);
-            unset($result['Risk_Status']);
-            unset($result['Risk_Expire_Date']);
+            unset($result['RiskStatus']);
+            unset($result['RiskExpireDate']);
         }
 
         return $results;
@@ -601,54 +581,28 @@ class DataWarehouse
      * @return array[]
      * @throws Doctrine\DBAL\Exception
      */
-    public function getRefsNewCerts($userKey, int $limit = self::BIGINT): array
-    {
-       return $this->conn->fetchAllAssociative(
-            "
-            SELECT DISTINCT
-                `Section`, `Area`, `Region`, `FirstName`, `LastName`, `Gender`, `Email`, `Address`, `City`, `State`, `PostalCode`, `CertificationDesc`, `CertificationDate`
-            FROM
-                `crs_admin_info`
-            WHERE (CONCAT(`Section`, '/', `Area`) LIKE '%$userKey%' )
-                AND `CertificationDate` >= DATE_SUB(NOW(), INTERVAL 60 DAY)
-                AND `CertificationDesc` IN ('National Referee', 'Advanced Referee', 'Intermediate Referee')
-            ORDER BY FIELD(`CertificationDesc`, 'National Referee', 'Advanced Referee', 'Intermediate Referee'),
-                     CAST(`Section` AS unsigned), `Area`, `CertificationDate` DESC, CAST(`Region` AS unsigned),
-                     `LastName` DESC
-            LIMIT $limit
-            "
-        );
-
-    }
-
-    /**
-     * @param mixed $userKey
-     * @param int $limit
-     * @return array[]
-     * @throws Doctrine\DBAL\Exception
-     */
     public function getExpiredRiskRefs($userKey, int $limit = self::BIGINT): array
     {
-        $MY = IncludedMY;
+        $MY = CurrentMY;
 
         $results = $this->conn->fetchAllAssociative(
             "
             SELECT *
             FROM crs_rpt_ref_certs
-            WHERE (`sar` LIKE '%$userKey%' ) AND `Risk_Status` IN ('None', 'Expired', NULL) AND `MY` >= '$MY'
+            WHERE (`sar` LIKE '%$userKey%' ) AND `RiskStatus` IN ('None', 'Expired', NULL) AND `MY` >= '$MY'
             ORDER BY `Section`, `Area` , ABS(`Region`) , `Last_Name` , `First_Name`
             LIMIT $limit
         "
         );
 
         foreach ($results as &$result) {
+            unset($result['AYSOID']);
             unset($result['Cell_Phone']);
             unset($result['Gender']);
             unset($result['Safe_Haven_Date']);
             unset($result['Concussion_Awareness_Date']);
             unset($result['Sudden_Cardiac_Arrest_Date']);
             unset($result['SafeSport_Date']);
-            unset($result['SafeSport_Expire_Date']);
             unset($result['LiveScan_Date']);
         }
 
@@ -667,8 +621,7 @@ class DataWarehouse
             SELECT `SAR`,`CertificationDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`
             FROM crs_rpt_ra
             WHERE `Current` <> ''
-            ORDER BY FIELD(`CertificationDesc`, 'National Referee Assessor', 'Referee Assessor', ''),
-                     `SAR`, `Last_Name` , `First_Name`
+            ORDER BY FIELD(`CertificationDesc`, 'National Referee Assessor', 'Referee Assessor', '') , `SAR`, `Last_Name` , `First_Name`
         "
         );
     }
@@ -684,9 +637,7 @@ class DataWarehouse
             SELECT `SAR`,`CertificationDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`
             FROM crs_rpt_ri
             WHERE `Current` <> ''
-            ORDER BY `Section`, `Area`, ABS(`Region`), FIELD(`CertificationDesc`, 'National Referee Instructor',
-            'Advanced Referee Instructor', 'Intermediate Referee Instructor', 'Regional Referee Instructor'),
-                `Last_Name` , `First_Name`
+            ORDER BY `Section`, `Area`, ABS(`Region`), FIELD(`CertificationDesc`, 'National Referee Instructor', 'Advanced Referee Instructor', 'Intermediate Referee Instructor', 'Regional Referee Instructor') , `Last_Name` , `First_Name`
         "
         );
     }
@@ -699,9 +650,9 @@ class DataWarehouse
     {
         return $this->conn->fetchAllAssociative(
             "
-            SELECT `SAR`,`CertificationDesc`,`InstructorDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`
+            SELECT `SAR`,`InstructorDesc`,`First_Name`,`Last_Name`,`City`,`State`,`Email`
             FROM crs_rpt_rie
-            WHERE  `Current` <> ''
+            WHERE `InstructorDesc` IN ('National Referee Instructor', 'Advanced Referee Instructor') AND `Current` <> ''
         "
         );
     }

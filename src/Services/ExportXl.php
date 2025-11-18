@@ -70,8 +70,7 @@ class ExportXl extends AbstractExporter
         $user = explode(' ', $user1->name);
         $u = strtoupper(str_replace('/', '', end($user)));
 
-        $date = date_create($this->dw->getUpdateTimestamp());
-        $shName = 'Updated ' . date_format($date, 'Y-M-d');
+        $shName = 'Updated ' . date('Y-M-d');
 
         switch ($this->uri) {
             case 'ra':
@@ -118,15 +117,6 @@ class ExportXl extends AbstractExporter
             case 'rls':
                 $this->outFileName = "MissingLiveScan.$u.$this->outFileName";
                 $results = $this->dw->getLiveScanRefs($userKey, $limit);
-                break;
-            case 'newcert':
-                $this->outFileName = "NewRefereeCerts.$u.$this->outFileName";
-                $users = array ('%%', '1');
-                if(in_array($userKey, $users)){
-                    $results = $this->dw->getRefsNewCerts('%%', $limit);
-                } else {
-                    $results = $this->dw->getRefsNewCerts($userKey, $limit);
-                }
                 break;
             case 'rxr':
                 $this->outFileName = "ExpiredRiskStatus.$u.$this->outFileName";
@@ -249,9 +239,10 @@ class ExportXl extends AbstractExporter
 
             $data = array($labels);
 
-            //set the data: 1 record in each row
+            //set the data : 1 record in each row
             foreach ($certs as $cert) {
                 $row = [];
+                $trainingComplete = true;
 
                 if (!empty($cert)) {
                     foreach ($cert as $key => $value) {
@@ -261,22 +252,31 @@ class ExportXl extends AbstractExporter
                             case 'City':
                                 $value = ucwords(strtolower($value));
                                 break;
-                        case 'Email':
-                            $value = strtolower($value);
-                            break;
+                            case 'Email':
+                                $value = strtolower($value);
+                                break;
+                            case 'Safe_Haven_Date':
+                            case 'Concussion_Awareness_Date':
+                            case 'Sudden_Cardiac_Arrest_Date':
+                                $trainingComplete = $trainingComplete && !empty($value);
+                                break;
+                            case 'SafeSport_Date':
+                                $is_18 = $this->is_18($cert['DOB']);
+                                if ($is_18)
+                                    $trainingComplete = $trainingComplete && !empty($value);
+                                break;
+                            case 'LiveScan_Date':
+                                break;
+                            case 'RiskStatus':
+                                $is_18 = $this->is_18($cert['DOB']);
+                                $trainingComplete =  $trainingComplete && ($value == 'Green' or (!$is_18 && $value == 'Blue'));
+                                break;
                         }
+
                         $row[] = $value;
                     }
                     if ($this->uri == 'crct') {
-                        $is_18 = $this->is_18($cert['DOB']);
-                        if ($cert['Safe_Haven_Date'] == '' or
-                            $cert['Concussion_Awareness_Date'] == ''  or
-                            $cert['Sudden_Cardiac_Arrest_Date'] == '' or
-                            $cert['Risk_Status'] == 'Expired' or
-                            ($is_18 and $cert['SafeSport_Date'] == ''))
-                            $row[] = '';
-                        else
-                            $row[] = 'COMPLETE';
+                        $row[] = $trainingComplete ? 'COMPLETE' : '';
                     }
                 }
 

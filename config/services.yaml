@@ -1,19 +1,23 @@
-parameters:
-    # Application Core
-    locale: 'en'
-    app.version: '2025.07.16.00'
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
 
-    # Communication Settings
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: 'en'
+    app.version: '2023.10.31.00 - DEV'
+
     sra:
         name: 'Rick Roberts'
         email: 'ayso1sra@gmail.com'
-        subject: 'subject=Suggestion for a CRS report'
+        subject: 'subject=Suggestion for a volunteer report'
 
     issueTracker: 'https://github.com/rrone/crs/issues'
 
     settings.test: false
 
 services:
+    # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.

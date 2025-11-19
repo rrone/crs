@@ -1318,7 +1318,11 @@ __metadata:
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "@symfony/webpack-encore@npm:^5.3.1":
+=======
+"@symfony/webpack-encore@npm:^5.1.0":
+>>>>>>> 33e06444b053e0129dc260250ad79bd7c6bfc206
   version: 5.3.1
   resolution: "@symfony/webpack-encore@npm:5.3.1"
   dependencies:
@@ -3696,7 +3700,11 @@ __metadata:
   dependencies:
     "@babel/core": ^7.17.0
     "@babel/preset-env": ^7.16.0
+<<<<<<< HEAD
     "@symfony/webpack-encore": ^5.3.1
+=======
+    "@symfony/webpack-encore": ^5.1.0
+>>>>>>> 33e06444b053e0129dc260250ad79bd7c6bfc206
     core-js: ^3.38.0
     regenerator-runtime: ^0.13.9
     webpack: ^5.74.0

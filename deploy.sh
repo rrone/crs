@@ -10,7 +10,7 @@ config="${dev}"/config
 
 prod="${ayso}"/_services/crs.ayso1ref.com/crs
 
-PHP=/usr/local/etc/php/8.1/conf.d
+PHP=/opt/homebrew/etc/php/8.4/conf.d
 
 ## clear the screen
 printf "\033c"
@@ -20,7 +20,7 @@ printf "\033c"
 echo
 
 echo ">>> Build production assets..."
-yarn encore production --progress
+yarn encore production
 echo
 
 echo ">>> Purge development items..."

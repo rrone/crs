@@ -5,6 +5,7 @@ namespace App\Abstracts;
 use PhpOffice\PhpSpreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Protection;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
 /*
     // Sample array of data to publish
@@ -163,8 +164,8 @@ abstract class AbstractExporter
         $this->ws->fromArray($data);
 
         //auto-size columns
-        foreach (range('A', $this->ws->getHighestDataColumn()) as $col) {
-            $this->ws->getColumnDimension($col)->setAutoSize(true);
+        for ($i = 'A'; $i !=  $this->ws->getHighestColumn(); $i++) {
+            $this->ws->getColumnDimension($i)->setAutoSize(TRUE);
         }
 
         //apply options

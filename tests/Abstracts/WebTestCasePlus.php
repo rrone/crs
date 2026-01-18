@@ -31,7 +31,6 @@ class WebTestCasePlus extends WebTestCase
         $kernel = $this->client->getKernel();
 
         $this->c = self::getContainer();
-
     }
 
     protected function getNamePW($paramStr = null)
@@ -45,7 +44,6 @@ class WebTestCasePlus extends WebTestCase
 
         $this->userName = $cred['user'];
         $this->pw = $cred['pw'];
-
     }
 
     protected function submitLoginForm($userName, $pwd)
@@ -54,7 +52,7 @@ class WebTestCasePlus extends WebTestCase
         $crawler = $this->client->request('GET', '/end');
         $this->client->followRedirects(false);
 
-        $form = $crawler->selectButton("Logon")->form([
+        $form = $crawler->selectButton('Logon')->form([
             'user' => $userName,
             'passwd' => $pwd,
         ]);
@@ -90,7 +88,6 @@ class WebTestCasePlus extends WebTestCase
         if (!empty($btn)) {
             $this->client->submit($form);
         }
-
     }
 
     protected function verifyLink($crawler, $name, $page)
@@ -98,7 +95,5 @@ class WebTestCasePlus extends WebTestCase
         $link = $crawler->selectLink($name)->link();
         $uri = $this->client->click($link)->getUri();
         $this->assertEquals("http://localhost/$page", $uri);
-
     }
-
 }

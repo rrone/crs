@@ -2,42 +2,37 @@
 
 namespace App\Controller;
 
+use App\Abstracts\AbstractController2;
 use Exception;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-
 use Symfony\Component\Routing\Annotation\Route;
-
-use App\Abstracts\AbstractController2;
 
 class ReportsController extends AbstractController2
 {
-    /**
-     * @var bool
-     */
     private bool $super;
 
     /**
      * ReportsController constructor.
-     * @param RequestStack $requestStack
-     * @throws Exception
+     *
+     * @throws \Exception
      */
     public function __construct(RequestStack $requestStack)
     {
         parent::__construct($requestStack);
-
     }
 
     /**
-     * @Route("/reports", name="reports")
-     * @param Request $request
+     *
      * @return RedirectResponse|Response
+     *
      * @throws \Doctrine\DBAL\Exception
      */
-    public function index(Request $request)
-    {
+#[Route("/reports", name: "reports")]
+    public function index(Request $request): RedirectResponse|Response
+{
         if (!$this->isAuthorized()) {
             return $this->redirectToRoute('logon');
         }
@@ -48,22 +43,20 @@ class ReportsController extends AbstractController2
         $this->super = $session->get('superadmin');
 
         return $this->renderPage();
-
     }
 
     /**
-     * @return Response
      * @throws \Doctrine\DBAL\Exception
      */
     public function renderPage(): Response
     {
-        $content = array(
+        $content = [
             'admin' => $this->user->admin,
             'user' => $this->user->name,
             'notes' => $this->dw->getReportNotes(),
             'content' => $this->renderContent(),
             'message' => null,
-        );
+        ];
 
         $content = array_merge($content, $this->getBaseContent());
 
@@ -71,7 +64,6 @@ class ReportsController extends AbstractController2
     }
 
     /**
-     * @return string|null
      * @throws \Doctrine\DBAL\Exception
      */
     protected function renderContent(): ?string
@@ -79,20 +71,20 @@ class ReportsController extends AbstractController2
         $html = null;
 
         $u = $this->user->name;
-        $html .= "<div id=\"reports\">";
+        $html .= '<div id="reports">';
         $html .= "<h3>Available reports for $u:</h3>\n";
         $html .= "<ul class=\"indent\">\n";
 
         $reports = $this->dw->getReports();
         foreach ($reports as $report) {
-            $report = (object)$report;
+            $report = (object) $report;
             if (!$report->admin || $this->user->admin) {
                 try { // handle possible exception if database table report differs from defined routes
                     $href = $this->generateUrl($report->key);
                     $notes = empty($report->notes) ? null : "<span style='font-weight:normal'> ($report->notes)</span>";
 
                     $html .= "<li><h3><a  href=\"$href\" class=\"reportDownload\" >$report->text</a>$notes</h3></li>\n";
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                 }
             }
         }
@@ -102,15 +94,12 @@ class ReportsController extends AbstractController2
         $hrefAdmin = $this->generateUrl('admin');
         $hrefEnd = $this->generateUrl('end');
 
-        $html .= "<h3 class=\"center\">";
-//        if ($this->super) {
-//            $html .= "<a href=$hrefAdmin >Admin Functions - </a> ";
-//        }
+        $html .= '<h3 class="center">';
+        //        if ($this->super) {
+        //            $html .= "<a href=$hrefAdmin >Admin Functions - </a> ";
+        //        }
         $html .= "<a href=$hrefEnd >Log Off</a></h3>\n";
 
         return $html;
-
     }
 }
-
-

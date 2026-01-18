@@ -5,7 +5,6 @@ namespace Tests\Repository;
 use App\Repository\DataWarehouse;
 use Doctrine\DBAL\Connection;
 use Psr\Container\ContainerInterface;
-use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class DataWarehouseTest extends KernelTestCase
@@ -17,13 +16,10 @@ class DataWarehouseTest extends KernelTestCase
      */
     protected static $conn;
 
-    /**
-     * @var DataWarehouse
-     */
     protected DataWarehouse $dw;
 
     protected string $userName;
-    protected stdClass $user;
+    protected \stdClass $user;
     protected ContainerInterface $c;
     protected string $pw;
 
@@ -38,13 +34,11 @@ class DataWarehouseTest extends KernelTestCase
 
         $this->getNamePW('admin_test');
         $this->user = $this->dw->getUserByName($this->userName);
-
     }
 
     protected function tearDown(): void
     {
         self::$conn->close();
-
     }
 
     protected function getNamePW($paramStr = null)
@@ -58,8 +52,8 @@ class DataWarehouseTest extends KernelTestCase
 
         $this->userName = $cred['user'];
         $this->pw = $cred['pw'];
-
     }
+
     public function testGetUserByName()
     {
         $result = $this->dw->getUserByName('');
@@ -89,43 +83,41 @@ class DataWarehouseTest extends KernelTestCase
     {
         $result = $this->dw->removeUser('');
         $this->assertNull($result);
-
     }
 
     public function testDBMethods()
     {
         $result = $this->dw->getRefAssessors('1', 10);
-        $this->assertEquals(10, sizeof($result));
+        $this->assertEquals(10, count($result));
 
         $result = $this->dw->getRefNationalAssessors();
-        $this->assertEquals(42, sizeof($result));
+        $this->assertEquals(42, count($result));
 
         $result = $this->dw->getRefInstructors('1', 10);
-        $this->assertEquals(10, sizeof($result));
+        $this->assertEquals(10, count($result));
 
         $result = $this->dw->getRefInstructorEvaluators('1', 10);
-        $this->assertEquals(10, sizeof($result));
+        $this->assertEquals(10, count($result));
 
         $result = $this->dw->getRefUpgradeCandidates('1', 10);
-        $this->assertEquals(10, sizeof($result));
+        $this->assertEquals(10, count($result));
 
         $result = $this->dw->getSafeHavenRefs('1', 10);
-        $this->assertEquals(10, sizeof($result));
+        $this->assertEquals(10, count($result));
 
         $result = $this->dw->getConcussionRefs('1', 10);
-        $this->assertEquals(10, sizeof($result));
+        $this->assertEquals(10, count($result));
 
         $result = $this->dw->getSafeSportExpirationRefs('1', 10);
-        $this->assertEquals(10, sizeof($result));
+        $this->assertEquals(10, count($result));
 
         $result = $this->dw->getLiveScanRefs('1', 10);
-        $this->assertEquals(10, sizeof($result));
+        $this->assertEquals(10, count($result));
 
         $result = $this->dw->getExpiredRiskRefs('1', 10);
-        $this->assertEquals(10, sizeof($result));
+        $this->assertEquals(10, count($result));
 
-//        $result = $this->dw->getRefsNewCerts('1', 5);
-//        $this->assertEquals(5, sizeof($result));
-
+        //        $result = $this->dw->getRefsNewCerts('1', 5);
+        //        $this->assertEquals(5, sizeof($result));
     }
 }

@@ -5,7 +5,7 @@ doctrine:
             default:
                 # configure these for your database server
                 driver: 'pdo_mysql'
-                server_version: '5.7'
+                server_version: '8.0'
                 charset: utf8mb4
                 default_table_options:
                     charset: utf8mb4
@@ -16,11 +16,15 @@ doctrine:
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
-        auto_mapping: true
+        auto_mapping: false
         mappings:
             App:
                 is_bundle: false
-                type: annotation
+                type: attribute
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+        enable_lazy_ghost_objects: true
+        enable_native_lazy_objects: true
+        controller_resolver:
+            auto_mapping: false

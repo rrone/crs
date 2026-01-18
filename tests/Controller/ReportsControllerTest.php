@@ -12,8 +12,8 @@ class ReportsControllerTest extends WebTestCasePlus
 {
     /**
      * @runInSeparateProcess
+     *
      * @dataProvider providePageUrls
-     * @param $url
      */
     public function testPageIsSuccessful($url)
     {
@@ -45,13 +45,12 @@ class ReportsControllerTest extends WebTestCasePlus
         yield ['/logon'];
         yield ['/reports'];
         yield ['/admin'];
-
     }
 
     /**
      * @runInSeparateProcess
+     *
      * @dataProvider provideReportUrls
-     * @param $url
      */
     public function testReports($url)
     {
@@ -82,17 +81,15 @@ class ReportsControllerTest extends WebTestCasePlus
         yield ['/rls'];
         yield ['/rxr'];
         yield ['/newcert'];
-
     }
 
     /**
      * @runInSeparateProcess
+     *
      * @dataProvider provideRedirectUrls
-     * @param $url
      */
     public function testPageRedirects($url)
     {
-
         $this->client->request('GET', $url);
 
         $this->assertResponseRedirects();
@@ -118,13 +115,12 @@ class ReportsControllerTest extends WebTestCasePlus
         yield ['/rxr'];
         yield ['/newcert'];
 
-//        //unused reports defined in ExportXl
-//        yield ['/hrc'];
-//        yield ['/nocerts'];
+        //        //unused reports defined in ExportXl
+        //        yield ['/hrc'];
+        //        yield ['/nocerts'];
 
-        //bad link
+        // bad link
         yield ['/xyz'];
-
     }
 
     public function testController()
@@ -165,7 +161,7 @@ class ReportsControllerTest extends WebTestCasePlus
 
         // verify view
         $view = $this->client->getResponse()->getContent();
-        $this->assertStringContainsString("<h3>Notes on these reports:</h3>", $view);
+        $this->assertStringContainsString('<h3>Notes on these reports:</h3>', $view);
 
         // verify links & test exports
         $this->verifyLink($crawler, 'Composite Referee Certification & Training', 'crct');
@@ -173,17 +169,16 @@ class ReportsControllerTest extends WebTestCasePlus
         $this->verifyLink($crawler, 'Referee Instructor Evaluators', 'rie');
         $this->verifyLink($crawler, 'Referee Assessors', 'ra');
         $this->verifyLink($crawler, 'Referee Upgrade Candidates', 'ruc');
-//        $this->verifyLink($crawler, 'New Referee Certifications', 'newcert');
-//        $this->verifyLink($crawler, 'Referees Missing Safe Haven Training', 'rsh');
-//        $this->verifyLink($crawler, 'Referees Missing Concussion Training', 'rcdc');
-//        $this->verifyLink($crawler, 'Referees Missing Sudden Cardiac Arrest', 'rsca');
-//        $this->verifyLink($crawler, 'Referees Missing SafeSport', 'rss');
-//        $this->verifyLink($crawler, 'Referees Missing LiveScan', 'rls');
+        //        $this->verifyLink($crawler, 'New Referee Certifications', 'newcert');
+        //        $this->verifyLink($crawler, 'Referees Missing Safe Haven Training', 'rsh');
+        //        $this->verifyLink($crawler, 'Referees Missing Concussion Training', 'rcdc');
+        //        $this->verifyLink($crawler, 'Referees Missing Sudden Cardiac Arrest', 'rsca');
+        //        $this->verifyLink($crawler, 'Referees Missing SafeSport', 'rss');
+        //        $this->verifyLink($crawler, 'Referees Missing LiveScan', 'rls');
         $this->verifyLink($crawler, 'Referees with Expired Risk Status', 'rxr');
         $this->verifyLink($crawler, 'Referee SafeSport Expiration', 'rssx');
 
         $this->assertEmpty($crawler->selectLink('National Referee Assessors')->getNode(0));
-
     }
 
     /**
@@ -199,10 +194,9 @@ class ReportsControllerTest extends WebTestCasePlus
         $crawler = $this->client->followRedirect();
 
         $view = $this->client->getResponse()->getContent();
-        $this->assertStringContainsString("<h3>Notes on these reports:</h3>", $view);
+        $this->assertStringContainsString('<h3>Notes on these reports:</h3>', $view);
 
         // verify Admin links
         $this->verifyLink($crawler, 'National Referee Assessors', 'nra');
     }
-
 }

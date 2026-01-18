@@ -3,17 +3,16 @@
 namespace Tests\Controller;
 
 use App\Controller\LogonController;
-use Generator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Tests\Abstracts\WebTestCasePlus;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Tests\Abstracts\WebTestCasePlus;
 
 class LogonControllerTest extends WebTestCasePlus
 {
     /**
      * @runInSeparateProcess
+     *
      * @dataProvider provideHomeUrls
-     * @param $url
      */
     public function testLogonSuccessful($url)
     {
@@ -22,7 +21,7 @@ class LogonControllerTest extends WebTestCasePlus
         $this->assertResponseIsSuccessful();
     }
 
-    public function provideHomeUrls(): Generator
+    public function provideHomeUrls(): \Generator
     {
         yield ['/'];
         yield ['/logon'];
@@ -30,8 +29,8 @@ class LogonControllerTest extends WebTestCasePlus
 
     /**
      * @runInSeparateProcess
+     *
      * @dataProvider provideUnauthUrls
-     * @param $url
      */
     public function testLogonUnsuccessful($url)
     {
@@ -44,11 +43,10 @@ class LogonControllerTest extends WebTestCasePlus
         $this->assertEquals('/logon', $this->client->getRequest()->getPathInfo());
     }
 
-    public function provideUnauthUrls(): Generator
+    public function provideUnauthUrls(): \Generator
     {
         yield ['/log'];
     }
-
 
     public function testController()
     {
@@ -71,7 +69,6 @@ class LogonControllerTest extends WebTestCasePlus
         $this->client->request('GET', '/logon');
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-
     }
 
     /**
@@ -87,8 +84,7 @@ class LogonControllerTest extends WebTestCasePlus
         $this->client->followRedirect();
 
         $view = $this->client->getResponse()->getContent();
-        $this->assertStringContainsString("<h3>Notes on these reports:</h3>", $view);
-
+        $this->assertStringContainsString('<h3>Notes on these reports:</h3>', $view);
     }
 
     /**
@@ -105,9 +101,7 @@ class LogonControllerTest extends WebTestCasePlus
 
         $view = $this->client->getResponse()->getContent();
         $this->assertStringContainsString("Unrecognized password for $this->userName", $view);
-
     }
-
 
     /**
      * @runInSeparateProcess
@@ -122,8 +116,7 @@ class LogonControllerTest extends WebTestCasePlus
         $this->client->followRedirect();
 
         $view = $this->client->getResponse()->getContent();
-        $this->assertStringContainsString("<h3>Notes on these reports:</h3>", $view);
-
+        $this->assertStringContainsString('<h3>Notes on these reports:</h3>', $view);
     }
 
     /**
@@ -139,8 +132,6 @@ class LogonControllerTest extends WebTestCasePlus
         $this->client->followRedirect();
 
         $view = $this->client->getResponse()->getContent();
-        $this->assertStringContainsString("<h3>Notes on these reports:</h3>", $view);
-
+        $this->assertStringContainsString('<h3>Notes on these reports:</h3>', $view);
     }
-
 }

@@ -3,18 +3,17 @@
 namespace Tests\Controller;
 
 use App\Repository\DataWarehouse;
-use Generator;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Tests\Abstracts\WebTestCasePlus;
 
 class AdminControllerTest extends WebTestCasePlus
 {
-
     /**
      * @runInSeparateProcess
+     *
      * @Security("!has_role('ROLE_USER')")
+     *
      * @dataProvider provideAdminUrls
-     * @param $url
      */
     public function testAdminSuccessful($url)
     {
@@ -28,7 +27,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertResponseIsSuccessful();
     }
 
-    public function provideAdminUrls(): Generator
+    public function provideAdminUrls(): \Generator
     {
         yield ['/admin'];
     }
@@ -43,7 +42,7 @@ class AdminControllerTest extends WebTestCasePlus
 
         $this->submitLoginForm('Area 1/B', '');
         $view = $this->client->getResponse()->getContent();
-        $this->assertStringNotContainsString("Password may not be blank", $view);
+        $this->assertStringNotContainsString('Password may not be blank', $view);
     }
 
     /**
@@ -101,7 +100,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('/admin', $this->client->getRequest()->getPathInfo());
         $view = $this->client->getResponse()->getContent();
-        $this->assertStringContainsString("<h1>Administrative Functions</h1>", $view);
+        $this->assertStringContainsString('<h1>Administrative Functions</h1>', $view);
     }
 
     /**
@@ -118,16 +117,16 @@ class AdminControllerTest extends WebTestCasePlus
         $pwd = 'password';
 
         $this->expectException(AccessDeniedException::class);
-        $this->submitAdminForm("btnAddUser", $pwd, $userName);
+        $this->submitAdminForm('btnAddUser', $pwd, $userName);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('/admin', $this->client->getRequest()->getPathInfo());
 
         // test user exists
-        $this->submitAdminForm("btnAddUser", $pwd, $userName);
+        $this->submitAdminForm('btnAddUser', $pwd, $userName);
         // test blank user name (default)
-        $this->submitAdminForm("btnAddUser", $pwd);
+        $this->submitAdminForm('btnAddUser', $pwd);
         // test blank pw
-        $this->submitAdminForm("btnAddUser", '', $userName);
+        $this->submitAdminForm('btnAddUser', '', $userName);
 
         $u = $dw->getUserByName($userName);
         $this->assertNotEmpty($u);
@@ -138,7 +137,6 @@ class AdminControllerTest extends WebTestCasePlus
         $dw->removeUser($u);
 
         $conn->close();
-
     }
 
     /**
@@ -161,7 +159,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->client->followRedirect();
 
         $this->expectException(AccessDeniedException::class);
-        $this->submitAdminForm("btnUpdate", $pw, $userName);
+        $this->submitAdminForm('btnUpdate', $pw, $userName);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('/admin', $this->client->getRequest()->getPathInfo());
 
@@ -172,7 +170,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertEquals('/reports', $this->client->getRequest()->getPathInfo());
 
         $this->getNamePW('user_test');
-        $this->submitAdminForm("btnUpdate", $this->pw, $this->userName);
+        $this->submitAdminForm('btnUpdate', $this->pw, $this->userName);
 
         $this->submitLoginForm($this->userName, $this->pw);
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
@@ -181,8 +179,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertEquals('/reports', $this->client->getRequest()->getPathInfo());
 
         // test blank pw
-        $this->submitAdminForm("btnUpdate", '', $userName);
-
+        $this->submitAdminForm('btnUpdate', '', $userName);
     }
 
     /**
@@ -191,7 +188,7 @@ class AdminControllerTest extends WebTestCasePlus
     public function testLogNote()
     {
         $this->expectException(AccessDeniedException::class);
-        $this->submitAdminForm("btnLogItem", 'TEST: testLogNote: add to log');
+        $this->submitAdminForm('btnLogItem', 'TEST: testLogNote: add to log');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('/admin', $this->client->getRequest()->getPathInfo());
     }
@@ -209,8 +206,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->client->followRedirect();
 
         $view = $this->client->getResponse()->getContent();
-        $this->assertStringContainsString("<h3>Notes on these reports:</h3>", $view);
-
+        $this->assertStringContainsString('<h3>Notes on these reports:</h3>', $view);
     }
 
     /**
@@ -227,7 +223,6 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
         $this->client->followRedirect();
         $this->assertEquals('/reports', $this->client->getRequest()->getPathInfo());
-
     }
 
     /**

@@ -2,11 +2,10 @@
 
 namespace App\Abstracts;
 
+use App\Repository\DataWarehouse;
+use DateMalformedStringException;
 use DateTime;
 use DateTimeZone;
-
-use App\Repository\DataWarehouse;
-
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use stdClass;
@@ -17,30 +16,24 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 abstract class AbstractController2 extends AbstractController
 {
-    /** @var Connection */
     protected Connection $conn;
 
-    /** @var Request */
     protected Request $request;
 
-    /** @var DataWarehouse */
     protected DataWarehouse $dw;
 
     /**
      * @var SessionInterface
      */
-    protected $session;
+    protected SessionInterface $session;
 
-    //shared variables
+    // shared variables
     /**
      * @var mixed|stdClass
      */
-    protected $user;
+    protected mixed $user;
 
-    //view variables
-    /**
-     * @var string
-     */
+    // view variables
     protected string $page_title;
     /**
      * @var array|string[]
@@ -52,8 +45,8 @@ abstract class AbstractController2 extends AbstractController
     protected array $msgStyle;
 
     /**
-     * AbstractController2 constructor
-     * @param RequestStack $requestStack
+     * AbstractController2 constructor.
+     *
      * @throws \Exception
      */
     public function __construct(RequestStack $requestStack)
@@ -71,15 +64,11 @@ abstract class AbstractController2 extends AbstractController
             $this->user = is_null($u) ? new stdClass() : $u;
         }
 
-        $this->page_title = "Section 1: Certification Reporting System";
+        $this->page_title = 'Section 1: Certification Reporting System';
         $this->msg = [0 => '', 'add' => '', 'update' => ''];
         $this->msgStyle = [0 => '', 'add' => '', 'update' => ''];
-
     }
 
-    /**
-     * @return bool|null
-     */
     protected function isAuthorized(): ?bool
     {
         if (!$this->session->get('authed')) {
@@ -98,11 +87,12 @@ abstract class AbstractController2 extends AbstractController
     /**
      * @param Request $request
      * @return null
+     *
      * @throws \Exception
      */
-    protected function logStamp(Request $request)
+    protected function logStamp(Request $request): null
     {
-        if ($this->session->get('name') == 'Super Admin') {
+        if ('Super Admin' == $this->session->get('name')) {
             return null;
         }
 
@@ -136,12 +126,10 @@ abstract class AbstractController2 extends AbstractController
         }
 
         return null;
-
     }
 
     /**
-     * @return string
-     * @throws Exception
+     * @throws Exception|DateMalformedStringException
      */
     protected function getUpdateTimestamp(): string
     {
@@ -154,17 +142,16 @@ abstract class AbstractController2 extends AbstractController
     }
 
     /**
-     * @return array
-     * @throws Exception
+     * @throws Exception|DateMalformedStringException
      */
     protected function getBaseContent(): array
     {
-        return array(
+        return [
             'root' => $this->generateUrl('logon'),
             'email' => $this->getParameter('sra')['email'],
             'issueTracker' => $this->getParameter('issueTracker'),
             'version' => $this->getParameter('app.version'),
             'updated' => $this->getUpdateTimestamp(),
-        );
+        ];
     }
 }

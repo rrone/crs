@@ -4,17 +4,12 @@ namespace App\Services;
 
 use App\Abstracts\AbstractExporter;
 use App\Repository\DataWarehouse;
-
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-use DateTime;
-use DateTimeZone;
-use Exception;
-
-define("xlsxFile", realpath(__DIR__ . '/../../var/xlsx/CompositeRefCerts.xlsx'));
+define('xlsxFile', realpath(__DIR__.'/../../var/xlsx/CompositeRefCerts.xlsx'));
 
 class ExportXl extends AbstractExporter
 {
@@ -27,8 +22,8 @@ class ExportXl extends AbstractExporter
 
     /**
      * ExportXl constructor.
-     * @param DataWarehouse $dataWarehouse
-     * @throws Exception
+     *
+     * @throws \Exception
      */
     public function __construct(DataWarehouse $dataWarehouse)
     {
@@ -36,20 +31,20 @@ class ExportXl extends AbstractExporter
 
         $this->dw = $dataWarehouse;
         $utc = $this->dw->getUpdateTimestamp();
-        $ts = new DateTime($utc, new DateTimeZone('UTC'));
-        $ts->setTimezone(new DateTimeZone('America/Los_Angeles'));
+        $ts = new \DateTime($utc, new \DateTimeZone('UTC'));
+        $ts->setTimezone(new \DateTimeZone('America/Los_Angeles'));
         $ts = $ts->format('Ymd_His');
-        $this->outFileName = 'Report_' . $ts . '.' . $this->getFileExtension();
+        $this->outFileName = 'Report_'.$ts.'.'.$this->getFileExtension();
     }
 
     /**
-     * @param Request $request
      * @return Response
+     *
      * @throws \Doctrine\DBAL\Exception
      */
     public function invoke(Request $request)
     {
-        $user1 = (object)$request->request->get('user');
+        $user1 = (object) $request->request->get('user');
         $baseURL = $request->request->get('baseURL');
 
         if ($user1->admin) {
@@ -57,7 +52,7 @@ class ExportXl extends AbstractExporter
         } else {
             $key = explode(' ', $user1->name);
             $userKey = end($key);
-            $userKey = $userKey == '10' ? '1' : $userKey;
+            $userKey = '10' == $userKey ? '1' : $userKey;
         }
 
         $this->uri = $request->attributes->get('_route');
@@ -71,7 +66,7 @@ class ExportXl extends AbstractExporter
         $u = strtoupper(str_replace('/', '', end($user)));
 
         $date = date_create($this->dw->getUpdateTimestamp());
-        $shName = 'Updated ' . date_format($date, 'Y-M-d');
+        $shName = 'Updated '.date_format($date, 'Y-M-d');
 
         switch ($this->uri) {
             case 'ra':
@@ -94,7 +89,7 @@ class ExportXl extends AbstractExporter
                 $this->outFileName = "UnregisteredRefs.$u.$this->outFileName";
                 $results = $this->dw->getUnregisteredRefs($userKey, $limit);
                 break;
-            // @codeCoverageIgnoreStart
+                // @codeCoverageIgnoreStart
             case 'rsh':
                 $this->outFileName = "MissingSafeHaven.$u.$this->outFileName";
                 $results = $this->dw->getSafeHavenRefs($userKey, $limit);
@@ -121,8 +116,8 @@ class ExportXl extends AbstractExporter
                 break;
             case 'newcert':
                 $this->outFileName = "NewRefereeCerts.$u.$this->outFileName";
-                $users = array ('%%', '1');
-                if(in_array($userKey, $users)){
+                $users = ['%%', '1'];
+                if (in_array($userKey, $users)) {
                     $results = $this->dw->getRefsNewCerts('%%', $limit);
                 } else {
                     $results = $this->dw->getRefsNewCerts($userKey, $limit);
@@ -140,10 +135,10 @@ class ExportXl extends AbstractExporter
                     $results = null;
                 }
                 break;
-            // @codeCoverageIgnoreEnd
+                // @codeCoverageIgnoreEnd
             case 'xra':
                 if ($user1->admin) {
-                    $this->outFileName = "RefAssessors.1.Report." . $this->getFileExtension();
+                    $this->outFileName = 'RefAssessors.1.Report.'.$this->getFileExtension();
                     $results = $this->dw->getRefAssessorsReport();
                 } else {
                     $results = null;
@@ -151,7 +146,7 @@ class ExportXl extends AbstractExporter
                 break;
             case 'xri':
                 if ($user1->admin) {
-                    $this->outFileName = "RefInstructors.1.Report." . $this->getFileExtension();
+                    $this->outFileName = 'RefInstructors.1.Report.'.$this->getFileExtension();
                     $results = $this->dw->getRefInstructorsReport();
                 } else {
                     $results = null;
@@ -159,7 +154,7 @@ class ExportXl extends AbstractExporter
                 break;
             case 'xrie':
                 if ($user1->admin) {
-                    $this->outFileName = "RefInstructorEvaluators.1.Report." . $this->getFileExtension();
+                    $this->outFileName = 'RefInstructorEvaluators.1.Report.'.$this->getFileExtension();
                     $results = $this->dw->getRefInstructorEvaluatorsReport();
                 } else {
                     $results = null;
@@ -167,7 +162,7 @@ class ExportXl extends AbstractExporter
                 break;
             case 'xnra':
                 if ($user1->admin) {
-                    $this->outFileName = "NationalRefAssessors.1.Report." . $this->getFileExtension();
+                    $this->outFileName = 'NationalRefAssessors.1.Report.'.$this->getFileExtension();
                     $results = $this->dw->getRefNationalAssessorsReport();
                 } else {
                     $results = null;
@@ -177,10 +172,10 @@ class ExportXl extends AbstractExporter
                 $this->outFileName = "CompositeRefCerts.$u.$this->outFileName";
                 $results = $this->dw->getCompositeRefCerts($userKey, $limit);
                 break;
-            // @codeCoverageIgnoreStart
+                // @codeCoverageIgnoreStart
             default:
                 $results = null;
-            // @codeCoverageIgnoreEnd
+                // @codeCoverageIgnoreEnd
         }
 
         // generate the response
@@ -188,9 +183,9 @@ class ExportXl extends AbstractExporter
             return new RedirectResponse($baseURL);
         } else {
             $content = null;
-            if ($user1->section && $this->uri == 'crct') {
+            if ($user1->section && 'crct' == $this->uri) {
                 // @codeCoverageIgnoreStart
-                if ($_SERVER['APP_ENV'] === 'dev') {
+                if ('dev' === $_SERVER['APP_ENV']) {
                     $this->generateExport($content, $results, $shName);
                     file_put_contents(realpath(xlsxFile), $this->export($content));
                 }
@@ -199,14 +194,13 @@ class ExportXl extends AbstractExporter
                 try {
                     $response = new BinaryFileResponse(realpath(xlsxFile));
                     // @codeCoverageIgnoreStart
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $response = new Response();
 
-                    $this->generateExport($content, array(), $shName);
+                    $this->generateExport($content, [], $shName);
                     $response->setContent($this->export($content));
-
                 }
-                // @codeCoverageIgnoreEnd
+            // @codeCoverageIgnoreEnd
             } else {
                 $response = new Response();
                 $this->generateExport($content, $results, $shName);
@@ -214,99 +208,86 @@ class ExportXl extends AbstractExporter
             }
         }
         $response->headers->set('Content-Type', $this->contentType);
-        $response->headers->set('Content-Disposition', 'attachment; filename=' . $this->outFileName);
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$this->outFileName);
         $response->headers->set('Set-Cookie', 'fileDownload=true; path=/');
 
         return $response;
     }
 
-    /**
-     * @param $content
-     * @param array $certs
-     * @param string $shName
-     * @return void
-     */
     private function generateExport(&$content, array $certs, string $shName): void
     {
         // @codeCoverageIgnoreStart
         if (empty($certs)) {
-            $content[$shName]['data'] = array('There were no records found for this report.');
+            $content[$shName]['data'] = ['There were no records found for this report.'];
             $content[$shName]['options'] = [];
+
             return;
         }
         // @codeCoverageIgnoreEnd
 
-        //set the header labels
-            $rec = (array)$certs[0];
+        // set the header labels
+        $rec = (array) $certs[0];
 
-            $labels = [];
-            foreach ($rec as $hdr => $val) {
-                $labels[] = $hdr;
-            }
-            if ($this->uri == 'crct') {
-                $labels[] = 'Health & Safety';
-            }
+        $labels = [];
+        foreach ($rec as $hdr => $val) {
+            $labels[] = $hdr;
+        }
+        if ('crct' == $this->uri) {
+            $labels[] = 'Health & Safety';
+        }
 
-            $data = array($labels);
+        $data = [$labels];
 
-            //set the data: 1 record in each row
-            foreach ($certs as $cert) {
-                $row = [];
+        // set the data: 1 record in each row
+        foreach ($certs as $cert) {
+            $row = [];
 
-                if (!empty($cert)) {
-                    foreach ($cert as $key => $value) {
-                        switch ($key) {
-                            case 'First_Name':
-                            case 'Last_Name':
-                            case 'City':
-                                $value = ucwords(strtolower($value));
-                                break;
+            if (!empty($cert)) {
+                foreach ($cert as $key => $value) {
+                    switch ($key) {
+                        case 'First_Name':
+                        case 'Last_Name':
+                        case 'City':
+                            $value = ucwords(strtolower($value));
+                            break;
                         case 'Email':
                             $value = strtolower($value);
                             break;
-                        }
-                        $row[] = $value;
                     }
-                    if ($this->uri == 'crct') {
-                        $is_18 = $this->is_18($cert['DOB']);
-                        if ($cert['Safe_Haven_Date'] == '' or
-                            $cert['Concussion_Awareness_Date'] == ''  or
-                            $cert['Sudden_Cardiac_Arrest_Date'] == '' or
-                            $cert['Risk_Status'] == 'Expired' or
-                            ($is_18 and $cert['SafeSport_Date'] == ''))
-                            $row[] = '';
-                        else
-                            $row[] = 'COMPLETE';
+                    $row[] = $value;
+                }
+                if ('crct' == $this->uri) {
+                    $is_18 = $this->is_18($cert['DOB']);
+                    if ('' == $cert['Safe_Haven_Date']
+                        or '' == $cert['Concussion_Awareness_Date']
+                        or '' == $cert['Sudden_Cardiac_Arrest_Date']
+                        or 'Expired' == $cert['Risk_Status']
+                        or ($is_18 and '' == $cert['SafeSport_Date'])) {
+                        $row[] = '';
+                    } else {
+                        $row[] = 'COMPLETE';
                     }
                 }
-
-                $data[] = $row;
             }
+
+            $data[] = $row;
+        }
 
         if (!empty($data)) {
             $content[$shName]['data'] = $data;
             $content[$shName]['options']['freezePane'] = 'A2';
             $content[$shName]['options']['horizontalAlignment'] = ['B1:Z' => 'left'];
             $content[$shName]['options']['selectRange'] = 'A2';
-
         }
-
     }
 
-    /**
-     * @param string $dob
-     * @return bool
-     */
-    private function is_18(string $dob):bool {
+    private function is_18(string $dob): bool
+    {
         return date_diff(date_create($dob), date_create())->y > 17;
     }
 
-    /**
-     * @param string $dob
-     * @return float
-     */
-    private function age(string $dob):float {
+    private function age(string $dob): float
+    {
         return date_diff(date_create($dob), date_create())->y;
     }
-
 }

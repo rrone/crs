@@ -1,10 +1,10 @@
 <?php
 
+use App\Kernel;
 use Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\DropDatabaseDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\Proxy\RunSqlDoctrineCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
-use App\Kernel;
 use Symfony\Component\Console\Input\ArrayInput;
 
 require_once __DIR__.'/../vendor/autoload.php';

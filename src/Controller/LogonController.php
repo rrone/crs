@@ -2,14 +2,11 @@
 
 namespace App\Controller;
 
-use Exception;
+use App\Abstracts\AbstractController2;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-
-use App\Abstracts\AbstractController2;
-
 use Symfony\Component\Routing\Annotation\Route;
 
 class LogonController extends AbstractController2
@@ -18,8 +15,8 @@ class LogonController extends AbstractController2
 
     /**
      * LogonController constructor.
-     * @param RequestStack $requestStack
-     * @throws Exception
+     *
+     * @throws \Exception
      */
     public function __construct(RequestStack $requestStack)
     {
@@ -27,11 +24,13 @@ class LogonController extends AbstractController2
     }
 
     /**
-     * @Route("/", name="logon")
-     * @Route("/logon", name="/")
+     *
      * @return RedirectResponse|Response
-     * @throws Exception
+     *
+     * @throws \Exception
      */
+#[Route('/', name: 'logon')]
+#[Route("/logon", name: "/")]
     public function index()
     {
         $this->request->query->set('url', $this->generateUrl('logon'));
@@ -49,7 +48,6 @@ class LogonController extends AbstractController2
 
     public function invoke(Request $request)
     {
-
         $this->url = $request->query->get('url');
 
         if ($request->isMethod('post')) {
@@ -70,7 +68,7 @@ class LogonController extends AbstractController2
                 $session->set('authed', true);
                 $this->msg[0] = '';
             } else {
-                //try master password
+                // try master password
                 $user = $this->dw->getUserByName('Super Admin');
                 $hash = isset($user) ? $user->hash : null;
                 $authed = password_verify($pass, $hash);
@@ -93,13 +91,12 @@ class LogonController extends AbstractController2
 
     public function renderPage(): array
     {
-
-        $content = array(
+        $content = [
             'content' => $this->renderContent(),
             'users' => $this->url,
             'message' => $this->msg[0],
             'admin' => $this->user->admin ?? false,
-        );
+        ];
 
         return array_merge($content, $this->getBaseContent());
     }
@@ -148,7 +145,7 @@ EOD;
         $options = null;
 
         foreach ($users as $user) {
-            $user = (object)$user;
+            $user = (object) $user;
             if ($user->enabled) {
                 $options .= "<option>$user->name</option>\n";
             }
@@ -156,6 +153,4 @@ EOD;
 
         return $options;
     }
-
-
 }

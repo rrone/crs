@@ -10,6 +10,7 @@ doctrine:
         result_cache_driver:
             type: service
             id: doctrine.result_cache_provider
+        enable_lazy_ghost_objects: true
 
 services:
     doctrine.result_cache_provider:

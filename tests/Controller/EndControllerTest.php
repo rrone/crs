@@ -40,5 +40,4 @@ class EndControllerTest extends WebTestCasePlus
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertEquals('/', $this->client->getRequest()->getPathInfo());
     }
-
 }

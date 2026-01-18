@@ -9,19 +9,18 @@ require dirname(__DIR__).'/config/bootstrap.php';
 
 (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
 
-if ($_SERVER['APP_ENV'] === 'dev') {
+if ('dev' === $_SERVER['APP_ENV']) {
     umask(0000);
 
-//    ini_set('xdebug.var_display_max_depth', -1);
+    //    ini_set('xdebug.var_display_max_depth', -1);
     ini_set('xdebug.var_display_max_children', -1);
     ini_set('xdebug.var_display_max_data', -1);
 
-    ini_set("display_errors", 1);
+    ini_set('display_errors', 1);
     ini_set('max_execution_time', 600);
     ini_set('memory_limit', '2G');
 
     Debug::enable();
-
 }
 
 $kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
@@ -32,5 +31,5 @@ try {
     $kernel->terminate($request, $response);
 } catch (Exception $e) {
     echo $e->getMessage();
-    die();
+    exit;
 }

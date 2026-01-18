@@ -57,11 +57,11 @@ class ExportController extends AbstractController2
         if (!$this->isAuthorized()) {
             return $this->redirectToRoute('/');
         }
-
         $this->logStamp($request);
-
-        $request->request->set('user', $this->user);
+        $request->request->set('user', ((array) $this->user)['name']);
         $request->request->set('baseURL', $this->generateUrl('logon'));
+        $request->request->set('admin', ((array) $this->user)['admin']);
+        $request->request->set('section', ((array) $this->user)['section']);
 
         return $this->exportXl->invoke($request);
     }

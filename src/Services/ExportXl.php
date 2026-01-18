@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Abstracts\AbstractExporter;
 use App\Repository\DataWarehouse;
+use stdClass;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,7 +45,12 @@ class ExportXl extends AbstractExporter
      */
     public function invoke(Request $request)
     {
-        $user1 = (object) $request->request->get('user');
+        $user1 = new stdClass();
+
+        $user1->name = $request->request->get('user');
+        $user1->admin = $request->request->get('admin');
+        $user1->section = $request->request->get('section');
+
         $baseURL = $request->request->get('baseURL');
 
         if ($user1->admin) {

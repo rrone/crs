@@ -8,7 +8,7 @@ use DateTime;
 use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
-use stdClass;
+use stdClass as stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -29,9 +29,9 @@ abstract class AbstractController2 extends AbstractController
 
     // shared variables
     /**
-     * @var mixed|stdClass
+     * @var stdClass
      */
-    protected mixed $user;
+    protected stdClass $user;
 
     // view variables
     protected string $page_title;

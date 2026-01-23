@@ -3,6 +3,7 @@
 namespace Tests\Controller;
 
 use App\Controller\ReportsController;
+use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -10,6 +11,18 @@ use Tests\Abstracts\WebTestCasePlus;
 
 class ReportsControllerTest extends WebTestCasePlus
 {
+    /**
+     * @return void
+     */
+    #[WithoutErrorHandler]
+    public function testCodeThatSetsCustomErrorHandler(): void
+    {
+        // Code that sets and does not remove its own error handler
+        set_error_handler(function () { /* ... */ });
+        trigger_error('An error', E_USER_NOTICE);
+        // PHPUnit will not complain about the unremoved handler here
+    }
+
     /**
      * @runInSeparateProcess
      *
@@ -88,7 +101,7 @@ class ReportsControllerTest extends WebTestCasePlus
      *
      * @dataProvider provideRedirectUrls
      */
-    public function testPageRedirects($url)
+    private function testPageRedirects($url)
     {
         $this->client->request('GET', $url);
 

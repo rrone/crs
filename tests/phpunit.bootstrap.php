@@ -3,12 +3,11 @@
 use App\Kernel;
 use Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\DropDatabaseDoctrineCommand;
-use Doctrine\Bundle\DoctrineBundle\Command\Proxy\RunSqlDoctrineCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 
 require_once __DIR__.'/../vendor/autoload.php';
-function bootstrap()
+function bootstrap(): void
 {
     $kernel = new Kernel('test', true);
     $kernel->boot();
@@ -16,7 +15,6 @@ function bootstrap()
     $application->setAutoExit(false);
     $application->add(new DropDatabaseDoctrineCommand());
     $application->add(new CreateDatabaseDoctrineCommand());
-    $application->add(new RunSqlDoctrineCommand());
     $application->run(new ArrayInput([
         'command' => 'doctrine:database:drop',
         '--if-exists' => '1',

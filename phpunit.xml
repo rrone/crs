@@ -2,17 +2,11 @@
 <!-- https://phpunit.readthedocs.io/en/latest/configuration.html -->
 <phpunit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.5/phpunit.xsd"
         colors="true"
-        convertErrorsToExceptions="false"
-        convertNoticesToExceptions="false"
-        convertWarningsToExceptions="false"
-        verbose="true"
+
         bootstrap="tests/bootstrap.php">
     <coverage>
-        <include>
-            <directory>src</directory>
-        </include>
         <report>
             <html outputDirectory="var/coverage/"/>
         </report>
@@ -24,15 +18,17 @@
         <env name="APP_DEBUG" value="1"/>
         <env name="SHELL_VERBOSITY" value="-1"/>
     </php>
+    <source>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+    </source>
     <testsuites>
         <testsuite name="Functional Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
     <extensions>
-        <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension"/>
+        <bootstrap class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension"/>
     </extensions>
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
-    </listeners>
 </phpunit>

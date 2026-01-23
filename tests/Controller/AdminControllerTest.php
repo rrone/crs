@@ -3,18 +3,23 @@
 namespace Tests\Controller;
 
 use App\Repository\DataWarehouse;
+use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
+use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Tests\Abstracts\WebTestCasePlus;
 
 class AdminControllerTest extends WebTestCasePlus
 {
+
     /**
-     * @runInSeparateProcess
      *
      * @Security("!has_role('ROLE_USER')")
      *
-     * @dataProvider provideAdminUrls
      */
+    #[DataProvider('provideAdminUrls')]
+    #[RunInSeparateProcess]
     public function testAdminSuccessful($url)
     {
         $this->getNamePW('admin_test');
@@ -27,14 +32,12 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertResponseIsSuccessful();
     }
 
-    public function provideAdminUrls(): \Generator
+    public static function provideAdminUrls(): Generator
     {
         yield ['/admin'];
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testInvalidLogin()
     {
         // invoke the controller action and test it
@@ -45,9 +48,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertStringNotContainsString('Password may not be blank', $view);
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testAdminAsAnonymous()
     {
         // instantiate the view and test it
@@ -64,9 +65,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertEquals('/', $this->client->getRequest()->getPathInfo());
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testAdminAsUser()
     {
         // invoke the controller action and test it
@@ -81,9 +80,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertEquals('/reports', $this->client->getRequest()->getPathInfo());
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testAdminAsAdmin()
     {
         // invoke the controller action and test it
@@ -103,9 +100,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertStringContainsString('<h1>Administrative Functions</h1>', $view);
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testNewPW()
     {
         global $kernel;
@@ -139,9 +134,7 @@ class AdminControllerTest extends WebTestCasePlus
         $conn->close();
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testPWChange()
     {
         $this->getNamePW('user_test');
@@ -182,9 +175,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->submitAdminForm('btnUpdate', '', $userName);
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testLogNote()
     {
         $this->expectException(AccessDeniedException::class);
@@ -193,9 +184,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertEquals('/admin', $this->client->getRequest()->getPathInfo());
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testDoneButton()
     {
         // invoke the controller action and test it
@@ -209,9 +198,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertStringContainsString('<h3>Notes on these reports:</h3>', $view);
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testLogExportAsUser()
     {
         // invoke the controller action and test it
@@ -225,9 +212,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertEquals('/reports', $this->client->getRequest()->getPathInfo());
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testLogExportAsAdmin()
     {
         // invoke the controller action and test it
@@ -241,9 +226,7 @@ class AdminControllerTest extends WebTestCasePlus
         $this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', $rpt);
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testLogExport()
     {
         $this->expectException(AccessDeniedException::class);

@@ -33,7 +33,7 @@ class WebTestCasePlus extends WebTestCase
         $this->c = self::getContainer();
     }
 
-    protected function getNamePW($paramStr = null)
+    protected function getNamePW($paramStr = null): void
     {
         if (empty($paramStr)) {
             $this->userName = '';
@@ -46,9 +46,9 @@ class WebTestCasePlus extends WebTestCase
         $this->pw = $cred['pw'];
     }
 
-    protected function submitLoginForm($userName, $pwd)
+    protected function submitLoginForm($userName, $pwd): void
     {
-        $this->client->followRedirects(true);
+        $this->client->followRedirects();
         $crawler = $this->client->request('GET', '/end');
         $this->client->followRedirects(false);
 
@@ -60,7 +60,7 @@ class WebTestCasePlus extends WebTestCase
         $this->client->submit($form);
     }
 
-    protected function submitAdminForm($btn = null, $txt = '', $userName = '')
+    protected function submitAdminForm($btn = null, $txt = '', $userName = ''): void
     {
         $this->getNamePW('dev_test');
         $this->submitLoginForm($this->userName, $this->pw);
@@ -90,7 +90,7 @@ class WebTestCasePlus extends WebTestCase
         }
     }
 
-    protected function verifyLink($crawler, $name, $page)
+    protected function verifyLink($crawler, $name, $page): void
     {
         $link = $crawler->selectLink($name)->link();
         $uri = $this->client->click($link)->getUri();

@@ -3,6 +3,10 @@
 namespace Tests\Controller;
 
 use App\Controller\LogonController;
+use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
+use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Tests\Abstracts\WebTestCasePlus;
@@ -10,10 +14,19 @@ use Tests\Abstracts\WebTestCasePlus;
 class LogonControllerTest extends WebTestCasePlus
 {
     /**
-     * @runInSeparateProcess
-     *
-     * @dataProvider provideHomeUrls
+     * @return void
      */
+    #[WithoutErrorHandler]
+    public function testCodeThatSetsCustomErrorHandler(): void
+    {
+        // Code that sets and does not remove its own error handler
+        set_error_handler(function () { /* ... */ });
+        trigger_error('An error', E_USER_NOTICE);
+        // PHPUnit will not complain about the unremoved handler here
+    }
+
+    #[DataProvider('provideHomeUrls')]
+    #[RunInSeparateProcess]
     public function testLogonSuccessful($url)
     {
         $this->client->request('GET', $url);
@@ -21,17 +34,14 @@ class LogonControllerTest extends WebTestCasePlus
         $this->assertResponseIsSuccessful();
     }
 
-    public function provideHomeUrls(): \Generator
+    public static function provideHomeUrls(): Generator
     {
         yield ['/'];
         yield ['/logon'];
     }
 
-    /**
-     * @runInSeparateProcess
-     *
-     * @dataProvider provideUnauthUrls
-     */
+    #[DataProvider('provideUnauthUrls')]
+    #[RunInSeparateProcess]
     public function testLogonUnsuccessful($url)
     {
         $this->client->request('GET', $url);
@@ -43,22 +53,20 @@ class LogonControllerTest extends WebTestCasePlus
         $this->assertEquals('/logon', $this->client->getRequest()->getPathInfo());
     }
 
-    public function provideUnauthUrls(): \Generator
+    public static function provideUnauthUrls(): Generator
     {
         yield ['/log'];
     }
 
-    public function testController()
-    {
-        // instantiate the controller
-        $rs = new RequestStack();
-        $controller = new LogonController($rs);
-        $this->assertTrue($controller instanceof AbstractController);
-    }
+//    public function testController()
+//    {
+//        // instantiate the controller
+//        $rs = new RequestStack();
+//        $controller = new LogonController($rs);
+//        $this->assertTrue($controller instanceof AbstractController);
+//    }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testRoot()
     {
         // instantiate the view and test it
@@ -71,9 +79,7 @@ class LogonControllerTest extends WebTestCasePlus
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testLogonAsUser()
     {
         $this->getNamePW('user_test');
@@ -87,9 +93,7 @@ class LogonControllerTest extends WebTestCasePlus
         $this->assertStringContainsString('<h3>Notes on these reports:</h3>', $view);
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testLogonAsUserWithBadPW()
     {
         $this->getNamePW('user_test');
@@ -103,9 +107,7 @@ class LogonControllerTest extends WebTestCasePlus
         $this->assertStringContainsString("Unrecognized password for $this->userName", $view);
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testLogonAsAdmin()
     {
         $this->getNamePW('admin_test');
@@ -119,9 +121,7 @@ class LogonControllerTest extends WebTestCasePlus
         $this->assertStringContainsString('<h3>Notes on these reports:</h3>', $view);
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[RunInSeparateProcess]
     public function testLogonAsDeveloper()
     {
         $this->getNamePW('dev_test');

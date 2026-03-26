@@ -26,12 +26,13 @@ class AdminController extends AbstractController2
 
     /**
      *
-     * @return RedirectResponse|Response
+     * @param Request $request
+     * @return RedirectResponse|Response|null
      *
      * @throws Exception
      */
     #[Route("/admin", name: "admin" )]
-    public function index(Request $request)
+    public function index(Request $request): RedirectResponse|Response|null
     {
         $sa = $this->session->get('superadmin');
         $this->super = is_bool($sa) ? $sa : false;
@@ -46,15 +47,12 @@ class AdminController extends AbstractController2
         $response = new Response();
         $response->headers->set('admin', $this->generateUrl('admin'));
 
-        switch ($this->handler($request)) {
-            case 'Done':
-                return $this->redirectToRoute('reports');
+        return match ($this->handler($request)) {
+            'Done' => $this->redirectToRoute('reports'),
+            'ExportLog' => $this->redirectToRoute('log'),
+            default => $this->renderPage(),
+        };
 
-            case 'ExportLog':
-                return $this->redirectToRoute('log');
-        }
-
-        return $this->renderPage();
     }
 
     /**
@@ -98,7 +96,7 @@ class AdminController extends AbstractController2
      *
      * @throws Exception
      */
-    public function renderPage()
+    public function renderPage(): null
     {
         $adminPath = $this->generateUrl('admin');
 

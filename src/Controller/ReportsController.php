@@ -12,12 +12,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ReportsController extends AbstractController2
 {
-    private bool $super;
-
     /**
      * ReportsController constructor.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(RequestStack $requestStack)
     {
@@ -26,6 +24,7 @@ class ReportsController extends AbstractController2
 
     /**
      *
+     * @param Request $request
      * @return RedirectResponse|Response
      *
      * @throws \Doctrine\DBAL\Exception
@@ -40,7 +39,6 @@ class ReportsController extends AbstractController2
         $this->logStamp($request);
         $session = $this->request->getSession();
         $this->user = $session->get('user');
-        $this->super = $session->get('superadmin');
 
         return $this->renderPage();
     }
@@ -84,20 +82,17 @@ class ReportsController extends AbstractController2
                     $notes = empty($report->notes) ? null : "<span style='font-weight:normal'> ($report->notes)</span>";
 
                     $html .= "<li><h3><a  href=\"$href\" class=\"reportDownload\" >$report->text</a>$notes</h3></li>\n";
-                } catch (\Exception $e) {
+                } catch (Exception) {
                 }
             }
         }
 
         $html .= "</ul>\n";
         $html .= "<hr>\n";
-        $hrefAdmin = $this->generateUrl('admin');
         $hrefEnd = $this->generateUrl('end');
 
         $html .= '<h3 class="center">';
-        //        if ($this->super) {
-        //            $html .= "<a href=$hrefAdmin >Admin Functions - </a> ";
-        //        }
+
         $html .= "<a href=$hrefEnd >Log Off</a></h3>\n";
 
         return $html;

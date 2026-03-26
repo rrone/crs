@@ -29,6 +29,7 @@ class ExportController extends AbstractController2
 
     /**
      *
+     * @param Request $request
      * @return RedirectResponse|Response
      *
      * @throws Exception
@@ -52,7 +53,7 @@ class ExportController extends AbstractController2
     #[Route("/xri", name: "xri")]
     #[Route("/xrie", name: "xrie")]
     #[Route("/xnra", name: "xnra")]
-    public function invoke(Request $request)
+    public function invoke(Request $request): RedirectResponse|Response
     {
         if (!$this->isAuthorized()) {
             return $this->redirectToRoute('/');

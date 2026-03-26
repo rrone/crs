@@ -1,35 +1,45 @@
 <?php
 
 use App\Kernel;
-use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 require dirname(__DIR__).'/config/bootstrap.php';
 
-(new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
+$env = $_SERVER['APP_ENV'] ?? 'prod';
 
-if ('dev' === $_SERVER['APP_ENV']) {
+$debugRaw = $_SERVER['APP_DEBUG'] ?? null;
+$debugParsed = null;
+
+if (null !== $debugRaw) {
+    $debugParsed = filter_var($debugRaw, FILTER_VALIDATE_BOOL, FILTER_NULL_ON_FAILURE);
+}
+
+$debug = null !== $debugParsed ? $debugParsed : ('prod' !== $env);
+
+if ($debug) {
     umask(0000);
-
-    //    ini_set('xdebug.var_display_max_depth', -1);
-    ini_set('xdebug.var_display_max_children', -1);
-    ini_set('xdebug.var_display_max_data', -1);
-
-    ini_set('display_errors', 1);
-    ini_set('max_execution_time', 600);
-    ini_set('memory_limit', '2G');
-
     Debug::enable();
 }
 
-$kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
+$kernel = new Kernel($env, $debug);
 $request = Request::createFromGlobals();
+
+$response = null;
+
 try {
     $response = $kernel->handle($request);
     $response->send();
-    $kernel->terminate($request, $response);
-} catch (Exception $e) {
-    echo $e->getMessage();
-    exit;
+} catch (Throwable $e) {
+    if (!$debug) {
+        $response = new Response('Internal Server Error', 500);
+        $response->send();
+    } else {
+        throw $e;
+    }
+} finally {
+    if ($response instanceof Response) {
+        $kernel->terminate($request, $response);
+    }
 }

@@ -429,7 +429,7 @@ class DataWarehouse
      * @param $key
      * @param $msg
      * @return null
-     * @throws Exception
+     * @throws Exception|Doctrine\DBAL\Exception
      */
     public function logInfo($key, $msg): null
     {
@@ -606,7 +606,7 @@ class DataWarehouse
        SELECT DISTINCT
                 `Section`, `Area`, `Region`, `First_Name` AS 'FirstName', `Last_Name` AS 'LastName', `Gender`, `Email`, `Address`, `City`, `State`, `PostalCode`, `CertificationDesc`, `CertificationDate`
             FROM
-                `crs_admin_info`
+                `all.AdminInfo`
             WHERE (CONCAT(`Section`, '/', `Area`) LIKE '%$userKey%' )
                 AND `CertificationDate` >= DATE_SUB(NOW(), INTERVAL 60 DAY)
                 AND `CertificationDesc` IN ('National Referee', 'Advanced Referee', 'Intermediate Referee')

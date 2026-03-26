@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Abstracts\AbstractController2;
+use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -16,7 +17,7 @@ class LogonController extends AbstractController2
     /**
      * LogonController constructor.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(RequestStack $requestStack)
     {
@@ -27,12 +28,12 @@ class LogonController extends AbstractController2
      *
      * @return RedirectResponse|Response
      *
-     * @throws \Exception
+     * @throws Exception
      */
 #[Route('/', name: 'logon')]
 #[Route("/logon", name: "/")]
-    public function index()
-    {
+    public function index(): RedirectResponse|Response
+{
         $this->request->query->set('url', $this->generateUrl('logon'));
 
         $this->invoke($this->request);
@@ -46,7 +47,7 @@ class LogonController extends AbstractController2
         return $this->render('logon.html.twig', $this->renderPage());
     }
 
-    public function invoke(Request $request)
+    public function invoke(Request $request): null
     {
         $this->url = $request->query->get('url');
 
@@ -61,7 +62,7 @@ class LogonController extends AbstractController2
             $session->set('superadmin', false);
 
             // try user pass
-            $hash = isset($user) ? $user->hash : null;
+            $hash = $user?->hash;
             $authed = password_verify($pass, $hash);
 
             if ($authed) {
@@ -70,7 +71,7 @@ class LogonController extends AbstractController2
             } else {
                 // try master password
                 $user = $this->dw->getUserByName('Super Admin');
-                $hash = isset($user) ? $user->hash : null;
+                $hash = $user?->hash;
                 $authed = password_verify($pass, $hash);
 
                 if ($authed) {

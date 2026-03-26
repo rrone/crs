@@ -5,6 +5,7 @@ namespace Tests\Repository;
 use App\Repository\DataWarehouse;
 use Doctrine\DBAL\Connection;
 use Psr\Container\ContainerInterface;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class DataWarehouseTest extends KernelTestCase
@@ -19,7 +20,7 @@ class DataWarehouseTest extends KernelTestCase
     protected DataWarehouse $dw;
 
     protected string $userName;
-    protected \stdClass $user;
+    protected stdClass $user;
     protected ContainerInterface $c;
     protected string $pw;
 

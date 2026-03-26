@@ -1,7 +1,7 @@
 parameters:
     # Application Core
     locale: 'en'
-    app.version: '2026.01.18.00'
+    app.version: '2026.03.26.00'
 
     # Communication Settings
     sra:

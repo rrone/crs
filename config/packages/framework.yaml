@@ -21,3 +21,8 @@ framework:
 
     annotations:
       enabled: false
+
+    cache:
+      pools:
+        doctrine.result_cache_pool:
+          adapter: cache.adapter.redis

@@ -4,6 +4,9 @@ namespace App\Services;
 
 use App\Abstracts\AbstractExporter;
 use App\Repository\DataWarehouse;
+use DateTime;
+use DateTimeZone;
+use Exception;
 use stdClass;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -24,7 +27,7 @@ class ExportXl extends AbstractExporter
     /**
      * ExportXl constructor.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(DataWarehouse $dataWarehouse)
     {
@@ -32,8 +35,8 @@ class ExportXl extends AbstractExporter
 
         $this->dw = $dataWarehouse;
         $utc = $this->dw->getUpdateTimestamp();
-        $ts = new \DateTime($utc, new \DateTimeZone('UTC'));
-        $ts->setTimezone(new \DateTimeZone('America/Los_Angeles'));
+        $ts = new DateTime($utc, new DateTimeZone('UTC'));
+        $ts->setTimezone(new DateTimeZone('America/Los_Angeles'));
         $ts = $ts->format('Ymd_His');
         $this->outFileName = 'Report_'.$ts.'.'.$this->getFileExtension();
     }
@@ -200,7 +203,7 @@ class ExportXl extends AbstractExporter
                 try {
                     $response = new BinaryFileResponse(realpath(xlsxFile));
                     // @codeCoverageIgnoreStart
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $response = new Response();
 
                     $this->generateExport($content, [], $shName);

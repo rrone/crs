@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Abstracts\AbstractController2;
+use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -16,7 +17,7 @@ class EndController extends AbstractController2
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route('/unk', name: 'unk')]
     #[Route('/end', name: 'end')]

@@ -1,7 +1,7 @@
 parameters:
     # Application Core
     locale: 'en'
-    app.version: '2026.03.26.00'
+    app.version: '2026.05.31.00'
 
     # Communication Settings
     sra:
@@ -22,7 +22,7 @@ services:
             $appVersion: '%app.version%'
             $projectDir: '%kernel.project_dir%'
 
-    # make classes in src/ available to be used as services
+    # to make classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/*'

@@ -1,7 +1,7 @@
 # AYSO Certification Reporting System
 
 ## Overview
-An application to publish AYSO certification volunteer certifications.
+An web service to publish AYSO certification volunteer certifications to authorized users.
 
 This application integrates volunteer certification reports drawn from the Association Platform and produces the following reports:
 
@@ -14,16 +14,17 @@ This application integrates volunteer certification reports drawn from the Assoc
  - Referee Upgrade Candidates
 
 ## Notes on these reports:
-1. All reports are delivered as Excel workbooks
-2. Report data is extracted at least weekly from AYSO Sports Affinity for Referees in Section 1
-3. Reports include the highest Certification, Safe Haven, Concussion Awareness, Sudden Cardiac Arrest, SafeSport, Background Checks & LiveScan data for MY2019 and later registrations. Background Check color code decoded at AYSO Wiki
-4. Any omissions or duplicate IDs should be addressed by a problem report to support@ayso.org
+1. Report data is extracted at least weekly from AYSO Sports Affinity for Referees in Section 1
+2. Reports include the highest Certification, Safe Haven, Concussion Awareness, Sudden Cardiac Arrest, SafeSport, Background Checks & LiveScan data for MY2019 and later registrations. Background Check color code decoded at [AYSO Wiki](https://bit.ly/41OfKuy)
+3. Report for Referee certification upgrades includes the last 60 days
+4. All reports are delivered as Excel workbooks
+5. Any omissions or duplicate IDs should be addressed by a problem report to [support@ayso.org](support@ayso.org)
 
 ## How to suggest a new report
-Suggestions for other reports? Apparent report errors? Contact the Section 1 Referee Administrator
+Suggestions for other reports? Apparent report errors? Contact the Section 1 Referee Administrator at [sra@aysos1.org](sra@aysos1.org)
 
 ## How to report a bug
-Find an issue with the Certification Reporting System? Log it in the issue tracker at https://github.com/rrone/crs/issues.
+Find an issue with the Certification Reporting System? Log it in the issue tracker at [https://github.com/rrone/crs/issues](https://github.com/rrone/crs/issues).
 
 ## Support
-Questions? Contact the Section 1 Referee Administrator.
+Questions? Contact the Section 1 Referee Administrator at [sra@aysos1.org](sra@aysos1.org).
